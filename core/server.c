@@ -107,8 +107,10 @@ char *forbidden_message= "<body><h3>Blocked IP-ADRESSE </h3></body>";
 int main(int argc, char **argv)
 {
 	daemonize();
-	process("started\n");
-	//auth
+
+
+
+	saveData("admin",100,100,"admin");
 
 	config_obj=parseConfigFile();
 	ipWhitelist = cJSON_GetObjectItem(config_obj,"ipWhitelist");

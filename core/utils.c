@@ -72,12 +72,12 @@ void handlePinsDirection(cJSON *js){
 
 
 int checkIP (cJSON *whitelist,struct lws *wsi){
-            const int IP_SIZE = 50;
-            char client_name [IP_SIZE];
-            char client_ip [IP_SIZE];
-            lws_get_peer_addresses(wsi, lws_get_socket_fd(wsi),
-                client_name, sizeof (client_name),
-                client_ip, sizeof (client_ip));
+    const int IP_SIZE = 50;
+    char client_name [IP_SIZE];
+    char client_ip [IP_SIZE];
+    lws_get_peer_addresses(wsi, lws_get_socket_fd(wsi),
+        client_name, sizeof (client_name),
+        client_ip, sizeof (client_ip));
                // printf("ip und nsme %s  %s\n",client_ip,client_name ); 
 
     cJSON *subitem = whitelist->child;
@@ -107,4 +107,66 @@ time_t get_mtime(const char *session_file)
         exit(1);
     }
     return attribut.st_mtime;
+}
+
+
+char * 
+get_header_item(struct lws *wsi,char *item)
+{
+    int n = 0;
+    char buf[256];
+    const unsigned char *c;
+
+    do {
+      c = lws_token_to_string(n);
+
+      if (!c) {
+         n++;
+         continue;
+     }
+
+
+
+     if(strncmp((char *)c,item,strlen(item))==0){
+        memset(buf, 0, sizeof buf);
+        lws_hdr_copy(wsi, buf, sizeof buf, n);
+        if(strlen(buf)>5){
+            buf[sizeof(buf) - 1] = '\0';
+
+            char *buf_malloc = (char *)malloc(256*sizeof(char));
+
+            memcpy(buf_malloc,buf,256);
+            return buf_malloc;
+        }
+    }
+
+    n++;
+} while (c);
+
+return NULL;
+}
+
+void parse_passwd(char *user,char *uid,char *gid)
+{
+    FILE *passwdFile = fopen("/etc/mein_server/passwd", "r"); 
+    char line[150]={0};
+    char deli[2];
+    char tmp_user[20];
+
+    
+    if (passwdFile==NULL)
+        process("passwd not found\n");
+    
+
+    int i = 0;
+
+    while(i < 100 && fgets(line, sizeof(line), passwdFile) != NULL){
+        sscanf(line, "%[^:]%[:^:]%[^:]%[:^:]%[^:]", tmp_user,deli,uid,deli,gid);
+            if(strcmp(tmp_user,user)==0)
+                break;
+        i++;
+    }
+
+
+    fclose(passwdFile);
 }

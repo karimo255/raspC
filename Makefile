@@ -33,6 +33,7 @@ install:
 	cp etc/passwd $(PASSWD_FILE)
 	cp mein_server.sh /etc/init.d/mein_server
 	chmod +x /etc/init.d/mein_server
+	update-rc.d mein_server remove
 	update-rc.d mein_server defaults
 
 clean:

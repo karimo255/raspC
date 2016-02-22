@@ -7,7 +7,7 @@ set -e
 NAME=mein_server
 PIDFILE=/var/run/$NAME.pid
 #This is the command to be run, give the full pathname
-DAEMON=/sbin/server
+DAEMON=/usr/sbin/mein_server
 
 export PATH="${PATH}:/usr/sbin:/sbin"
 

@@ -1,18 +1,19 @@
  #include "server.h"
 
 
-static char *salt="Y/";
-
-
+static char *salt="Y/.U34DoL195";
 
 
 extern int clientAuth(char *user,char *password){
 
 	char *passwd="/etc/mein_server/passwd";
 
-	char tmp_user[20];
-	char tmp_password[20];
-	char line[50];
+	char tmp_user[20]={0};
+	char tmp_password[20]={0};
+	char uid[100]={0};
+	char gid[100]={0};
+	char line[150]={0};
+	char deli[2];
 
 	FILE *passwdFile = fopen(passwd, "r"); 
 
@@ -28,7 +29,8 @@ extern int clientAuth(char *user,char *password){
 	
 
 	while(i < 100 && fgets(line, sizeof(line), passwdFile) != NULL){
-		sscanf(line, "%s\t%[^\n]", tmp_user, tmp_password);
+		sscanf(line, "%[^:]%[:^:]%[^:]%[:^:]%[^:]%[:^:]%[^\n]", tmp_user,deli,uid,deli,gid,deli,tmp_password);
+		process(tmp_password);
 		i++;
 
 		if(strcmp(tmp_user,user)==0){
@@ -46,7 +48,7 @@ extern int clientAuth(char *user,char *password){
 
 
 
-extern void saveData(char *user,char *password){
+extern void saveData(char *user,int uid,int gid,char *password){
 	char *passwd="/etc/mein_server/passwd";
 
 	FILE *passwdFile = fopen(passwd, "a");
@@ -60,10 +62,13 @@ extern void saveData(char *user,char *password){
 	char *hash = strdup(crypt(password, salt));
 
 
-	char record[strlen(user)+strlen(hash)+2];
 
 
-	sprintf(record,"\n%s\t%s",user,hash);
+	char record[150];
+
+
+	sprintf(record,"%s:%d:%d:%s\n",user,uid,gid,hash);
+
 
 
 	//printf("record45 :  %s\n",record );

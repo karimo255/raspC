@@ -50,6 +50,13 @@ struct per_session_data__http {
 	char  *session_id;
 };
 
+struct per_session_data__details {
+    char  *session_id;
+    char *user;
+    int uid;
+    int gid;
+};
+
 struct per_session_data__auth {
     char  *session_id;
 };
@@ -225,7 +232,7 @@ extern int clientAuth(char *user,char *password);
 
 char *do_hashing(char *buffer);
 int clientAuth(char *user,char *password);
-void saveData(char *user,char *password);
+void saveData(char *user,int uid,int gid,char *password);
 
 time_t get_mtime(const char *path);
 
@@ -233,3 +240,10 @@ time_t get_mtime(const char *path);
 /* daemonize */
 extern void process(char arr[]);
 extern void daemonize();
+
+
+extern char * 
+get_header_item(struct lws *wsi,char *item);
+
+extern void 
+parse_passwd(char *user,char *uid,char *gid);

@@ -56,42 +56,7 @@ int set_other_headers(struct lws *wsi,char *key, char *value,struct other_header
         /* end of cookie */     
 }
 
-char * 
-get_header_item(struct lws *wsi,char *item)
-{
-    int n = 0;
-    char buf[256];
-    const unsigned char *c;
 
-    do {
-      c = lws_token_to_string(n);
-
-      if (!c) {
-       n++;
-       continue;
-   }
-
-
-
-   if(strncmp((char *)c,item,strlen(item))==0){
-    memset(buf, 0, sizeof buf);
-    lws_hdr_copy(wsi, buf, sizeof buf, n);
-    if(strlen(buf)>5){
-        buf[sizeof(buf) - 1] = '\0';
-
-        char *buf_malloc = (char *)malloc(256*sizeof(char));
-
-        memcpy(buf_malloc,buf,256);
-        return buf_malloc;
-    }
-}
-
-
-n++;
-} while (c);
-
-return NULL;
-}
 
 
 
@@ -167,6 +132,13 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
 
             char *requested_uri = (char *) in;
 
+
+            if (strcmp(requested_uri, "/") == 0) {
+
+                requested_uri = "/index.html";
+
+            }            
+
             char *requested_file_ext = strrchr(requested_uri,'.');
 
             if(!pss->session_id && strcmp(requested_file_ext,".html")==0){
@@ -174,11 +146,7 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
                 
             }
             
-            if (strcmp(requested_uri, "/") == 0) {
 
-                requested_uri = "/index.html";
-
-            }
         // try to get current working directory
             char cwd[100];
             char *resource_path;
@@ -189,7 +157,7 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
 
             // join current working direcotry to the resource path
                 sprintf(resource_path, "%s%s","/var/www/upload/webserver/assets", requested_uri);
-                process(resource_path);
+               // process(resource_path);
 
             if( access( resource_path, F_OK ) != -1 ) { // file exists
             }else{

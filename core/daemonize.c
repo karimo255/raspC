@@ -6,6 +6,8 @@ void process(char arr[]){
     syslog(LOG_NOTICE, arr);
 } 
 
+ 
+
 
 void daemonize(){
     int n, fd, ret;
