@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+<script src="jquery/jquery.js">
+</script>
+<script src="cookie/cookie.js">
+</script>
+
+<script src="bootstrap/bootstrap.min.js">
+</script> 
+<link rel="stylesheet" href="bootstrap/bootstrap.min.css">     
+<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css" />   
+</head>
+<body>
+    <nav role="navigation" class="navbar container">
+        <div class="row navbar-inverse">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header" styles="position:relative;">
+                <button data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" class="navbar-toggle" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">Home</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/details.html">Details</a>
+                    </li>
+                    <li>
+                        <a href="/services.html">Services</a>
+                    </li>
+                    <li>
+                        <a href="/gpio.html">GPIO</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav> 
+    <!-- breadcrumb-->
+    <div class="container">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="/home.html">Home</a></li>                
+            </ol>     
+        </div>       
+    </div>    
+    <div class="container">
+
+        <div class="row">
+            <h3> Information</h3>
+            <div class="col-md-12">
+                <div class="controll poll-right">
+                    <span><i class="continue fa fa-play"></i></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box">
+                    <h4>Storage</h4>
+                    <div id="canvas-holder">
+                        <canvas id="chart-area" width="200" height="200"/>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-4 cpu-details">
+                <h3>CPU Details</h3>
+                <table class="table table-striped cpu-info">
+                    <button type="button" class="btn btn-primary">Temperature <span id="cpuTemp" class="badge">?</span></button>                                    <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <div class="halter halter-cpu" id="stoon">
+                <ul class="y-axis">
+                    <li>100%</li>
+                    <li>80%</li>
+                    <li>60%</li>
+                    <li>40%</li>
+                    <li>20%</li>
+                </ul>
+            </div>
+            <div class="legend">
+                <p>
+
+	                User
+                </p>
+                  <p> System</p>
+                <p> Idle</p> <p> Idle</p>
+            </div>
+        </div>    
+
+        <div class="col-md-4">
+            <div class="halter halter-ram" id="stoon">
+                <ul class="y-axis">
+                    <li>100%</li>
+                    <li>80%</li>
+                    <li>60%</li>
+                    <li>40%</li>
+                    <li>20%</li>
+                </ul>
+            </div>
+            <div class="legend">
+                 <p> <span>used</span> <i class="fa fa-check"></i></p>
+                 <p> <span>free</span> <i class="fa fa-check"></i></p>
+                <p><span>shared</span> <i class="fa fa-check"></i> </p>
+                <p> <span>buffers</span> <i class="fa fa-check"></i></p>
+                <p> <span>cached</span> <i class="fa fa-check"></i></p>
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="halter halter-cpu-freq" id="stoon">
+                <ul class="y-axis">
+                    <li>100%</li>
+                    <li>80%</li>
+                    <li>60%</li>
+                    <li>40%</li>
+                    <li>20%</li>
+                </ul>
+            </div>
+
+            <div class="legend cpu-freq">
+                 <p><span>cpu0</span> <i class="fa fa-check"></i></p>  <p><span>cpu1</span> <i class="fa fa-check"></i></p>
+                <p><span>cpu2</span> <i class="fa fa-check"></i></p> <p><span>cpu3</span> <i class="fa fa-check"></i></p>                
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
+<script src="charts.js"></script>    
+<script src="java.js"></script>    

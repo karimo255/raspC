@@ -1,0 +1,6 @@
+#/bin/sh
+make
+make install
+kill `pidof server`
+cd bin
+./server

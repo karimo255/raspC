@@ -1,0 +1,40 @@
+Determining if the include file in6addr.h exists failed with the following output:
+Change Dir: /var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec1631625085/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1631625085.dir/build.make CMakeFiles/cmTryCompileExec1631625085.dir/build
+make[1]: Entering directory '/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1631625085.dir/CheckIncludeFile.c.o
+/usr/bin/cc  -DKEYWORD=__inline  -o CMakeFiles/cmTryCompileExec1631625085.dir/CheckIncludeFile.c.o   -c /var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: in6addr.h: No such file or directory
+ #include <in6addr.h>
+                     ^
+compilation terminated.
+CMakeFiles/cmTryCompileExec1631625085.dir/build.make:57: recipe for target 'CMakeFiles/cmTryCompileExec1631625085.dir/CheckIncludeFile.c.o' failed
+make[1]: Leaving directory '/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec1631625085.dir/CheckIncludeFile.c.o] Error 1
+Makefile:118: recipe for target 'cmTryCompileExec1631625085/fast' failed
+make: *** [cmTryCompileExec1631625085/fast] Error 2
+
+
+Determining if the include file vfork.h exists failed with the following output:
+Change Dir: /var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec292556930/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec292556930.dir/build.make CMakeFiles/cmTryCompileExec292556930.dir/build
+make[1]: Entering directory '/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec292556930.dir/CheckIncludeFile.c.o
+/usr/bin/cc  -DKEYWORD=__inline  -o CMakeFiles/cmTryCompileExec292556930.dir/CheckIncludeFile.c.o   -c /var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:19: fatal error: vfork.h: No such file or directory
+ #include <vfork.h>
+                   ^
+compilation terminated.
+CMakeFiles/cmTryCompileExec292556930.dir/build.make:57: recipe for target 'CMakeFiles/cmTryCompileExec292556930.dir/CheckIncludeFile.c.o' failed
+make[1]: Leaving directory '/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/CMakeTmp'
+make[1]: *** [CMakeFiles/cmTryCompileExec292556930.dir/CheckIncludeFile.c.o] Error 1
+Makefile:118: recipe for target 'cmTryCompileExec292556930/fast' failed
+make: *** [cmTryCompileExec292556930/fast] Error 2
+
+

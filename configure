@@ -1,0 +1,23 @@
+#!/bin/sh
+echo "Install dependies librarie  :"
+
+
+echo "Installing Libwebsockets library"
+cd lib/libwebsockets
+mkdir -p build && cd build
+cmake ..
+sudo make install
+echo "done."
+
+
+echo "Installing wiringPi library"
+cd ../../../lib/wiringPi
+sudo bash build
+echo "done."
+
+echo "Installing cJSON library"
+cd ../../lib/cJSON
+sudo make
+echo "done."
+
+echo "finish"

@@ -1,0 +1,11 @@
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/dist.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/test-client.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/test-echo.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/test-fraggle.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/test-fuzxy.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/test-ping.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/test-server.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/test-server-extpoll.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/test-server-pthreads.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/websockets.dir
+/var/www/upload/release/lib/libwebsockets/build/CMakeFiles/websockets_shared.dir

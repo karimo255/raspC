@@ -1,0 +1,169 @@
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<script src="jquery/jquery.js">
+</script>
+<script src="cookie/cookie.js">
+</script>
+
+<script src="bootstrap/bootstrap.min.js">
+</script> 
+<link rel="stylesheet" href="bootstrap/bootstrap.min.css">     
+<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+<meta content="" name="description">
+<meta content="" name="author">
+
+
+<title>Signin</title>
+
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-md-offset-4">
+                <h1 class="text-center login-title">LogIn</h1>
+                <div class="account-wall">
+                    <form class="form-signin">
+                        <input type="text" class="user form-control" placeholder="User" required autofocus>
+                        <input type="password" class="pass form-control" placeholder="Password" required>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                            Sign in</button>
+                            <div class="alert alert-danger auth-failure">
+                                <p> User und Passwort Stimmen nicht überein !</p>
+                            </div>
+                            <label>Keep login </label><input type="checkbox" name="keep-login" class="keep-login" ></input>
+                            <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </body></html>
+
+
+    <style type="text/css">
+    .auth-failure{
+        display: none;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .account-wall {
+        width: 100%;
+    }
+    form {
+        width: 100%;
+    }
+    input{
+        margin: 0 0 3px 0 !important;
+
+    }
+
+
+</style>
+
+
+<script type="text/javascript">
+    $(function() {
+        window.WebSocket = window.WebSocket || window.MozWebSocket;
+
+        var websocket = new WebSocket('ws://192.168.43.88:7681',
+          'auth');
+
+        var count_client =0;
+
+        websocket.onopen = function () {
+            console.log('verbindung hergestellt');
+        };
+        
+        websocket.onerror = function () {
+            alert('fehler');
+        };
+
+        var checkObject  = function(obj){
+            if(obj.length>1){
+                for (var i = obj.length - 1; i >= 0; i--) {
+                    checkObject(obj[i]);
+                };
+            }else{
+                if (obj.status == 0) {
+                    console.log(obj.status);
+                    $('.pin[pinid=' + obj.pin + ']')
+                    .removeClass('fa fa-toggle-on')
+                    .addClass('fa fa-toggle-off');
+                } else {
+                    $('.pin[pinid=' + obj.pin + ']')
+                    .removeClass('fa fa-toggle-off')
+                    .addClass('fa fa-toggle-on');
+                }
+            }
+            $('.pin[pinid=' + obj.pin + ']').prev('i').hide(150);
+
+        };
+
+
+        var sendObject = function(obj){
+            obj = JSON.stringify(obj,null,4);
+            websocket.send(obj);
+            console.log('1');
+        }
+        
+        websocket.onmessage = function (message) {
+            var obj = JSON.parse(message.data);
+            console.log(obj); 
+            for (var i = obj.length - 1; i >= 0; i--) {
+                switch (obj[i].request) {
+                    case "session-id": 
+                    setSession(obj[i].session_id);
+                    break;
+                    default :
+                    $('.auth-failure').show();
+                    break;
+                }
+            }
+        }
+        var keep_login=false;
+        var setSession = function(session_id){
+            if(session_id && keep_login){
+                $.cookie("session_id", session_id,{ expires:31,path:"/"});
+            }else if(session_id){
+                $.cookie("session_id", session_id);
+            }
+            
+            location.reload();}
+
+
+            $('.user,.pass').focus(function(){
+                $('.auth-failure').hide();
+            });
+
+
+            
+            $('button').click(function () {
+
+                var user = $('.user').val();
+                var pass = $('.pass').val();
+
+                var obj={};
+                obj.user = user;
+                obj.pass=pass;
+
+                var checked = $('input[type=checkbox]').prop("checked");
+
+                if(checked){
+                    keep_login=checked;
+                }
+
+                sendObject(obj);
+                return false;
+                
+            });
+        });
+</script>

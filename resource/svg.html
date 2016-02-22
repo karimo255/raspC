@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+    </script> 
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">     
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css" />   
+
+    <script type="text/javascript">
+        $(window).ready(function() {
+
+
+
+            setInterval(function(){
+                if($('.pallete').size()>2){
+                    $('.pallete').eq(0).remove();
+                }
+                var pallete = $('<div class="pallete"/>');
+                $('.halter').append(pallete);
+                pallete.animate({"right":"100%"});
+            },10000);
+
+
+            
+
+
+        });
+    </script>
+</head>
+<body>
+    <nav role="navigation" class="navbar container">
+        <div class="row navbar-inverse">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header" styles="position:relative;">
+                <button data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" class="navbar-toggle" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">Home</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/details.html">Details</a>
+                    </li>
+                    <li>
+                        <a href="/services.html">Services</a>
+                    </li>
+                    <li>
+                        <a href="/gpio.html">GPIO</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav> 
+    <!-- breadcrumb-->
+    <div class="container">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="/home.html">Home</a></li>                
+            </ol>     
+        </div>       
+    </div>    
+    <div class="container">
+
+        <div class="row">
+            <h3> Services runnig... </h3>
+            <div class="col-md-4">
+                <div class="box">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="halter">
+
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="box">                  
+                </div>
+            </div>                
+        </div>
+
+    </div>
+</body>
+</html>
+
+<style type="text/css">
+
+.daemon {
+    cursor: pointer;
+}
+.halter {
+    background-color: red;
+    height: 140px;
+    position: relative;
+    width: 200px;
+}
+.pallete {
+    background-color: blue;
+    height: 120px;
+    position: absolute;
+    right: -100%;
+    transition: all 20s linear 0s;
+    width: 200px;
+}
+.start-position {
+    right: -100%;
+}
+.move {
+    right: 100%;
+}
+
+
+
+
+</style>

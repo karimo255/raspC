@@ -1,0 +1,239 @@
+
+body {
+    color: #333;
+    font: 12px "Helvetica neue",Helvetica,Arial,sans-serif;
+    margin: 0;
+    padding: 0;
+}
+th {
+    position: relative;
+}
+.fa {
+    cursor: pointer;
+}
+.fa.fa-spinner.fa-spin {
+    color: turquoise;
+    display: none;
+    left: -20px;
+    position: absolute;
+    top: 15px;
+}
+.panel-footer {
+    min-height: 100px;
+}
+.container {
+}
+.box.home p span {
+    color: seagreen;
+    float: right;
+    padding: 0 15px 5px 0;
+}
+.box {
+    padding: 20px;
+}
+.box h4 {
+    margin-bottom: 15px;
+}
+.input {
+    cursor: not-allowed;
+}
+.custom-bar-chart {
+    margin-bottom: 40px;
+}
+.custom-bar-chart {
+    border-bottom: 1px solid #c9cdd7;
+    height: 210px;
+    margin-left: 20px;
+    margin-top: 20px;
+    position: relative;
+}
+.y-axis {
+    color: #555555;
+    font-size: 11px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    text-align: left;
+    width: 100%;
+}
+.y-axis li {
+    border-top: 1px dashed #dbdce0;
+    display: block;
+    height: 42px;
+    width: 100%;
+}
+.custom-bar-chart.cpu .bar {
+    float: left;
+    height: 100%;
+    margin: 0 7%;
+    position: relative;
+    text-align: center;
+    width: 11%;
+    z-index: 10;
+}
+.custom-bar-chart.ram .bar {
+    float: left;
+    height: 100%;
+    margin: 0 6%;
+    position: relative;
+    text-align: center;
+    width: 8%;
+    z-index: 10;
+}
+.custom-bar-chart .bar .title {
+    bottom: -30px;
+    font-size: 11px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+.custom-bar-chart .bar .value {
+    background: #ff865c none repeat scroll 0 0;
+    border-radius: 5px 5px 0 0;
+    bottom: 0;
+    color: #68dff0;
+    position: absolute;
+    transition: all 0.3s ease 0s;
+    width: 100%;
+}
+#canvas-holder {
+    text-align: center;
+}
+.all-server p {
+    height: 25px;
+    margin: 6px;
+    padding: 4px;
+    width: 100%;
+}
+.all-server span {
+    font-size: 14px;
+    padding: 4px 10px;
+}
+.halter {
+    background-color: #ffffe0;
+    height: 240px;
+    margin: 3%;
+    overflow: hidden;
+    position: relative;
+    width: 94%;
+}
+.pallete {
+    height: 240px;
+    position: absolute;
+    right: -100%;
+    width: 100%;
+}
+.y-axis {
+    color: #555555;
+    font-size: 11px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    text-align: left;
+    width: 100%;
+}
+.y-axis li {
+    border-top: 1px dashed #dbdce0;
+    display: block;
+    height: 50px;
+    width: 100%;
+}
+.legend p {
+    border-left: 15px solid;
+    float: left;
+    opacity: 0.6;
+    padding-left: 5px;
+    position: relative;
+    width: 50%;
+}
+.legend p:first-child {
+    opacity: 1;
+}
+.legend {
+    margin-left: 20px;
+    margin-top: 15px;
+    min-height: 75px;
+}
+.legend ul {
+    display: none;
+    height: auto;
+    left: 5px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: -60px;
+    width: auto;
+    z-index: 9;
+    box-shadow: 0 0 1px 1px thistle;
+}
+.legend li {
+    border: 1px solid white;
+    float: left;
+    height: 21px;
+    list-style: outside none none;
+    width: 21px;
+}
+.zeit {
+    bottom: 0;
+    color: tan;
+    font-size: 11px;
+    height: 10px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+}
+.zeit > li {
+    float: left;
+    list-style: outside none none;
+    text-align: center;
+    width: 33.33%;
+}
+.zeit > li:first-child {
+    text-align: left;
+}
+.zeit > li:last-child {
+    text-align: right;
+}
+.settings {
+    background-color: tomato;
+    box-shadow: 9px -6px 6px 10px black;
+    color: white;
+    height: auto;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100px;
+    z-index: 99;
+    display: none;
+}
+.settings_speed {
+    width: 35px;
+}
+.settings_speed {
+    border: medium none;
+    box-shadow: 0 0 2px 1px black;
+    color: black;
+    margin-left: 6px;
+}
+.settings button{
+    margin-left: 5%;
+    width: 90%;
+    height: 30px;
+}
+
+.fa.fa-wrench {
+    position: absolute;
+    right: 0;
+    background-color: tomato;
+    color: white;
+    padding: 3px;
+    opacity: 0.50;
+    cursor: pointer;
+    z-index: 999;
+}
+.fa.fa-wrench:hover {
+    opacity: 1;
+}
+

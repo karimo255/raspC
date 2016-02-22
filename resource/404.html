@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+    </script> 
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">     
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css" />   
+
+    <script type="text/javascript">
+        $(function() {
+            window.WebSocket = window.WebSocket || window.MozWebSocket;
+            
+            var websocket = new WebSocket('ws://192.168.1.2:9000',
+              'dumb-increment-protocol');
+
+            var count_client =0;
+            
+            websocket.onopen = function () {
+                console.log('verbindung hergestellt');
+                //    websocket.send("get_stat");
+            };
+            
+            websocket.onerror = function () {
+                alert('fehler');
+            };
+
+            var checkObject  = function(obj){
+                if(obj.length>1){
+                    for (var i = obj.length - 1; i >= 0; i--) {
+                        checkObject(obj[i]);
+                    };
+                    return;
+                }
+                if (obj.status == 0) {
+                    $('.pin[pinid=' + obj.pin + ']')
+                    .removeClass('fa fa-toggle-on')
+                    .addClass('fa fa-toggle-off');
+                } else {
+                    $('.pin[pinid=' + obj.pin + ']')
+                    .removeClass('fa fa-toggle-off')
+                    .addClass('fa fa-toggle-on');
+                }
+                $('.pin[pinid=' + obj.pin + ']').prev('i').hide(150);
+
+            };
+
+            var sendObject = function(obj){
+                obj = JSON.stringify(obj,null,4);
+                websocket.send(obj);
+
+            }
+            
+            websocket.onmessage = function (message) {
+                var obj = JSON.parse(message.data);
+                console.log('erhalten obj');
+                console.log(obj); 
+                if(obj.hasOwnProperty('count_client') ){
+                    var new_count_client = obj.count_client; 
+
+                    if(new_count_client>count_client){
+                        count_client=new_count_client;  
+                        $('.count_client').text(count_client);
+                        $('#message1').show();
+                    }else if(new_count_client<count_client){
+                        count_client=new_count_client;   
+                        $('.count_client').text(count_client);
+                        $('#message2').show();
+                    }
+                    setTimeout(function(){
+                        $('#message1,#message2').hide();
+                    },1400); 
+                }else{
+                    $('.pin[pinid=' + obj.pin + ']').prev('i').css('display','inline-block');
+                    checkObject(obj);}
+                };
+
+
+                $('.pin').click(function () {
+        //status : if off then enable (1) it else disable it (0)
+        var status = 0;
+        if ($(this).hasClass('fa fa-toggle-off')) {
+            //$(this).toogleClass('fa fa-toggle-off', 'fa fa-toggle-on');
+            status = 1;
+        }
+        //pin number
+        var pin = $(this).attr('pinid');
+
+        var obj={};
+        obj.pin = pin;
+        obj.status=status;
+
+        sendObject(obj);
+        console.log('gesendet');
+        console.log(obj);
+    });
+            });
+</script>
+</head>
+<body>
+    <nav role="navigation" class="navbar container">
+        <div class="row navbar-inverse">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header" styles="position:relative;">
+                <button data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" class="navbar-toggle" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="home.html" class="navbar-brand">Home</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/details.html">Details</a>
+                    </li>
+                    <li>
+                        <a href="/services.html">Services</a>
+                    </li>
+                    <li>
+                        <a href="/gpio.html">GPIO</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav> 
+    <!-- breadcrumb-->
+    <div class="container">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="/home.html">Home</a></li> 
+                <li>404</li>               
+            </ol>     
+        </div>       
+    </div>    
+    <div class="container">
+
+        <div class="row">
+            <div class="well">
+                <h2> 404 : Die Seite, nach der Sie suchen, existiert nicht! </h2>  
+                <h4>Sitemap</h4>         
+                <ul>
+                    <li><a href="/home.html">Home</a></li>
+                    <li><a href="/details.html">Details</a></li>
+                    <li><a href="/services.html">Services</a></li>
+                    <li><a href="/gpio.html">GPIO</a></li>                
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
