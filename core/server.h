@@ -53,8 +53,8 @@ struct per_session_data__http {
 struct per_session_data__details {
     char  *session_id;
     char *user;
-    int uid;
-    int gid;
+    int *uid;
+    int *gid;
 };
 
 struct per_session_data__auth {

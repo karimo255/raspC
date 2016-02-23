@@ -134,7 +134,7 @@ get_header_item(struct lws *wsi,char *item)
         if(strlen(buf)>5){
             buf[sizeof(buf) - 1] = '\0';
 
-            char *buf_malloc = (char *)malloc(256*sizeof(char));
+            char *buf_malloc = (char *)realloc(buf_malloc,256*sizeof(char));
 
             memcpy(buf_malloc,buf,256);
             return buf_malloc;
@@ -157,13 +157,16 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
 
     if(cookie)
     {
-        process(cookie);
+        process("by cookie");
 
         //build session_file form coockie/session_id        
         char *session_id= strrchr(cookie, '=')+1;
 
+
         char session_file[75]={0};
         sprintf(session_file,"%s/%s",session_file_path,session_id);
+
+        
 
                 //check if sessionfile exit
         FILE *session_filep= fopen(session_file,"r");
@@ -186,11 +189,15 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
         }
 
         //set session;
+        process(session_file);
         pss->session_id=session_id;
 
+        process(session_id);
+
+
         fclose(session_filep);
+        return 0;
     }
-    return 0;
     return -1;
 }
 
