@@ -151,22 +151,23 @@ void parse_passwd(char *user,char *uid,char *gid)
     FILE *passwdFile = fopen("/etc/mein_server/passwd", "r"); 
     char line[150]={0};
     char deli[2];
-    char tmp_user[20];
+    char tmp_user[10];
 
     
     if (passwdFile==NULL)
         process("passwd not found\n");
     
 
-    int i = 0;
-
-    while(i < 100 && fgets(line, sizeof(line), passwdFile) != NULL){
+    while(fgets(line, sizeof(line), passwdFile) != NULL){
         sscanf(line, "%[^:]%[:^:]%[^:]%[:^:]%[^:]", tmp_user,deli,uid,deli,gid);
-            if(strcmp(tmp_user,user)==0)
-                break;
-        i++;
+        if(strcmp(tmp_user,user)==0){
+            uid=NULL;
+            gid=NULL;
+            sscanf(line, "%[^:]%[:^:]%[^:]%[:^:]%[^:]", tmp_user,deli,uid,deli,gid);
+            break;
+        }
     }
 
 
-    fclose(passwdFile);
+fclose(passwdFile);
 }

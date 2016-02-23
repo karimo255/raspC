@@ -52,13 +52,13 @@ static struct lws_protocols protocols[] = {
 		"details",
 		callback_details,
 		sizeof(struct per_session_data__gpio),
-		64,
+		124,
 	},		
 	{
 		"services",
 		callback_services,
 		sizeof(struct per_session_data__services),
-		512,
+		1024,
 	},
 	{
 		"gpio",
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 
 
 
-	saveData("admin",100,100,"admin");
+	//saveData("admin",100,100,"admin");
 
 	config_obj=parseConfigFile();
 	ipWhitelist = cJSON_GetObjectItem(config_obj,"ipWhitelist");
