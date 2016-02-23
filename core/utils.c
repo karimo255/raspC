@@ -2,6 +2,7 @@
 
 extern int client_count;  
 
+extern int cookie_lifetime;
 
 void increment_client_count()  {
 	client_count++;
@@ -144,6 +145,53 @@ get_header_item(struct lws *wsi,char *item)
 } while (c);
 
 return NULL;
+}
+
+int 
+check_session(struct lws *wsi,struct per_session_data__details *pss)   
+{
+
+    char *session_file_path="/etc/mein_server/sessions";
+
+    char *cookie=get_header_item(wsi,"cookie:");
+
+    if(cookie)
+    {
+        process(cookie);
+
+        //build session_file form coockie/session_id        
+        char *session_id= strrchr(cookie, '=')+1;
+
+        char session_file[75]={0};
+        sprintf(session_file,"%s/%s",session_file_path,session_id);
+
+                //check if sessionfile exit
+        FILE *session_filep= fopen(session_file,"r");
+        if(session_filep==NULL){
+            process("sessions file not found2");
+            free(cookie);fclose(session_filep);
+            return -1;
+        }
+
+        //check if session_file is valid
+        time_t jetzt= time(NULL);
+        time_t create_date = get_mtime(session_file);
+
+        double diff = difftime(jetzt,create_date);
+        if(diff>cookie_lifetime){
+            if(unlink(session_file)!=0)
+                process("session_file not removed");
+            free(cookie);fclose(session_filep);
+            return -1;
+        }
+
+        //set session;
+        pss->session_id=session_id;
+
+        fclose(session_filep);
+    }
+    return 0;
+    return -1;
 }
 
 void parse_passwd(char *user,char *uid,char *gid)

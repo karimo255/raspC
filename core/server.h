@@ -244,6 +244,8 @@ extern void daemonize();
 
 extern char * 
 get_header_item(struct lws *wsi,char *item);
+extern int 
+check_session(struct lws *wsi,struct per_session_data__details *pss);
 
 extern void 
 parse_passwd(char *user,char *uid,char *gid);
