@@ -100,12 +100,15 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 
 					char uid[10];
 					char gid[10];
+					
+					process("+++++++++++++");
 
 					parse_passwd(pss->user,uid,gid);
+					
 					int u=atoi(uid);
 					int g=atoi(gid);
 					//int g=atoi(gid);
-					process("+++++++++++++");
+
 					process(uid);
 					process(gid);
 					pss->uid =u;
@@ -114,9 +117,9 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 
 
                  /*ouf*/
-				process(pss->user);
+				//process(pss->user);
 
-				process("+++++++++++++");
+
 
 				
 				chalter=0;
