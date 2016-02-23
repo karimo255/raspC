@@ -51,8 +51,8 @@ static struct lws_protocols protocols[] = {
 	{
 		"details",
 		callback_details,
-		sizeof(struct per_session_data__gpio),
-		124,
+		sizeof(struct per_session_data__details),
+		1024,
 	},		
 	{
 		"services",

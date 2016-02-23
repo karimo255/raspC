@@ -74,8 +74,8 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 
 					int u=atoi(uid);
 					int g=atoi(gid);
-					//int g=atoi(gid);
-
+					process("*****user info******");
+					process(pss->user);
 					process(uid);
 					process(gid);
 					pss->uid =u;
@@ -83,8 +83,7 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 				} 
 
 
-            }     /*ouf*/
-				//process(pss->user);
+            } 
 
 
 
@@ -92,11 +91,6 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 				chalter=0;
 				increment_client_count();
 			//lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
-
-            /*   new */
-
-
-            /*  new end */
 
 
 				storageInfo(&storage_l);
