@@ -21,76 +21,50 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 	void *in, size_t len)  {
 
 	struct per_session_data__details *pss =
-	(struct per_session_data__details *)user;    
-
-	
-
-	char *session_file_path="/etc/mein_server/sessions";
-
+	(struct per_session_data__details *)user; 
 
 
 	switch (reason) {
 		case LWS_CALLBACK_FILTER_PROTOCOL_CONNECTION:
 		{            
-			
 			check_session(wsi,pss);
-			
-
-
-			//free(cookie);
 			break; 
 		}         
 		case LWS_CALLBACK_CLOSED:
 		{
 			chalter=0;
 			decrement_client_count();
-            //lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
+            lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
 		}
 		case LWS_CALLBACK_ESTABLISHED:
 		{
-			if(pss->session_id){
-				
-				/* ouf */
-				char session_file[75]={0};
-				sprintf(session_file,"%s/%s",session_file_path,pss->session_id);
 
-                //check if sessionfile exit
-				FILE *session_filep= fopen(session_file,"r");
-				if(session_filep==NULL){
-					process("sessions file not found3");
-					fclose(session_filep);
-					break;
-				}
+			process("*****user info down******");
+			process(pss->session_id);
+            process(pss->user);
 
-				char line[50]={0};
-				if(fgets(line, sizeof(line), session_filep) != NULL)
-				{
-					pss->user=strrchr(line, '=')+1;
-
-					char uid[10];
-					char gid[10];
-
-					parse_passwd(pss->user,uid,gid);
-
-					int u=atoi(uid);
-					int g=atoi(gid);
-					process("*****user info******");
-					process(pss->user);
-					process(uid);
-					process(gid);
-					pss->uid =u;
-					pss->gid =g; 
-				} 
-
-
-            } 
-
+            switch(pss->gid){
+            	case 100:
+            		process("100");
+            		break;
+            	case 101:
+            		process("101");
+            		break;
+            	case 102:
+            		process("102");
+            		break;
+            	case 200:
+            		process("200");            		            		
+            		break;
+            	default:
+            		process("default");		
+            }
 
 
 
 				chalter=0;
 				increment_client_count();
-			//lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
+				//lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
 
 
 				storageInfo(&storage_l);

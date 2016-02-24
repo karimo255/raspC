@@ -122,26 +122,26 @@ get_header_item(struct lws *wsi,char *item)
       c = lws_token_to_string(n);
 
       if (!c) {
-         n++;
-         continue;
-     }
+       n++;
+       continue;
+   }
 
 
 
-     if(strncmp((char *)c,item,strlen(item))==0){
-        memset(buf, 0, sizeof buf);
-        lws_hdr_copy(wsi, buf, sizeof buf, n);
-        if(strlen(buf)>5){
-            buf[sizeof(buf) - 1] = '\0';
+   if(strncmp((char *)c,item,strlen(item))==0){
+    memset(buf, 0, sizeof buf);
+    lws_hdr_copy(wsi, buf, sizeof buf, n);
+    if(strlen(buf)>5){
+        buf[sizeof(buf) - 1] = '\0';
 
-            char *buf_malloc = (char *)realloc(buf_malloc,256*sizeof(char));
+        char *buf_malloc = (char *)realloc(buf_malloc,256*sizeof(char));
 
-            memcpy(buf_malloc,buf,256);
-            return buf_malloc;
-        }
+        memcpy(buf_malloc,buf,256);
+        return buf_malloc;
     }
+}
 
-    n++;
+n++;
 } while (c);
 
 return NULL;
@@ -155,7 +155,7 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
 
     char *cookie=get_header_item(wsi,"cookie:");
 
-    if(cookie)
+    if(cookie && !pss->session_id)
     {
         process("by cookie");
 
@@ -189,10 +189,31 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
         }
 
         //set session;
-        process(session_file);
         pss->session_id=session_id;
+        pss->user=(char*)malloc(32);
 
-        process(session_id);
+        char line[100]={0};
+        
+
+
+        if(fgets(line, sizeof(line), session_filep) != NULL)
+        {
+            char *u=strrchr(line, '=')+1;
+            memcpy(pss->user,u,20);
+            
+
+            char uid[10];
+            char gid[10];
+
+            parse_passwd(pss->user,uid,gid);
+
+            
+            pss->uid =atoi(uid);
+            pss->gid =atoi(gid);
+             
+        }else{
+            process("doch");
+        }         
 
 
         fclose(session_filep);
@@ -201,13 +222,15 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
     return -1;
 }
 
-void parse_passwd(char *user,char *uid,char *gid)
+void parse_passwd(char *user,char uid[],char gid[])
 {
     FILE *passwdFile = fopen("/etc/mein_server/passwd", "r"); 
     char line[75]={0};
     char deli[2];
     char tmp_user[25];
     char rest[50];
+    char tmp_uid[10];
+    char tmp_gid[10];
 
     
     if (passwdFile==NULL)
@@ -220,7 +243,9 @@ void parse_passwd(char *user,char *uid,char *gid)
         sscanf(line, "%[^:]%[^\n]", tmp_user,rest);
 
         if(strncmp(tmp_user,user,sizeof(user))==0){
-            sscanf(rest, "%[:^:]%[^:]%[:^:]%[^:]",deli,uid,deli,gid);
+            sscanf(rest, "%[:^:]%[^:]%[:^:]%[^:]",deli,tmp_uid,deli,tmp_gid);
+            memcpy(uid,tmp_uid,10);
+            memcpy(gid,tmp_gid,10);
             break;
         }
         
@@ -228,5 +253,5 @@ void parse_passwd(char *user,char *uid,char *gid)
     }
 
 
-fclose(passwdFile);
+    fclose(passwdFile);
 }
