@@ -118,8 +118,11 @@ char *hardwareDynamicJSON(struct cpu_live cpu_l,struct ram_usage ram_l,struct cp
     hardwarejs=cJSON_Print(root);
     
 
-    free(root);free(cpu_root_object);free(cpu_root_object_object);free(ram_root_object);free(ram_root_object_object); 
+    free(root);
+    free(cpu_root_object);free(cpu_root_object_object);
+    free(ram_root_object);free(ram_root_object_object); 
     free(cpu_freq_root_object);free(cpu_freq_root_object_object);
+    free(net_root_object);free(net_root_object_object);
 
     return hardwarejs;
 }

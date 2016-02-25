@@ -156,7 +156,7 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
                 resource_path = malloc(120);
 
             // join current working direcotry to the resource path
-                sprintf(resource_path, "%s%s","/var/www/upload/webserver/assets", requested_uri);
+                sprintf(resource_path, "%s%s","/var/www/upload/release/resource", requested_uri);
                // process(resource_path);
 
             if( access( resource_path, F_OK ) != -1 ) { // file exists

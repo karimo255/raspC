@@ -89,6 +89,7 @@
         </div>
 
         <div class="col-md-4">
+            <h3>CPU time</h3>
             <div class="halter halter-cpu" id="stoon">
                 <ul class="y-axis">
                     <li>100%</li>
@@ -99,16 +100,16 @@
                 </ul>
             </div>
             <div class="legend">
-                <p>
+                 <p> <span>user</span> <i class="fa fa-check"></i></p>
+                 <p> <span>system</span> <i class="fa fa-check"></i></p>
+                <p><span>idle</span> <i class="fa fa-check"></i> </p>
+                <p> <span>wait</span> <i class="fa fa-check"></i></p>
 
-	                User
-                </p>
-                  <p> System</p>
-                <p> Idle</p> <p> Idle</p>
             </div>
         </div>    
 
         <div class="col-md-4">
+            <h3>RAM usage</h3>
             <div class="halter halter-ram" id="stoon">
                 <ul class="y-axis">
                     <li>100%</li>
@@ -129,6 +130,7 @@
         </div>
 
         <div class="col-md-4">
+            <h3>CPU frequenzes</h3>
             <div class="halter halter-cpu-freq" id="stoon">
                 <ul class="y-axis">
                     <li>100%</li>
@@ -144,6 +146,24 @@
                 <p><span>cpu2</span> <i class="fa fa-check"></i></p> <p><span>cpu3</span> <i class="fa fa-check"></i></p>                
             </div>
         </div>
+
+        <div class="col-md-4">
+            <h3>Network live monitoring</h3>
+            <div class="halter halter-net-live" >
+                <ul class="y-axis">
+                    <li>5 MB</li>
+                    <li>4 MB</li>
+                    <li>3 MB</li>
+                    <li>2 MB</li>
+                    <li>1 MB</li>
+                </ul>
+            </div>
+
+            <div class="legend net-live">
+                 <p><span>rx</span> <i class="fa fa-check"></i></p>  <p><span>tx</span> <i class="fa fa-check"></i></p>
+                <p><span>total</span> <i class="fa fa-check"></i></p>                
+            </div>
+        </div>        
 
     </div>
 

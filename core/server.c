@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
 
 	struct lws_context_creation_info info;
-	unsigned int ms, oldms,oldms_2 = 0;
+	unsigned int ms, oldms= 0;
 	const char *iface = NULL;
 	char cert_path[1024];
 	char key_path[1024];

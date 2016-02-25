@@ -38,6 +38,37 @@ $(window).ready(function() {
     $('.legend i').click(function(){
         console.log($(this).text());
         switch($.trim($(this).parents("p").text())){
+            /* cpu time*/
+            case "user":
+            cpu_user= cpu_user?0:1;
+            cpu_user?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+            break;
+            case "system":
+            cpu_system= cpu_system?0:1;
+            cpu_system?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+            break;
+            case "idle":
+            cpu_idle= cpu_idle?0:1;
+            cpu_idle?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+            break;                                    
+            case "wait":
+            cpu_wait= cpu_wait?0:1;
+            cpu_wait?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+            break;
+            /* network*/            
+            case "rx":
+            rx= rx?0:1;
+            rx?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+            break;
+            case "tx":
+            tx= tx?0:1;
+            tx?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+            break;
+            case "total":
+            total= total?0:1;
+            total?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+            break;
+            /* cpu freq */                                    
             case "cpu0":
             cpu0= cpu0?0:1;
             cpu0?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
@@ -54,7 +85,8 @@ $(window).ready(function() {
             case "cpu3":
             cpu3= cpu3?0:1;
             cpu3?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;   
+            break;
+            /* ram usage*/   
             case "free":
             ram_free= ram_free?0:1;
             ram_free?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
@@ -108,9 +140,32 @@ $(window).ready(function() {
 
     var set_color = function(name,color){
         switch(name){
+            /* cpu time */
+            case "user":
+            cpu_user_color=color;
+            break;
+            case "system":
+            cpu_system_color=color;
+            break;
+            case "idle":
+            cpu_idle_color=color;
+            break;                                    
+            case "wait":
+            cpu_wait_color=color;
+            break;  
+            /* network */          
+            case "rx":
+            rx_color=color;
+            break;
+            case "tx":
+            tx_color=color;
+            break;
+            case "total":
+            total_color=color;
+            break;                                    
             case "cpu0":
             cpu0_color=color;
-            break;
+            break;            
             case "cpu1":
             cpu1_color=color;
             break;
@@ -234,6 +289,7 @@ $(window).ready(function() {
     var cpu_buffer=[];
     var ram_buffer=[];
     var cpu_freq_buffer=[];
+    var net_live_buffer=[];
 
     websocket.onopen = function () {
         console.log('verbindung hergestellt');
@@ -247,12 +303,11 @@ $(window).ready(function() {
         obj = JSON.stringify(obj,null,4);
         websocket.send(obj);
     }
-    var c_cpu=0;var c_ram=0;var c_cpu_freq=0;
+    var c_cpu=0;var c_ram=0;var c_cpu_freq=0;var c_net_live=0;
 
     websocket.onmessage = function (message) {
         var obj = JSON.parse(message.data);
         //console.log('erhalten obj');
-       // console.log(obj); 
        for (var i = obj.length - 1; i >= 0; i--) {
         switch (obj[i].request) {
             case "count_client": 
@@ -276,7 +331,11 @@ $(window).ready(function() {
             break;                
             case "cpu-info":
             handleCpuInfo(obj[i].data);                    
-            break;                  
+            break;    
+            case "net-live":
+            net_live_buffer[c_net_live]=obj[i].data;    
+            c_net_live++;                      
+            break;                           
         }
     }
 
@@ -297,127 +356,213 @@ var last_value_ram_buffers=0;
 var last_value_ram_shared=0;
 var last_value_ram_cached=0;
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++cpu+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+var cpu_speed=3600;
 
-var  cpu_buffer_tmp=[]; 
+var cpu_user_color;
+var cpu_system_color;
+var cpu_wait_color;
+var cpu_idle_color;
 
-setInterval(function(){
 
-
-
-
-    cpu_buffer_tmp=cpu_buffer;cpu_buffer=[];c_cpu=0;
-
-//cpu
-var pallete = $('<div class="pallete"/>');
+var  cpu_buffer_tmp=[];
 
 
 
-var canvas = document.createElement('canvas');
+var last_value_cpu_user;
+var last_value_cpu_system;
+var last_value_cpu_idle;
+var last_value_cpu_wait;
 
+var cpu_user=1;
+var cpu_system=0;
+var cpu_idle=0;
+var cpu_wait=0;
 
+var cpu_intervall;
 
-canvas.height = 240;
-canvas.width = canvas_width;
+var get_cpu_speed = function(){
+    return cpu_speed;
+};
 
-/*  idle*/
-ctx = canvas.getContext("2d");
-
-ctx.strokeStyle="aquamarine";
-ctx.fill="#FF0000";
-ctx.beginPath();
-
-
-
-var spane = canvas_width/(cpu_buffer_tmp.length-1);
-var step=0;
-for (var i = 0; i < cpu_buffer_tmp.length ; i++) {
-
-    ctx.lineTo(step,240-((cpu_buffer_tmp[i].idle*240)/100)); 
-    step=step+spane;
-    if(i==cpu_buffer_tmp.length-1){
-        step=canvas_width;
+var handlecpuSpeed=function(){
+    $('.halter-cpu').find('.zeit').remove();
+    var spped_bar = $('<ul class="zeit"/>');  
+    for (var i = 0; i < 3; i++) {
+        var li = $('<li/>');
+        if(i==2){
+            li.text(0);
+        }else{
+            li.text((get_cpu_speed()/(i+1)/1000)+"S");
+        }
+        spped_bar.append(li);
     }
-}                
+    $('.halter-cpu').append(spped_bar);
 
-ctx.stroke();
-
-/* end idle*/
-
-/* user */
-
-user_ctx = canvas.getContext("2d");
-
-user_ctx.strokeStyle="#FF00FF";
-user_ctx.beginPath();
+};
+handlecpuSpeed();
 
 
-step=0;
-for (var i = 0; i < cpu_buffer_tmp.length; i++) {
+var cpu_loop=function(){
 
-    user_ctx.lineTo(step,240-((cpu_buffer_tmp[i].user*240)/100)); 
-    step=step+spane;
-    if(i==cpu_buffer_tmp.length-1){
-        step=canvas_width;
-    }
-}                
-
-user_ctx.stroke();
-/* end user */
-
-/* system */
-
-system_ctx = canvas.getContext("2d");
-
-system_ctx.strokeStyle="sienna";
-system_ctx.beginPath();
+    cpu_intervall = setInterval(function(){
 
 
-step=0;
-for (var i = 0; i < cpu_buffer_tmp.length ; i++) {
 
-    system_ctx.lineTo(step,240-((cpu_buffer_tmp[i].system*240)/100)); 
-    step=step+spane;
-    if(i==cpu_buffer_tmp.length-1){
-        step=canvas_width;
-    }
-}                
+        var pallete = $('<div class="pallete"/>');
 
-system_ctx.stroke();
-/* end system */
+        $('.halter-cpu').append(pallete);
+        pallete.animate({"right":"100%"},get_cpu_speed()*2,"linear");
+        if($('.halter-cpu .pallete').size()>2){
+            $('.halter-cpu .pallete').eq(0).remove();
+        } 
 
+        cpu_buffer_tmp=cpu_buffer;cpu_buffer=[];c_cpu=0;
 
-/* wait */
+        if( cpu_user || cpu_system || cpu_idle || cpu_buffers || cpu_wait ){
 
-wait_ctx = canvas.getContext("2d");
-
-wait_ctx.strokeStyle="teal";
-wait_ctx.beginPath();
+            var canvas = document.createElement('canvas');
 
 
-step=0;
-for (var i = 0; i < cpu_buffer_tmp.length ; i++) {
-
-    wait_ctx.lineTo(step,240-((cpu_buffer_tmp[i].wait*240)/100)); 
-    step=step+spane;
-    if(i==cpu_buffer_tmp.length-1){
-        step=canvas_width;
-    }
-}                
-
-wait_ctx.stroke();
-/* end wait */
+            canvas.height = 240;
+            canvas.width = canvas_width;
 
 
-pallete.append(canvas);
+            var spane = (canvas_width/(cpu_buffer_tmp.length-1));
+            var step=0;
 
-$('.halter-cpu').append(pallete);
-pallete.animate({"right":"100%"},cpu_speed*2,"linear");
-if($('.halter-cpu .pallete').size()>2){
-    $('.halter-cpu .pallete').eq(0).remove();
-} 
-/* end cpu*/
-},cpu_speed);
+
+
+            if(cpu_user){
+                /*  user*/
+                cpu_user_ctx = canvas.getContext("2d");
+
+                cpu_user_ctx.strokeStyle=cpu_user_color;
+                cpu_user_ctx.beginPath();
+
+
+
+                step=0;
+
+
+                cpu_user_ctx.lineTo(0,last_value_cpu_user); 
+
+
+                for (var i = 0; i < cpu_buffer_tmp.length ; i++) {
+                    if(i==0){
+                        
+                    }else{
+                        cpu_user_ctx.lineTo(step,240-((cpu_buffer_tmp[i].user*240)/100));  
+                    }
+                        step=step+spane;
+                        if(i==cpu_buffer_tmp.length-2){
+                            step=canvas_width;
+                        }
+                    
+                }                
+
+                cpu_user_ctx.stroke();
+
+                last_value_cpu_user=240-((cpu_buffer_tmp[cpu_buffer_tmp.length-1].user*240)/100);
+            }
+            /* end cpu_user*/
+
+            /* system */
+            if(cpu_system){
+                cpu_system_ctx = canvas.getContext("2d");
+
+                cpu_system_ctx.strokeStyle=cpu_system_color;
+                cpu_system_ctx.beginPath();
+
+
+
+                step=0;
+                cpu_system_ctx.lineTo(step,last_value_cpu_system); 
+
+
+                for (var i = 0; i < cpu_buffer_tmp.length ; i++) {
+                    if(i==0){
+
+                    }else{
+                        cpu_system_ctx.lineTo(step,240-((cpu_buffer_tmp[i].system*240)/100)); 
+                    }    
+                    step=step+spane;
+                    if(i==cpu_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
+
+                }                
+
+                cpu_system_ctx.stroke();
+                last_value_cpu_system=240-((cpu_buffer_tmp[cpu_buffer_tmp.length-1].system*240)/100);
+            }
+            /* end system */
+
+            /* idle */
+            if(cpu_idle){
+                cpu_idle_ctx = canvas.getContext("2d");
+
+                cpu_idle_ctx.strokeStyle=cpu_idle_color;
+                cpu_idle_ctx.beginPath();
+
+
+                var step=0;
+                cpu_idle_ctx.lineTo(step,last_value_cpu_idle); 
+
+                for (var i = 0; i < cpu_buffer_tmp.length ; i++) {
+                    if(i==0){
+
+                    }else{
+                        cpu_idle_ctx.lineTo(step,240-((cpu_buffer_tmp[i].idle*240)/100)); 
+                    }    
+                    step=step+spane;
+                    if(i==cpu_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
+                }                
+
+                cpu_idle_ctx.stroke();
+                last_value_cpu_idle=240-((cpu_buffer_tmp[cpu_buffer_tmp.length-1].idle*240)/100);
+            }
+            /* end idle */
+
+
+            /* wait */
+
+            if(cpu_wait){
+                cpu_wait_ctx = canvas.getContext("2d");
+
+                cpu_wait_ctx.strokeStyle=cpu_wait_color;
+                cpu_wait_ctx.beginPath();
+
+                step=0;
+                cpu_wait_ctx.lineTo(step,last_value_cpu_wait); 
+
+                for (var i = 0; i < cpu_buffer_tmp.length ; i++) {
+                    if(i==0){
+
+                    }else{
+                        cpu_wait_ctx.lineTo(step,240-((cpu_buffer_tmp[i].wait*240)/100)); 
+                    }    
+                    step=step+spane;
+                    if(i==cpu_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
+                }                
+
+                cpu_wait_ctx.stroke();
+                last_value_cpu_wait=240-((cpu_buffer_tmp[cpu_buffer_tmp.length-1].wait*240)/925);
+            }            
+            /* end wait */
+            pallete.append(canvas);
+        }
+
+
+    },get_cpu_speed());
+
+}
+
+cpu_loop();
 
 //+++++++++++++++++++++++++++++++++++++++++ram+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var ram_speed=3600;
@@ -447,7 +592,9 @@ var ram_cached=0;
 
 var ram_intervall;
 
-
+var get_ram_speed = function(){
+    return ram_speed;
+};
 
 var handleRamSpeed=function(){
     $('.halter-ram').find('.zeit').remove();
@@ -457,7 +604,7 @@ var handleRamSpeed=function(){
         if(i==2){
             li.text(0);
         }else{
-            li.text((ram_speed/(i+1)/1000)+"S");
+            li.text((get_ram_speed()/(i+1)/1000)+"S");
         }
         spped_bar.append(li);
     }
@@ -470,161 +617,183 @@ handleRamSpeed();
 var ram_loop=function(){
 
     ram_intervall = setInterval(function(){
-//ram
-
-
-var pallete = $('<div class="pallete"/>');
-
-$('.halter-ram').append(pallete);
-pallete.animate({"right":"100%"},ram_speed*2,"linear");
-if($('.halter-ram .pallete').size()>2){
-    $('.halter-ram .pallete').eq(0).remove();
-} 
-
-ram_buffer_tmp=ram_buffer;ram_buffer=[];c_ram=0;
-
-if(ram_free || ram_used || ram_buffers || ram_cached || ram_shared){
-    var canvas = document.createElement('canvas');
-
-
-    canvas.height = 240;
-    canvas.width = canvas_width;
-
-    var spane = (canvas_width/(ram_buffer_tmp.length-1));
-
-
-    if(ram_used){
-
-        /*  used*/
-        ram_used_ctx = canvas.getContext("2d");
-
-        ram_used_ctx.strokeStyle=ram_used_color;
-        ram_used_ctx.beginPath();
 
 
 
-        spane = (canvas_width/(ram_buffer_tmp.length-1));
-        var step=0;
+        var pallete = $('<div class="pallete"/>');
+
+        $('.halter-ram').append(pallete);
+        pallete.animate({"right":"100%"},get_ram_speed()*2,"linear");
+        if($('.halter-ram .pallete').size()>2){
+            $('.halter-ram .pallete').eq(0).remove();
+        } 
+
+        ram_buffer_tmp=ram_buffer;ram_buffer=[];c_ram=0;
+
+        if( ram_used || ram_free || ram_shared || ram_buffers || ram_cached ){
+
+            var canvas = document.createElement('canvas');
+
+
+            canvas.height = 240;
+            canvas.width = canvas_width;
+
+
+            var spane = (canvas_width/(ram_buffer_tmp.length-1));
+            var step=0;
 
 
 
-        for (var i = 0; i < ram_buffer_tmp.length ; i++) {
+            if(ram_used){
+                /*  used*/
+                ram_used_ctx = canvas.getContext("2d");
 
-            ram_used_ctx.lineTo(step,240-((ram_buffer_tmp[i].used*240)/925)); 
-            step=step+spane;
-            if(i==ram_buffer_tmp.length-2){
-                step=canvas_width;
+                ram_used_ctx.strokeStyle=ram_used_color;
+                ram_used_ctx.beginPath();
+
+
+
+                step=0;
+
+
+                ram_used_ctx.lineTo(0,last_value_ram_used); 
+
+
+                for (var i = 0; i < ram_buffer_tmp.length ; i++) {
+                    if(i==0){
+                        
+                    }else{
+                        ram_used_ctx.lineTo(step,240-((ram_buffer_tmp[i].used*240)/925)); 
+                    }
+                        step=step+spane;
+                        if(i==ram_buffer_tmp.length-2){
+                            step=canvas_width;
+                        }
+                    
+                }                
+
+                ram_used_ctx.stroke();
+
+                last_value_ram_used=240-((ram_buffer_tmp[ram_buffer_tmp.length-1].used*240)/925);
             }
-        }                
+            /* end ram_used*/
 
-        ram_used_ctx.stroke();
-        last_value_ram_used=ram_buffer_tmp[ram_buffer_tmp.length-1].used;
+            /* free */
+            if(ram_free){
+                ram_free_ctx = canvas.getContext("2d");
 
-    }
-    /* end used*/
-
-    /* free */
-    if(ram_free){
-        ram_free_ctx = canvas.getContext("2d");
-
-        ram_free_ctx.strokeStyle=ram_free_color;
-        ram_free_ctx.beginPath();
+                ram_free_ctx.strokeStyle=ram_free_color;
+                ram_free_ctx.beginPath();
 
 
 
-        step=0;
-        for (var i = 0; i < ram_buffer_tmp.length ; i++) {
+                step=0;
+                ram_free_ctx.lineTo(step,last_value_ram_free); 
 
-            ram_free_ctx.lineTo(step,240-((ram_buffer_tmp[i].free*240)/925)); 
-            step=step+spane;
-            if(i==ram_buffer_tmp.length-1){
-                step=canvas_width;
+
+                for (var i = 0; i < ram_buffer_tmp.length ; i++) {
+                    if(i==0){
+
+                    }else{
+                        ram_free_ctx.lineTo(step,240-((ram_buffer_tmp[i].free*240)/925)); 
+                    }    
+                    step=step+spane;
+                    if(i==ram_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
+
+                }                
+
+                ram_free_ctx.stroke();
+                last_value_ram_free=240-((ram_buffer_tmp[ram_buffer_tmp.length-1].free*240)/925);
             }
-        }                
+            /* end free */
 
-        ram_free_ctx.stroke();
-        /* end free */
-        last_value_ram_free=ram_buffer_tmp[ram_buffer_tmp.length-1].free;    
-    }
-    /* shared */
-    if(ram_shared){
-        ram_shared_ctx = canvas.getContext("2d");
+            /* shared */
+            if(ram_shared){
+                ram_shared_ctx = canvas.getContext("2d");
 
-        ram_shared_ctx.strokeStyle=ram_shared_color;
-        ram_shared_ctx.beginPath();
+                ram_shared_ctx.strokeStyle=ram_shared_color;
+                ram_shared_ctx.beginPath();
 
 
-        var step=0;
-        for (var i = 0; i < ram_buffer_tmp.length ; i++) {
+                var step=0;
+                ram_shared_ctx.lineTo(step,last_value_ram_shared); 
 
-            ram_shared_ctx.lineTo(step,240-((ram_buffer_tmp[i].shared*240)/925)); 
-            step=step+spane;
-            if(i==ram_buffer_tmp.length-1){
-                step=canvas_width;
+                for (var i = 0; i < ram_buffer_tmp.length ; i++) {
+                    if(i==0){
+
+                    }else{
+                        ram_shared_ctx.lineTo(step,240-((ram_buffer_tmp[i].shared*240)/925)); 
+                    }    
+                    step=step+spane;
+                    if(i==ram_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
+                }                
+
+                ram_shared_ctx.stroke();
+                last_value_ram_shared=240-((ram_buffer_tmp[ram_buffer_tmp.length-1].shared*240)/925);
             }
-        }                
+            /* end shared */
 
-        ram_shared_ctx.stroke();
-        last_value_ram_shared=ram_buffer_tmp[ram_buffer_tmp.length-1].shared;
 
-        /* end shared */
-    }
+            /* cached */
+            if(ram_buffers){
+                ram_buffers_ctx = canvas.getContext("2d");
 
-    /* cached */
-    if(ram_cached){
-        ram_cached_ctx = canvas.getContext("2d");
+                ram_buffers_ctx.strokeStyle=ram_buffers_color;
+                ram_buffers_ctx.beginPath();
 
-        ram_cached_ctx.strokeStyle=ram_cached_color;
-        ram_cached_ctx.beginPath();
+                step=0;
+                ram_buffers_ctx.lineTo(step,last_value_ram_buffers); 
 
-        step=0;
-        for (var i = 0; i < ram_buffer_tmp.length ; i++) {
+                for (var i = 0; i < ram_buffer_tmp.length ; i++) {
+                    if(i==0){
 
-            ram_cached_ctx.lineTo(step,240-((ram_buffer_tmp[i].cached*240)/925));
-            step=step+spane;
-            if(i==ram_buffer_tmp.length-1){
-                step=canvas_width;
+                    }else{
+                        ram_buffers_ctx.lineTo(step,240-((ram_buffer_tmp[i].buffers*240)/925)); 
+                    }    
+                    step=step+spane;
+                    if(i==ram_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
+                }                
+
+                ram_buffers_ctx.stroke();
+                last_value_ram_buffers=240-((ram_buffer_tmp[ram_buffer_tmp.length-1].buffers*240)/925);
             }
-        }                
 
-        ram_cached_ctx.stroke();
-        /* end cached */
-        last_value_ram_cached=ram_buffer_tmp[ram_buffer_tmp.length-1].cached;
+            if(ram_cached){
+                ram_cached_ctx = canvas.getContext("2d");
 
-    }
+                ram_cached_ctx.strokeStyle=ram_cached_color;
+                ram_cached_ctx.beginPath();
 
+                step=0;
+                ram_cached_ctx.lineTo(step,last_value_ram_cached); 
 
-    /* buffers */
-    if(ram_buffers){
-        ram_buffers_ctx = canvas.getContext("2d");
+                for (var i = 0; i < ram_buffer_tmp.length ; i++) {
+                    if(i==0){
 
-        ram_buffers_ctx.strokeStyle=ram_buffers_color;
-        ram_buffers_ctx.beginPath();
+                    }else{
+                        ram_cached_ctx.lineTo(step,240-((ram_buffer_tmp[i].cached*240)/925)); 
+                    }    
+                    step=step+spane;
+                    if(i==ram_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
+                }                
 
-
-        step=0;
-        for (var i = 0; i < ram_buffer_tmp.length ; i++) {
-
-            ram_buffers_ctx.lineTo(step,240-((ram_buffer_tmp[i].buffers*240)/925));
-            step=step+spane;
-            if(i==ram_buffer_tmp.length-1){
-                step=canvas_width;
-            }
-        }                
-
-        ram_buffers_ctx.stroke();
-        /* end buffers */
-        last_value_ram_buffers=ram_buffer_tmp[ram_buffer_tmp.length-1].buffers;
-
-    }
-
-    pallete.append(canvas);
+                ram_cached_ctx.stroke();
+                last_value_ram_cached=240-((ram_buffer_tmp[ram_buffer_tmp.length-1].cached*240)/925);
+            }            
+            /* end cached */
+            pallete.append(canvas);
+        }
 
 
-    /* end ram*/
-}
-
-},ram_speed);
+    },get_ram_speed());
 
 }
 
@@ -753,12 +922,16 @@ var cpu_freq_loop=function(){
 
 
                 for (var i = 0; i < cpu_freq_buffer_tmp.length ; i++) {
+                    if(i==0){
 
-                    cpu1_ctx.lineTo(step,240-cpu_freq_buffer_tmp[i].cpu1); 
+                    }else{
+                        cpu1_ctx.lineTo(step,240-cpu_freq_buffer_tmp[i].cpu1); 
+                    }    
                     step=step+spane;
-                    if(i==cpu_freq_buffer_tmp.length-1){
+                    if(i==cpu_freq_buffer_tmp.length-2){
                         step=canvas_width;
                     }
+
                 }                
 
                 cpu1_ctx.stroke();
@@ -778,10 +951,13 @@ var cpu_freq_loop=function(){
                 cpu2_ctx.lineTo(step,cpu2_last_value); 
 
                 for (var i = 0; i < cpu_freq_buffer_tmp.length ; i++) {
+                    if(i==0){
 
-                    cpu2_ctx.lineTo(step,240-cpu_freq_buffer_tmp[i].cpu2); 
+                    }else{
+                        cpu2_ctx.lineTo(step,240-cpu_freq_buffer_tmp[i].cpu2); 
+                    }    
                     step=step+spane;
-                    if(i==cpu_freq_buffer_tmp.length-1){
+                    if(i==cpu_freq_buffer_tmp.length-2){
                         step=canvas_width;
                     }
                 }                
@@ -803,10 +979,13 @@ var cpu_freq_loop=function(){
                 cpu3_ctx.lineTo(step,cpu3_last_value); 
 
                 for (var i = 0; i < cpu_freq_buffer_tmp.length ; i++) {
+                    if(i==0){
 
-                    cpu3_ctx.lineTo(step,240-cpu_freq_buffer_tmp[i].cpu3);
+                    }else{
+                        cpu3_ctx.lineTo(step,240-cpu_freq_buffer_tmp[i].cpu3);
+                    }    
                     step=step+spane;
-                    if(i==cpu_freq_buffer_tmp.length-1){
+                    if(i==cpu_freq_buffer_tmp.length-2){
                         step=canvas_width;
                     }
                 }                
@@ -826,12 +1005,193 @@ var cpu_freq_loop=function(){
 cpu_freq_loop();
 
 
+//++++++++++++++++++++++++++++++++++++++++++++++++net live--------------------------------------------------------------
+var net_live_speed=3600;
 
+var rx_color;
+var tx_color;
+var total_color;
+
+
+var  net_live_buffer_tmp=[];
+
+var rx_last_value=0;
+var tx_last_value=0;
+var total_last_value=0;
+
+var rx=1;
+var tx=0;
+var total=0;
+
+var net_live_intervall;
+
+var get_net_live_speed = function(){
+    return net_live_speed;
+};
+
+var handleNetLiveSpeed=function(){
+    $('.halter-net-live').find('.zeit').remove();
+    var spped_bar = $('<ul class="zeit"/>');  
+    for (var i = 0; i < 3; i++) {
+        var li = $('<li/>');
+        if(i==2){
+            li.text(0);
+        }else{
+            li.text((get_net_live_speed()/(i+1)/1000)+"S");
+        }
+        spped_bar.append(li);
+    }
+    $('.halter-net-live').append(spped_bar);
+
+};
+handleNetLiveSpeed();
+
+
+var net_live_loop=function(){
+
+    net_live_intervall = setInterval(function(){
+
+
+
+        var pallete = $('<div class="pallete"/>');
+
+        $('.halter-net-live').append(pallete);
+        pallete.animate({"right":"100%"},get_net_live_speed()*2,"linear");
+        if($('.halter-net-live .pallete').size()>2){
+            $('.halter-net-live .pallete').eq(0).remove();
+        } 
+
+        net_live_buffer_tmp=net_live_buffer;net_live_buffer=[];c_net_live=0;
+
+        if( rx || tx || total ){
+
+            var canvas = document.createElement('canvas');
+
+
+            canvas.height = 240;
+            canvas.width = canvas_width;
+
+
+            var spane = (canvas_width/(net_live_buffer_tmp.length-1));
+            var step=0;
+
+
+
+            if(rx){
+                /*  used*/
+                rx_ctx = canvas.getContext("2d");
+
+                rx_ctx.strokeStyle=rx_color;
+                rx_ctx.beginPath();
+
+
+
+                step=0;
+
+
+                rx_ctx.lineTo(0,rx_last_value); 
+
+
+                for (var i = 0; i < net_live_buffer_tmp.length ; i++) {
+                    if(i==0){
+                        
+                    }else{
+                        rx_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].rx-net_live_buffer_tmp[i-1].rx)*240)/5120)); 
+                        console.log((net_live_buffer_tmp[i].rx-net_live_buffer_tmp[i-1].rx));
+                    }
+                        step=step+spane;
+                        if(i==net_live_buffer_tmp.length-2){
+                            step=canvas_width;
+                        }
+                    
+                }                
+
+                rx_ctx.stroke();
+
+                rx_last_value=240-(((net_live_buffer_tmp[net_live_buffer_tmp.length-1].rx-net_live_buffer_tmp[net_live_buffer_tmp.length-2].rx)*240)/5120);
+            }
+            /* end rx*/
+
+            /* free */
+            if(tx){
+                tx_ctx = canvas.getContext("2d");
+
+                tx_ctx.strokeStyle=tx_color;
+                tx_ctx.beginPath();
+
+
+
+                step=0;
+                tx_ctx.lineTo(step,tx_last_value); 
+
+
+                for (var i = 0; i < net_live_buffer_tmp.length ; i++) {
+                    if(i==0){
+
+                    }else{
+                        tx_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].tx-net_live_buffer_tmp[i-1].tx)*240)/5120)); 
+                    }
+                    
+                    step=step+spane;
+                    if(i==net_live_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
+                }                
+
+                tx_ctx.stroke();
+                tx_last_value=240-(((net_live_buffer_tmp[net_live_buffer_tmp.length-1].tx-net_live_buffer_tmp[net_live_buffer_tmp.length-2].tx)*240)/5120);
+            }
+            /* end free */
+
+
+            /* cached */
+            if(total){
+                total_ctx = canvas.getContext("2d");
+
+                total_ctx.strokeStyle=total_color;
+                total_ctx.beginPath();
+
+                step=0;
+                total_ctx.lineTo(step,total_last_value); 
+
+                for (var i = 0; i < net_live_buffer_tmp.length ; i++) {
+                    if(i==0){
+
+                    }else{
+                       total_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].total-net_live_buffer_tmp[i-1].total)*240)/5120)); 
+                    }
+                    step=step+spane;
+                    if(i==net_live_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
+                }                
+
+                total_ctx.stroke();
+                total_last_value=240-(((net_live_buffer_tmp[net_live_buffer_tmp.length-1].total-net_live_buffer_tmp[net_live_buffer_tmp.length-2].total)*240)/5120);
+            }
+            /* end cached */
+            pallete.append(canvas);
+        }
+
+
+    },get_net_live_speed());
+
+}
+
+net_live_loop();
 //realtime 
 
 /* controll */
 
 /* apply settings */
+$('.halter-cpu button').click(function(){
+    cpu_freq_speed= $(this).parents('.halter').find('.settings_speed').val();
+    $(this).parents('.halter').find('.settings').toggle('slideDown');
+    clearTimeout(cpu_intervall);
+    cpu_loop();
+    handlecpuSpeed();
+}); 
+
 $('.halter-cpu-freq button').click(function(){
     cpu_freq_speed= $(this).parents('.halter').find('.settings_speed').val();
     $(this).parents('.halter').find('.settings').toggle('slideDown');
@@ -846,6 +1206,13 @@ $('.halter-ram button').click(function(){
     clearTimeout(ram_intervall);
     ram_loop();
     handleRamSpeed();
+}); 
+$('.halter-net-live button').click(function(){
+    ram_speed= $(this).parents('.halter').find('.settings_speed').val();
+    $(this).parents('.halter').find('.settings').toggle('slideDown');
+    clearTimeout(net_live_intervall);
+    net_live_loop();
+    handleNetLiveSpeed();
 });    
 
 });

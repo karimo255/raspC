@@ -55,6 +55,7 @@ struct per_session_data__details {
     char *user;
     int uid;
     int gid;
+    int checked;
 };
 
 struct per_session_data__auth {

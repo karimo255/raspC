@@ -12,10 +12,10 @@ int netLive(struct net_live *net_live){
 	static FILE *fp;
 
 
-	fp = popen(tx, "r");
+	fp = popen(rx, "r");
 	fgets(tmp, 15, fp);
 
-	net_live->rx = atoi(tmp);
+	net_live->rx = atoi(tmp)/1024;
 	
 	pclose(fp);//end
 
@@ -23,7 +23,7 @@ int netLive(struct net_live *net_live){
 	fp = popen(tx, "r");
 	fgets(tmp, 15, fp);
 
-	net_live->tx = atoi(tmp);
+	net_live->tx = atoi(tmp)/1024;
 	
 	pclose(fp);//end
 
