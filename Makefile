@@ -7,7 +7,7 @@ CFLAGS = -Wall -O2
 
 
 
-OBJECTS = server.o callback_http.o callback_home.o callback_details.o callback_services.o callback_gpio.o callback_auth.o   ram.o cpu.o storage.o hardware_info.o services.o utils.o auth.o cpu_freq.o daemonize.o
+OBJECTS = server.o callback_http.o callback_home.o callback_details.o callback_services.o callback_gpio.o callback_auth.o   ram.o cpu.o storage.o hardware_info.o services.o utils.o auth.o cpu_freq.o daemonize.o network.o
 
 BINDIR = /usr/sbin
 

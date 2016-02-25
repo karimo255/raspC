@@ -149,7 +149,19 @@ struct cpu_freq{
     int cpu2;
     int cpu3;
 };
+
 extern int cpuLiveFreq(struct cpu_freq *cpu_freq);
+
+//network
+struct net_live{
+    int tx;
+    int rx;
+    int total;
+};
+
+extern int netLive(struct net_live *net_live);
+
+
 
 //
 
@@ -204,8 +216,7 @@ extern void storageInfo(struct storage_info *storage_i);
 //hardware-info
 
 extern char *hardwareStaticJSON(struct storage_info storage_l,struct cpu_info cpu_i);
-extern char *hardwareDynamicJSON(struct cpu_live cpu_l,struct ram_usage ram_l,struct cpu_freq cpu_freq);
-
+char *hardwareDynamicJSON(struct cpu_live cpu_l,struct ram_usage ram_l,struct cpu_freq cpu_freq,struct net_live net_live);
 
 //services
 struct services {

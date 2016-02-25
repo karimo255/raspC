@@ -9,6 +9,7 @@ extern int cookie_lifetime;
 struct ram_usage ram_l;
 struct cpu_live cpu_l; 
 struct cpu_freq cpu_freq;
+struct net_live net_live;
 
 struct cpu_info cpu_i;
 struct storage_info storage_l;
@@ -90,7 +91,7 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 			case LWS_CALLBACK_SERVER_WRITEABLE:
 			{         
 
-				char *out = hardwareDynamicJSON(cpu_l,ram_l,cpu_freq);
+				char *out = hardwareDynamicJSON(cpu_l,ram_l,cpu_freq,net_live);
 
 
 				int count = strlen(out);

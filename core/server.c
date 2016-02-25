@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
 
 	struct lws_context_creation_info info;
-	unsigned int ms, oldms = 0;
+	unsigned int ms, oldms,oldms_2 = 0;
 	const char *iface = NULL;
 	char cert_path[1024];
 	char key_path[1024];
@@ -197,14 +197,17 @@ int main(int argc, char **argv)
 		 extern struct ram_usage ram_l;
 		 extern struct cpu_live cpu_l;
 		 extern struct cpu_freq cpu_freq;
+		 extern struct net_live net_live;
 
 
 		 ms = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-		 if ((ms - oldms) > 50 && get_client_count()>0 && (cpuLive(&cpu_l,5)==0 && ramLive(&ram_l,5)==0  && cpuLiveFreq(&cpu_freq)==0)) {
+		 if ((ms - oldms) > 50 && get_client_count()>0 && (cpuLive(&cpu_l,5)==0 && ramLive(&ram_l,5)==0  && cpuLiveFreq(&cpu_freq)==0 && netLive(&net_live)==0)) {
 		 	lws_callback_on_writable_all_protocol(context,
 		 		&protocols[PROTOCOL_DETAILS]);
 		 	oldms = ms;
 		 }
+
+		 
 
 
 		 n = lws_service(context, 50);

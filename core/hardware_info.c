@@ -42,9 +42,12 @@ char *hardwareStaticJSON(struct storage_info storage_l,struct cpu_info cpu_i){
 }
 
 
-char *hardwareDynamicJSON(struct cpu_live cpu_l,struct ram_usage ram_l,struct cpu_freq cpu_freq){
-    cJSON *root,*cpu_root_object,*cpu_root_object_object,*ram_root_object,*ram_root_object_object;
+char *hardwareDynamicJSON(struct cpu_live cpu_l,struct ram_usage ram_l,struct cpu_freq cpu_freq,struct net_live net_live){
+    cJSON *root;
+    cJSON *cpu_root_object,*cpu_root_object_object;
+    cJSON *ram_root_object,*ram_root_object_object;
     cJSON *cpu_freq_root_object,*cpu_freq_root_object_object;
+    cJSON *net_root_object,*net_root_object_object;
 
     root = cJSON_CreateArray();
 
@@ -95,6 +98,18 @@ char *hardwareDynamicJSON(struct cpu_live cpu_l,struct ram_usage ram_l,struct cp
     cJSON_AddNumberToObject(cpu_freq_root_object_object, "cpu3", cpu_freq.cpu3);            
 
 
+
+    net_root_object=cJSON_CreateObject();
+    cJSON_AddItemToArray(root,net_root_object);
+
+    net_root_object_object=cJSON_CreateObject();
+
+    cJSON_AddStringToObject(net_root_object, "request", "net-live");            
+    cJSON_AddItemToObject(net_root_object, "data", net_root_object_object); 
+
+    cJSON_AddNumberToObject(net_root_object_object, "tx", net_live.tx);            
+    cJSON_AddNumberToObject(net_root_object_object, "rx", net_live.rx);            
+    cJSON_AddNumberToObject(net_root_object_object, "total", net_live.total);            
 
 
     
