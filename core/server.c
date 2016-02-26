@@ -13,6 +13,8 @@ char *new_user=NULL;
 
 volatile int force_exit = 0;
 
+struct client *clinets_lst;
+
 struct lws_context *context;
 
 
@@ -111,6 +113,8 @@ char *forbidden_message= "<body><h3>Blocked IP-ADRESSE </h3></body>";
 int main(int argc, char **argv)
 {
 	daemonize();
+	
+
 
 
 

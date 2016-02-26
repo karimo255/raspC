@@ -9,7 +9,7 @@ void printliste(const struct client *e)
 	for( ; e != NULL ; e = e->next )
 
 	{
-
+		process("from Listenendes");
 		process(e->name );
 
 	}
@@ -51,7 +51,6 @@ void append(struct client **lst, char *name,int uid,int gid)
 int replace(struct client **lst, char *name,int uid, int gid)
 
 {
-
 	while( *lst != NULL ) 
 
 	{
@@ -60,7 +59,7 @@ int replace(struct client **lst, char *name,int uid, int gid)
 			(*lst)->name=name;	
 			(*lst)->gid=gid;
 			return 0;
-		}		
+		}
 		lst = &(*lst)->next;
 	
 	}
@@ -68,6 +67,27 @@ int replace(struct client **lst, char *name,int uid, int gid)
 	return -1;
 }
 
+int count(struct client **lst)
+
+{
+	return sizeof(lst)/sizeof(lst[1]);
+}
+
+int removeC(struct client **lst,int uid)
+
+{
+	while( *lst != NULL ) 
+
+	{
+		if((*lst)->uid==uid){	
+			*lst=NULL;
+		}			
+		lst = &(*lst)->next;
+			
+	}
+
+	return 1;
+}
 
 int find(struct client **lst, int uid)
 

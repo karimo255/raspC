@@ -16,6 +16,9 @@ struct storage_info storage_l;
 extern char *hash;
 extern char *new_user;
 
+extern struct client *clinets_lst;
+
+
 
 
 int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *user,
@@ -35,12 +38,26 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 		{            
 			check_session(wsi,pss);
 			increment_client_count();
+			if(find(&clinets_lst,pss->uid)!=0){
+				append(&clinets_lst, pss->user,pss->uid,pss->gid);
+			}				
+			printliste(clinets_lst);
 			break; 
 		}         
 		case LWS_CALLBACK_WS_PEER_INITIATED_CLOSE:
 		{
 			new_user=pss->user;
 			decrement_client_count();
+			//removeC(&clinets_lst,pss->uid);
+			count(&clinets_lst);
+			switch(count(&clinets_lst)){
+				case 1:
+				process("1");
+				break;
+				case 2:
+				process("2");
+				break;				
+			}
 		}	
 		case LWS_CALLBACK_ESTABLISHED:
 		{

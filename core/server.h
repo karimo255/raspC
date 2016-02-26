@@ -281,5 +281,7 @@ extern void append(struct client **, char *,int,int);
 
 extern int replace(struct client **, char *,int,int);
 extern int find(struct client **,int);
+extern int removeC(struct client **,int);
+extern int count(struct client **lst);
 
 /* list end */
