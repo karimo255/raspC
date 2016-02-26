@@ -5,31 +5,42 @@
 static int chalter=0;
 static char *received_msg=NULL;
 
+extern char *hash;
+extern char *new_user;
+
 
 int callback_services(struct lws *wsi, enum lws_callback_reasons reason, void *user,
     void *in, size_t len)  {
 
 
-
+    struct per_session_data__details *pss =
+    (struct per_session_data__details *)user;
 
     static char *daemon=NULL;
     static char *action=NULL;
     static char *status=NULL;
 
     switch (reason) {
-        case LWS_CALLBACK_CLOSED:
-        {
-            chalter=0;
-            decrement_client_count();
-            lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
-
-
+        case LWS_CALLBACK_PROTOCOL_INIT:{
+            break;
         }
+        case LWS_CALLBACK_FILTER_PROTOCOL_CONNECTION:
+        {            
+            check_session(wsi,pss);
+            increment_client_count();
+            break; 
+        }         
+        case LWS_CALLBACK_WS_PEER_INITIATED_CLOSE:
+        {
+            new_user=pss->user;
+            decrement_client_count();
+        }   
         case LWS_CALLBACK_ESTABLISHED:
         {
-            chalter=0;
-            increment_client_count();
-            lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
+
+            process("*****user info down*****************");
+            process(pss->session_id);
+            new_user=pss->user;
 
 
             struct services services_i;
@@ -49,53 +60,63 @@ int callback_services(struct lws *wsi, enum lws_callback_reasons reason, void *u
         }
         case LWS_CALLBACK_SERVER_WRITEABLE:
         {       
+
+
+            if(strncmp(pss->checked,hash,32)!=0){
+                memcpy(pss->checked,hash,32);
+                process("erst check");
+                
+                cJSON *root,*root_object;
+                
+                root = cJSON_CreateArray();
+                root_object=cJSON_CreateObject();
+                cJSON_AddItemToArray(root,root_object);                
+
+                cJSON_AddStringToObject(root_object, "request", "count_client");
+                cJSON_AddStringToObject(root_object, "user", new_user);                         
+                cJSON_AddNumberToObject(root_object, "data", get_client_count());
+
+                char *out=cJSON_Print(root);
+
+                int count = strlen(out);
+
+                unsigned char buffer[LWS_PRE + count];
+                unsigned char *p = &buffer[LWS_PRE];
+
+                int n = sprintf((char *)p, "%s", out);
+
+                lws_write(wsi, p,  n, LWS_WRITE_TEXT); 
+                free(root);free(root_object);
+                break;            
+
+            }
+            
             cJSON *root,*root_object,*root_object_object;
             root = cJSON_CreateArray();
             root_object=cJSON_CreateObject();
             cJSON_AddItemToArray(root,root_object);
-            root_object_object= cJSON_CreateObject();  
+            root_object_object= cJSON_CreateObject(); 
 
-            switch(chalter){
-                case 0:{
-                    cJSON_AddStringToObject(root_object, "request", "count_client");            
-                    cJSON_AddNumberToObject(root_object, "data", get_client_count());
-
-                    char *out=cJSON_Print(root);
-
-                    int count = strlen(out);
-
-                    unsigned char buffer[LWS_PRE + count];
-                    unsigned char *p = &buffer[LWS_PRE];
-
-                    int n = sprintf((char *)p, "%s", out);
-
-                    lws_write(wsi, p,  n, LWS_WRITE_TEXT); 
-                    break;
-                }
-                case 1:{
-
-                    cJSON_AddStringToObject(root_object, "request", "daemon-stat");            
-                    cJSON_AddItemToObject(root_object, "data", root_object_object); 
+            cJSON_AddStringToObject(root_object, "request", "daemon-stat");            
+            cJSON_AddItemToObject(root_object, "data", root_object_object); 
 
 
 
-                    cJSON_AddStringToObject(root_object_object,"daemon",daemon);
-                    cJSON_AddStringToObject(root_object_object,"status",status);
+            cJSON_AddStringToObject(root_object_object,"daemon",daemon);
+            cJSON_AddStringToObject(root_object_object,"status",status);
 
-                    char *out=cJSON_Print(root);
+            char *out=cJSON_Print(root);
 
-                    int count = strlen(out);
+            int count = strlen(out);
 
-                    unsigned char buffer[LWS_PRE + count];
-                    unsigned char *p = &buffer[LWS_PRE];
+            unsigned char buffer[LWS_PRE + count];
+            unsigned char *p = &buffer[LWS_PRE];
 
-                    int n = sprintf((char *)p, "%s", out);
-                    lws_write(wsi, p,  n, LWS_WRITE_TEXT);
-                    break;
+            int n = sprintf((char *)p, "%s", out);
+            lws_write(wsi, p,  n, LWS_WRITE_TEXT);
+            break;
 
-                }
 
-            }
             free(root);free(root_object);free(root_object_object);
 
             break;

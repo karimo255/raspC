@@ -194,6 +194,8 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
         pss->session_id=session_id;
         pss->user=(char*)malloc(32);
 
+        
+
         char line[100]={0};
         
 

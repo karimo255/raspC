@@ -5,8 +5,11 @@ int max_poll_elements;
 int debug_level = 9;
 
 int cookie_lifetime=31*24*3600;//one week
-int client_count=0;  
+int client_count=0; 
+int old_client_count=-1; 
 
+char *hash=NULL;
+char *new_user=NULL;
 
 volatile int force_exit = 0;
 
@@ -26,6 +29,7 @@ enum demo_protocols {
 	PROTOCOL_DETAILS,
 	PROTOCOL_SERVICES,
 	PROTOCOL_GPIO,
+	PROTOCOL_AUTH,
 
 	/* always last */
 	DEMO_PROTOCOL_COUNT
@@ -45,31 +49,31 @@ static struct lws_protocols protocols[] = {
 	{
 		"home",
 		callback_home,
-		sizeof(struct per_session_data__gpio),
+		sizeof(struct per_session_data__details),
 		64,
 	},
 	{
 		"details",
 		callback_details,
 		sizeof(struct per_session_data__details),
-		2048,
+		1024,
 	},		
 	{
 		"services",
 		callback_services,
-		sizeof(struct per_session_data__services),
+		sizeof(struct per_session_data__details),
 		1024,
 	},
 	{
 		"gpio",
 		callback_gpio,
-		sizeof(struct per_session_data__gpio),
-		64,
+		sizeof(struct per_session_data__details),
+		1024,
 	},
 	{
 		"auth",
 		callback_auth,
-		sizeof(struct per_session_data__gpio),
+		sizeof(struct per_session_data__details),
 		124,
 	},	
 	{ NULL, NULL, 0, 0 } /* terminator */
@@ -120,10 +124,6 @@ int main(int argc, char **argv)
 	handlePinsDirection(pinDirections);
 
 	signal(SIGINT, sighandler);
-
-
-	
-
 	
 
 
@@ -207,7 +207,22 @@ int main(int argc, char **argv)
 		 	oldms = ms;
 		 }
 
-		 
+		if(old_client_count!=client_count){
+			if(hash){
+				free(hash);
+			}
+
+			hash=rand_string();
+		 	lws_callback_on_writable_all_protocol(context,
+		 		&protocols[PROTOCOL_DETAILS]);
+		 	lws_callback_on_writable_all_protocol(context,
+		 		&protocols[PROTOCOL_GPIO]);		
+		 	lws_callback_on_writable_all_protocol(context,
+		 		&protocols[PROTOCOL_SERVICES]);	
+		 	lws_callback_on_writable_all_protocol(context,
+		 		&protocols[PROTOCOL_HOME]);			 				 			 					
+			old_client_count=client_count;
+		}		 
 
 
 		 n = lws_service(context, 50);

@@ -12,12 +12,10 @@ struct net_live net_live;
 
 struct cpu_info cpu_i;
 struct storage_info storage_l;
-char *hash=NULL;
-char *new_user;
 
+extern char *hash;
+extern char *new_user;
 
-
-cJSON *root,*root_object;
 
 
 int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *user,
@@ -26,9 +24,7 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 	struct per_session_data__details *pss =
 	(struct per_session_data__details *)user; 
 
-	root = cJSON_CreateArray();
-	root_object=cJSON_CreateObject();
-	cJSON_AddItemToArray(root,root_object);
+
 
 
 	switch (reason) {
@@ -43,16 +39,11 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 		}         
 		case LWS_CALLBACK_WS_PEER_INITIATED_CLOSE:
 		{
+			new_user=pss->user;
 			decrement_client_count();
 		}	
 		case LWS_CALLBACK_ESTABLISHED:
 		{
-
-			if(hash){
-				free(hash);
-			}
-
-			hash=rand_string();
 
 			process("*****user info down*****************");
 			process(pss->session_id);
@@ -80,6 +71,12 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 			if(strncmp(pss->checked,hash,32)!=0){
 				memcpy(pss->checked,hash,32);
 				process("erst check");
+				
+				cJSON *root,*root_object;	
+
+				root = cJSON_CreateArray();
+				root_object=cJSON_CreateObject();
+				cJSON_AddItemToArray(root,root_object);
 
 				cJSON_AddStringToObject(root_object, "request", "count_client");
 				cJSON_AddStringToObject(root_object, "user", new_user);				            
@@ -95,7 +92,7 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 				int n = sprintf((char *)p, "%s", out);
 
 				lws_write(wsi, p,  n, LWS_WRITE_TEXT); 				
-
+				free(root);free(root_object);
 				break;				
 
 			}

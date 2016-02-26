@@ -3,26 +3,37 @@
 static int chalter=0;
 static char *received_msg=NULL;
 
-
-
+extern char *hash;
+extern char *new_user;
 
 int callback_gpio(struct lws *wsi, enum lws_callback_reasons reason, void *user,
   void *in, size_t len)  {
 
+    struct per_session_data__details *pss =
+    (struct per_session_data__details *)user; 
+    
     switch (reason) {
-      
-        case LWS_CALLBACK_CLOSED:
-        {
-            chalter=0;
-            decrement_client_count();
-            lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
-            printf("closed\n");
+        case LWS_CALLBACK_PROTOCOL_INIT:{
+            break;
         }
+        case LWS_CALLBACK_FILTER_PROTOCOL_CONNECTION:
+        {            
+            check_session(wsi,pss);
+            increment_client_count();
+            break; 
+        }         
+        case LWS_CALLBACK_WS_PEER_INITIATED_CLOSE:
+        {
+            new_user=pss->user;
+            decrement_client_count();
+        }   
         case LWS_CALLBACK_ESTABLISHED:
         {
-            chalter=0;
-            increment_client_count();
-            lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
+
+            process("*****user info down*****************");
+            process(pss->session_id);
+            new_user=pss->user;
+
 
             cJSON *config_obj=parseConfigFile();
 
@@ -70,62 +81,74 @@ int callback_gpio(struct lws *wsi, enum lws_callback_reasons reason, void *user,
         }
         case LWS_CALLBACK_SERVER_WRITEABLE:
         {            
+
+            if(strncmp(pss->checked,hash,32)!=0){
+                memcpy(pss->checked,hash,32);
+                process("erst check");
+                
+                cJSON *root,*root_object;
+                
+                root = cJSON_CreateArray();
+                root_object=cJSON_CreateObject();
+                cJSON_AddItemToArray(root,root_object);                
+
+                cJSON_AddStringToObject(root_object, "request", "count_client");
+                cJSON_AddStringToObject(root_object, "user", new_user);                         
+                cJSON_AddNumberToObject(root_object, "data", get_client_count());
+
+                char *out=cJSON_Print(root);
+
+                int count = strlen(out);
+
+                unsigned char buffer[LWS_PRE + count];
+                unsigned char *p = &buffer[LWS_PRE];
+
+                int n = sprintf((char *)p, "%s", out);
+
+                lws_write(wsi, p,  n, LWS_WRITE_TEXT); 
+                free(root);free(root_object);
+                break;            
+
+            }
+
             cJSON *root,*root_object,*root_object_object;
 
             root = cJSON_CreateArray();
             root_object=cJSON_CreateObject();
             cJSON_AddItemToArray(root,root_object);
-            root_object_object= cJSON_CreateObject();  
+            root_object_object= cJSON_CreateObject(); 
+             
             int pin = 0, status = 0;
             cJSON * root_copy ;
             char *out;
 
 
-            switch(chalter){
-                case  0:{
-                    cJSON_AddStringToObject(root_object, "request", "count_client");            
-                    cJSON_AddNumberToObject(root_object, "data", get_client_count());
+            root_copy = cJSON_Parse(received_msg);
 
-                    out=cJSON_Print(root);
-
-                    int count = strlen(out);
-
-                    unsigned char buffer[LWS_PRE + count];
-                    unsigned char *p = &buffer[LWS_PRE];
-
-                    int n = sprintf((char *)p, "%s", out);
-
-                    lws_write(wsi, p,  n, LWS_WRITE_TEXT);  
-                    break;
-                }
-                case 1:{
-                    root_copy = cJSON_Parse(received_msg);
-
-                    pin = cJSON_GetObjectItem(root_copy,"pin")->valueint;
-                    status = cJSON_GetObjectItem(root_copy,"status")->valueint;
+            pin = cJSON_GetObjectItem(root_copy,"pin")->valueint;
+            status = cJSON_GetObjectItem(root_copy,"status")->valueint;
 
 
-                    digitalWrite(pin, status);
-                    status = digitalRead(pin);
+            digitalWrite(pin, status);
+            status = digitalRead(pin);
 
 
-                    cJSON_AddStringToObject(root_object, "request", "pin-state");            
-                    cJSON_AddItemToObject(root_object, "data", root_object_object); 
+            cJSON_AddStringToObject(root_object, "request", "pin-state");            
+            cJSON_AddItemToObject(root_object, "data", root_object_object); 
 
 
-                    cJSON_AddNumberToObject(root_object_object,"pin",pin);
-                    cJSON_AddNumberToObject(root_object_object,"status",status);
-                    out=cJSON_Print(root);
+            cJSON_AddNumberToObject(root_object_object,"pin",pin);
+            cJSON_AddNumberToObject(root_object_object,"status",status);
+            out=cJSON_Print(root);
 
-                    int count = strlen(out);
+            int count = strlen(out);
 
-                    unsigned char buffer[LWS_PRE + count];
-                    unsigned char *p = &buffer[LWS_PRE];
+            unsigned char buffer[LWS_PRE + count];
+            unsigned char *p = &buffer[LWS_PRE];
 
-                    int n = sprintf((char *)p, "%s", out);
-                    lws_write(wsi, p,  n, LWS_WRITE_TEXT);
-                }
-            }
+            int n = sprintf((char *)p, "%s", out);
+            lws_write(wsi, p,  n, LWS_WRITE_TEXT);
+
 
             free(root);free(root_object);free(root_object_object);
 

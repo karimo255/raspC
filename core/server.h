@@ -262,3 +262,24 @@ check_session(struct lws *wsi,struct per_session_data__details *pss);
 
 extern void 
 parse_passwd(char *user,char *uid,char *gid);
+
+/* liste */
+
+struct client
+
+{
+    char *name;            /* der Wert des clients          */
+    int uid;
+    int gid;
+    struct client *next; /* Zeiger auf das nächste client */
+
+};
+
+extern void printliste(const struct client* );
+
+extern void append(struct client **, char *,int,int);
+
+extern int replace(struct client **, char *,int,int);
+extern int find(struct client **,int);
+
+/* list end */
