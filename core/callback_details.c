@@ -35,25 +35,18 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 		case LWS_CALLBACK_PROTOCOL_INIT:{
 			break;
 		}
-		case LWS_CALLBACK_CLIENT_ESTABLISHED:
-		{
-
-			break;
-		}
 		case LWS_CALLBACK_FILTER_PROTOCOL_CONNECTION:
 		{            
 			check_session(wsi,pss);
+			increment_client_count();
 			break; 
 		}         
-		case LWS_CALLBACK_CLOSED:
+		case LWS_CALLBACK_WS_PEER_INITIATED_CLOSE:
 		{
 			decrement_client_count();
-		}
+		}	
 		case LWS_CALLBACK_ESTABLISHED:
 		{
-			if(strncmp(pss->checked,"init",32)==0){
-				increment_client_count();
-			}
 
 			if(hash){
 				free(hash);
