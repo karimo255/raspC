@@ -55,7 +55,7 @@ struct per_session_data__details {
     char *user;
     int uid;
     int gid;
-    int checked;
+    char checked[32];
 };
 
 struct per_session_data__auth {
@@ -245,6 +245,7 @@ extern int clientAuth(char *user,char *password);
 char *do_hashing(char *buffer);
 int clientAuth(char *user,char *password);
 void saveData(char *user,int uid,int gid,char *password);
+extern char *rand_string();
 
 time_t get_mtime(const char *path);
 

@@ -10,7 +10,9 @@ void increment_client_count()  {
 
 
 void decrement_client_count()  {
+
 	client_count--;
+    process("nach");
 }
 
 int get_client_count(){
@@ -210,7 +212,7 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
             
             pss->uid =atoi(uid);
             pss->gid =atoi(gid);
-             
+            memcpy(pss->checked,"init",32);             
         }else{
             process("doch");
         }         

@@ -5,13 +5,13 @@ static char *received_msg=NULL;
 
 cJSON *root_copy;
 
-static char *rand_string()
+char *rand_string()
 {
     const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK";
     char str[32];
     memset(str,0,32);
     int n=0;
-    for ( n = 0; n < 31; n++) {
+    for ( n = 0; n < 32; n++) {
         int key = rand() % (int) (sizeof charset - 1);
         str[n] = charset[key];
     }

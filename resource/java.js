@@ -36,7 +36,6 @@ $(window).ready(function() {
 
 
     $('.legend i').click(function(){
-        console.log($(this).text());
         switch($.trim($(this).parents("p").text())){
             /* cpu time*/
             case "user":
@@ -74,7 +73,6 @@ $(window).ready(function() {
             cpu0?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
             break;
             case "cpu1":
-            console.log('jj');
             cpu1= cpu1?0:1;
             cpu1?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
             break;
@@ -311,7 +309,7 @@ $(window).ready(function() {
        for (var i = obj.length - 1; i >= 0; i--) {
         switch (obj[i].request) {
             case "count_client": 
-            checkCount(obj[i].data);
+            console.log(obj[i]);
             break;
             case "cpu-live":
             handleCpu(obj[i].data);
@@ -1097,7 +1095,6 @@ var net_live_loop=function(){
                         
                     }else{
                         rx_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].rx-net_live_buffer_tmp[i-1].rx)*240)/5120)); 
-                        console.log((net_live_buffer_tmp[i].rx-net_live_buffer_tmp[i-1].rx));
                     }
                         step=step+spane;
                         if(i==net_live_buffer_tmp.length-2){
