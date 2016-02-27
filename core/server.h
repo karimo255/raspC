@@ -267,21 +267,22 @@ parse_passwd(char *user,char *uid,char *gid);
 
 struct client
 
-{
-    char *name;            /* der Wert des clients          */
-    int uid;
+{   int uid ;
+    char name[20];            /* der Wert des clients          */
     int gid;
+    char session_id[8];
     struct client *next; /* Zeiger auf das nächste client */
 
 };
 
-extern void printliste(const struct client* );
 
-extern void append(struct client **, char *,int,int);
+extern void lst_print(const struct client* );
 
-extern int replace(struct client **, char *,int,int);
-extern int find(struct client **,int);
-extern int removeC(struct client **,int);
-extern int count(struct client **lst);
+extern int lst_append(struct client **, char *,int,int,char *);
 
+extern int lst_replace(struct client **, char *,int,int,char *);
+extern int lst_find(struct client **,int);
+extern int lst_remove(struct client **,int);
+extern int lst_count(struct client **lst);
+extern char *lst_json(struct client **lst);
 /* list end */

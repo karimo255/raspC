@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-<script src="jquery/jquery.js">
-</script>
-<script src="cookie/cookie.js">
-</script>
+    <script src="jquery/jquery.js">
+    </script>
+    <script src="cookie/cookie.js">
+    </script>
 
-<script src="bootstrap/bootstrap.min.js">
-</script> 
-<link rel="stylesheet" href="bootstrap/bootstrap.min.css">     
-<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <script src="bootstrap/bootstrap.min.js">
+    </script> 
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">     
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css" />   
 </head>
 <body>
@@ -40,8 +40,30 @@
                         <a href="/gpio.html">GPIO</a>
                     </li>
                 </ul>
+                <!-- user info -->
+                <div  class="user-area pull-right">
+                    <p data-target="#user-info" data-toggle="collapse">Details</p>
+                    <div id="user-info" class="collapse">
+                        <ul class="user-action">
+                            <li>
+                                Logout
+                            </li>
+                        </ul>
+                        <div class="log">
+                            
+                            <h5>Loged users</h5>
+                            <ul>
+                                <li>admin</li>
+                                <li>demo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.user-info -->                
             </div>
             <!-- /.navbar-collapse -->
+
+            
         </div>
         <!-- /.container -->
     </nav> 
@@ -100,72 +122,72 @@
                 </ul>
             </div>
             <div class="legend">
-                 <p> <span>user</span> <i class="fa fa-check"></i></p>
-                 <p> <span>system</span> <i class="fa fa-check"></i></p>
-                <p><span>idle</span> <i class="fa fa-check"></i> </p>
-                <p> <span>wait</span> <i class="fa fa-check"></i></p>
+             <p> <span>user</span> <i class="fa fa-check"></i></p>
+             <p> <span>system</span> <i class="fa fa-check"></i></p>
+             <p><span>idle</span> <i class="fa fa-check"></i> </p>
+             <p> <span>wait</span> <i class="fa fa-check"></i></p>
 
-            </div>
-        </div>    
+         </div>
+     </div>    
 
-        <div class="col-md-4">
-            <h3>RAM usage</h3>
-            <div class="halter halter-ram" id="stoon">
-                <ul class="y-axis">
-                    <li>100%</li>
-                    <li>80%</li>
-                    <li>60%</li>
-                    <li>40%</li>
-                    <li>20%</li>
-                </ul>
-            </div>
-            <div class="legend">
-                 <p> <span>used</span> <i class="fa fa-check"></i></p>
-                 <p> <span>free</span> <i class="fa fa-check"></i></p>
-                <p><span>shared</span> <i class="fa fa-check"></i> </p>
-                <p> <span>buffers</span> <i class="fa fa-check"></i></p>
-                <p> <span>cached</span> <i class="fa fa-check"></i></p>
-
-            </div>
+     <div class="col-md-4">
+        <h3>RAM usage</h3>
+        <div class="halter halter-ram" id="stoon">
+            <ul class="y-axis">
+                <li>100%</li>
+                <li>80%</li>
+                <li>60%</li>
+                <li>40%</li>
+                <li>20%</li>
+            </ul>
         </div>
+        <div class="legend">
+         <p> <span>used</span> <i class="fa fa-check"></i></p>
+         <p> <span>free</span> <i class="fa fa-check"></i></p>
+         <p><span>shared</span> <i class="fa fa-check"></i> </p>
+         <p> <span>buffers</span> <i class="fa fa-check"></i></p>
+         <p> <span>cached</span> <i class="fa fa-check"></i></p>
 
-        <div class="col-md-4">
-            <h3>CPU frequenzes</h3>
-            <div class="halter halter-cpu-freq" id="stoon">
-                <ul class="y-axis">
-                    <li>100%</li>
-                    <li>80%</li>
-                    <li>60%</li>
-                    <li>40%</li>
-                    <li>20%</li>
-                </ul>
-            </div>
+     </div>
+ </div>
 
-            <div class="legend cpu-freq">
-                 <p><span>cpu0</span> <i class="fa fa-check"></i></p>  <p><span>cpu1</span> <i class="fa fa-check"></i></p>
-                <p><span>cpu2</span> <i class="fa fa-check"></i></p> <p><span>cpu3</span> <i class="fa fa-check"></i></p>                
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <h3>Network live monitoring</h3>
-            <div class="halter halter-net-live" >
-                <ul class="y-axis">
-                    <li>5 MB</li>
-                    <li>4 MB</li>
-                    <li>3 MB</li>
-                    <li>2 MB</li>
-                    <li>1 MB</li>
-                </ul>
-            </div>
-
-            <div class="legend net-live">
-                 <p><span>rx</span> <i class="fa fa-check"></i></p>  <p><span>tx</span> <i class="fa fa-check"></i></p>
-                <p><span>total</span> <i class="fa fa-check"></i></p>                
-            </div>
-        </div>        
-
+ <div class="col-md-4">
+    <h3>CPU frequenzes</h3>
+    <div class="halter halter-cpu-freq" id="stoon">
+        <ul class="y-axis">
+            <li>100%</li>
+            <li>80%</li>
+            <li>60%</li>
+            <li>40%</li>
+            <li>20%</li>
+        </ul>
     </div>
+
+    <div class="legend cpu-freq">
+     <p><span>cpu0</span> <i class="fa fa-check"></i></p>  <p><span>cpu1</span> <i class="fa fa-check"></i></p>
+     <p><span>cpu2</span> <i class="fa fa-check"></i></p> <p><span>cpu3</span> <i class="fa fa-check"></i></p>                
+ </div>
+</div>
+
+<div class="col-md-4">
+    <h3>Network live monitoring</h3>
+    <div class="halter halter-net-live" >
+        <ul class="y-axis">
+            <li>5 MB</li>
+            <li>4 MB</li>
+            <li>3 MB</li>
+            <li>2 MB</li>
+            <li>1 MB</li>
+        </ul>
+    </div>
+
+    <div class="legend net-live">
+     <p><span>rx</span> <i class="fa fa-check"></i></p>  <p><span>tx</span> <i class="fa fa-check"></i></p>
+     <p><span>total</span> <i class="fa fa-check"></i></p>                
+ </div>
+</div>        
+
+</div>
 
 </div>
 </body>

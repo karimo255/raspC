@@ -38,19 +38,17 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 		{            
 			check_session(wsi,pss);
 			increment_client_count();
-			if(find(&clinets_lst,pss->uid)!=0){
-				append(&clinets_lst, pss->user,pss->uid,pss->gid);
+			if(lst_find(&clinets_lst,pss->uid)<0){
+				lst_append(&clinets_lst, pss->user,pss->uid,pss->gid,pss->session_id+24);
 			}				
-			printliste(clinets_lst);
 			break; 
 		}         
 		case LWS_CALLBACK_WS_PEER_INITIATED_CLOSE:
 		{
 			new_user=pss->user;
 			decrement_client_count();
-			//removeC(&clinets_lst,pss->uid);
-			count(&clinets_lst);
-			switch(count(&clinets_lst)){
+			lst_remove(&clinets_lst,pss->uid);
+			switch(lst_count(&clinets_lst)){
 				case 1:
 				process("1");
 				break;
@@ -89,17 +87,7 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 				memcpy(pss->checked,hash,32);
 				process("erst check");
 				
-				cJSON *root,*root_object;	
-
-				root = cJSON_CreateArray();
-				root_object=cJSON_CreateObject();
-				cJSON_AddItemToArray(root,root_object);
-
-				cJSON_AddStringToObject(root_object, "request", "count_client");
-				cJSON_AddStringToObject(root_object, "user", new_user);				            
-				cJSON_AddNumberToObject(root_object, "data", get_client_count());
-
-				char *out=cJSON_Print(root);
+				char *out = lst_json(&clinets_lst);
 
 				int count = strlen(out);
 
@@ -108,8 +96,8 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 
 				int n = sprintf((char *)p, "%s", out);
 
-				lws_write(wsi, p,  n, LWS_WRITE_TEXT); 				
-				free(root);free(root_object);
+				lws_write(wsi, p,  n, LWS_WRITE_TEXT); 	
+				free(out);			
 				break;				
 
 			}

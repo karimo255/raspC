@@ -155,6 +155,7 @@ th {
     min-height: 75px;
 }
 .legend ul {
+    box-shadow: 0 0 1px 1px thistle;
     display: none;
     height: auto;
     left: 5px;
@@ -164,7 +165,6 @@ th {
     top: -60px;
     width: auto;
     z-index: 9;
-    box-shadow: 0 0 1px 1px thistle;
 }
 .legend li {
     border: 1px solid white;
@@ -199,6 +199,7 @@ th {
     background-color: tomato;
     box-shadow: 9px -6px 6px 10px black;
     color: white;
+    display: none;
     height: auto;
     padding: 5px;
     position: absolute;
@@ -206,7 +207,6 @@ th {
     top: 0;
     width: 100px;
     z-index: 99;
-    display: none;
 }
 .settings_speed {
     width: 35px;
@@ -217,23 +217,74 @@ th {
     color: black;
     margin-left: 6px;
 }
-.settings button{
+.settings button {
+    height: 30px;
     margin-left: 5%;
     width: 90%;
-    height: 30px;
 }
-
 .fa.fa-wrench {
-    position: absolute;
-    right: 0;
     background-color: tomato;
     color: white;
-    padding: 3px;
-    opacity: 0.50;
     cursor: pointer;
+    opacity: 0.5;
+    padding: 3px;
+    position: absolute;
+    right: 0;
     z-index: 999;
 }
 .fa.fa-wrench:hover {
     opacity: 1;
 }
-
+.collapse .pull-right {
+    color: white;
+    cursor: pointer;
+    height: 100%;
+    line-height: 50px;
+    width: 150px;
+}
+.user-area {
+    position: relative;
+}
+.user-area.pull-right > p {
+    color: white;
+    margin: 0;
+    padding: 0 15px;
+    text-align: right;
+}
+#user-info {
+    background-color: windowtext;
+    padding: 5px 20px 10px 5px;
+    position: absolute;
+    right: 0;
+    text-align: left;
+    width: auto;
+    z-index: 999;
+}
+.collapse.navbar-collapse {
+    padding-right: 0;
+}
+#user-info ul {
+    list-style: outside none none;
+    margin: 0;
+    padding: 0;
+}
+#user-info li {
+    border-radius: 4px;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 10px;
+}
+#user-info h5 {
+    border-bottom: 1px solid;
+    margin: 4px 10px;
+    padding: 5px 0;
+}
+.log li {
+    border-radius: 4px;
+}
+.log li:hover {
+    background: turquoise none repeat scroll 0 0;
+}
+.user-action li:hover {
+    background: turquoise none repeat scroll 0 0;
+}
