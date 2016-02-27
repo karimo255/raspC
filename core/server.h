@@ -270,7 +270,7 @@ struct client
 {   int uid ;
     char name[20];            /* der Wert des clients          */
     int gid;
-    char session_id[8];
+    char session_id[10];
     struct client *next; /* Zeiger auf das nächste client */
 
 };

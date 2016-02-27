@@ -231,7 +231,7 @@ int main(int argc, char **argv)
 
 
 		 n = lws_service(context, 50);
-
+	}
 
 		lws_context_destroy(context);
 

@@ -10,9 +10,8 @@ void lst_print(const struct client *e)
 
 	{
 		printf("************ \n");
-		printf("name %s\n", e->name );
-		printf("uid %d\n", e->uid );
-		printf("gid %d\n", e->gid );
+		process(e->name );
+		process(e->session_id );
 
 	}
 
