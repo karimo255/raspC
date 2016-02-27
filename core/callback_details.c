@@ -48,6 +48,7 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 			new_user=pss->user;
 			decrement_client_count();
 			lst_remove(&clinets_lst,pss->uid);
+
 			switch(lst_count(&clinets_lst)){
 				case 1:
 				process("1");
