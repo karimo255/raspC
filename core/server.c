@@ -188,6 +188,7 @@ int main(int argc, char **argv)
 
 
 	 n = 0;
+
 	 while (n >= 0 && !force_exit) {
 	 	struct timeval tv;
 
@@ -230,7 +231,7 @@ int main(int argc, char **argv)
 
 
 		 n = lws_service(context, 50);
-		}
+
 
 		lws_context_destroy(context);
 
