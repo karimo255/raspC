@@ -306,42 +306,42 @@ $(window).ready(function() {
     websocket.onmessage = function (message) {
         var obj = JSON.parse(message.data);
         //console.log('erhalten obj');
-       for (var i = obj.length - 1; i >= 0; i--) {
-        switch (obj[i].request) {
-            case "count_client": 
-            console.log(obj[i]);
-            break;
-            case "cpu-live":
-            handleCpu(obj[i].data);
-            cpu_buffer[c_cpu]=obj[i].data;
-            c_cpu++;
-            break;
-            case "ram-live":
-            ram_buffer[c_ram]=obj[i].data;    
-            c_ram++;               
-            break;
-            case "cpu-freq":
-            cpu_freq_buffer[c_cpu_freq]=obj[i].data;    
-            c_cpu_freq++;               
-            break;            
-            case "storage-info":
-            handleStorage(obj[i].data);                    
-            break;                
-            case "cpu-info":
-            handleCpuInfo(obj[i].data);                    
-            break;    
-            case "net-live":
-            net_live_buffer[c_net_live]=obj[i].data;    
-            c_net_live++;                      
-            break;                           
+        for (var i = obj.length - 1; i >= 0; i--) {
+            switch (obj[i].request) {
+                case "count_client": 
+                console.log(obj[i]);
+                break;
+                case "cpu-live":
+                handleCpu(obj[i].data);
+                cpu_buffer[c_cpu]=obj[i].data;
+                c_cpu++;
+                break;
+                case "ram-live":
+                ram_buffer[c_ram]=obj[i].data;    
+                c_ram++;               
+                break;
+                case "cpu-freq":
+                cpu_freq_buffer[c_cpu_freq]=obj[i].data;    
+                c_cpu_freq++;               
+                break;            
+                case "storage-info":
+                handleStorage(obj[i].data);                    
+                break;                
+                case "cpu-info":
+                handleCpuInfo(obj[i].data);                    
+                break;    
+                case "net-live":
+                net_live_buffer[c_net_live]=obj[i].data;    
+                c_net_live++;                      
+                break;                           
+            }
         }
+
     }
 
-}
+    websocket.onclose = function (close) {
 
-websocket.onclose = function (close) {
-
-};
+    };
 
 
 
@@ -448,14 +448,14 @@ var cpu_loop=function(){
 
                 for (var i = 0; i < cpu_buffer_tmp.length ; i++) {
                     if(i==0){
-                        
+
                     }else{
                         cpu_user_ctx.lineTo(step,240-((cpu_buffer_tmp[i].user*240)/100));  
                     }
-                        step=step+spane;
-                        if(i==cpu_buffer_tmp.length-2){
-                            step=canvas_width;
-                        }
+                    step=step+spane;
+                    if(i==cpu_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
                     
                 }                
 
@@ -659,14 +659,14 @@ var ram_loop=function(){
 
                 for (var i = 0; i < ram_buffer_tmp.length ; i++) {
                     if(i==0){
-                        
+
                     }else{
                         ram_used_ctx.lineTo(step,240-((ram_buffer_tmp[i].used*240)/925)); 
                     }
-                        step=step+spane;
-                        if(i==ram_buffer_tmp.length-2){
-                            step=canvas_width;
-                        }
+                    step=step+spane;
+                    if(i==ram_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
                     
                 }                
 
@@ -889,14 +889,14 @@ var cpu_freq_loop=function(){
 
                 for (var i = 0; i < cpu_freq_buffer_tmp.length ; i++) {
                     if(i==0){
-                        
+
                     }else{
                         cpu0_ctx.lineTo(step,240-cpu_freq_buffer_tmp[i].cpu0); 
                     }
-                        step=step+spane;
-                        if(i==cpu_freq_buffer_tmp.length-2){
-                            step=canvas_width;
-                        }
+                    step=step+spane;
+                    if(i==cpu_freq_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
                     
                 }                
 
@@ -1092,14 +1092,14 @@ var net_live_loop=function(){
 
                 for (var i = 0; i < net_live_buffer_tmp.length ; i++) {
                     if(i==0){
-                        
+
                     }else{
                         rx_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].rx-net_live_buffer_tmp[i-1].rx)*240)/5120)); 
                     }
-                        step=step+spane;
-                        if(i==net_live_buffer_tmp.length-2){
-                            step=canvas_width;
-                        }
+                    step=step+spane;
+                    if(i==net_live_buffer_tmp.length-2){
+                        step=canvas_width;
+                    }
                     
                 }                
 
@@ -1155,23 +1155,23 @@ var net_live_loop=function(){
                     if(i==0){
 
                     }else{
-                       total_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].total-net_live_buffer_tmp[i-1].total)*240)/5120)); 
-                    }
-                    step=step+spane;
-                    if(i==net_live_buffer_tmp.length-2){
-                        step=canvas_width;
-                    }
-                }                
+                     total_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].total-net_live_buffer_tmp[i-1].total)*240)/5120)); 
+                 }
+                 step=step+spane;
+                 if(i==net_live_buffer_tmp.length-2){
+                    step=canvas_width;
+                }
+            }                
 
-                total_ctx.stroke();
-                total_last_value=240-(((net_live_buffer_tmp[net_live_buffer_tmp.length-1].total-net_live_buffer_tmp[net_live_buffer_tmp.length-2].total)*240)/5120);
-            }
-            /* end cached */
-            pallete.append(canvas);
+            total_ctx.stroke();
+            total_last_value=240-(((net_live_buffer_tmp[net_live_buffer_tmp.length-1].total-net_live_buffer_tmp[net_live_buffer_tmp.length-2].total)*240)/5120);
         }
+        /* end cached */
+        pallete.append(canvas);
+    }
 
 
-    },get_net_live_speed());
+},get_net_live_speed());
 
 }
 
@@ -1215,3 +1215,11 @@ $('.halter-net-live button').click(function(){
 });
 
 
+var deleteSession = function(){
+    $.removeCookie("session_id",{ expires:31,path:"/"}) || $.removeCookie("session_id");
+            location.reload();
+}
+
+        $('.logout').click(function(){
+            deleteSession();
+        });
