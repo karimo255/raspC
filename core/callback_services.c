@@ -8,6 +8,8 @@ static char *received_msg=NULL;
 extern char *hash;
 extern char *new_user;
 
+extern struct client *clinets_lst;
+
 
 int callback_services(struct lws *wsi, enum lws_callback_reasons reason, void *user,
     void *in, size_t len)  {
@@ -28,13 +30,17 @@ int callback_services(struct lws *wsi, enum lws_callback_reasons reason, void *u
         {            
             check_session(wsi,pss);
             increment_client_count();
+            if(lst_find(&clinets_lst,pss->uid)<0){
+                lst_append(&clinets_lst, pss->user,pss->uid,pss->gid,pss->session_id+24);
+            }               
             break; 
         }         
         case LWS_CALLBACK_WS_PEER_INITIATED_CLOSE:
         {
             new_user=pss->user;
             decrement_client_count();
-        }   
+            lst_remove(&clinets_lst,pss->uid);
+        }  
         case LWS_CALLBACK_ESTABLISHED:
         {
 
@@ -65,18 +71,9 @@ int callback_services(struct lws *wsi, enum lws_callback_reasons reason, void *u
             if(strncmp(pss->checked,hash,32)!=0){
                 memcpy(pss->checked,hash,32);
                 process("erst check");
+                lst_print(clinets_lst);
                 
-                cJSON *root,*root_object;
-                
-                root = cJSON_CreateArray();
-                root_object=cJSON_CreateObject();
-                cJSON_AddItemToArray(root,root_object);                
-
-                cJSON_AddStringToObject(root_object, "request", "count_client");
-                cJSON_AddStringToObject(root_object, "user", new_user);                         
-                cJSON_AddNumberToObject(root_object, "data", get_client_count());
-
-                char *out=cJSON_Print(root);
+                char *out = lst_json(&clinets_lst);
 
                 int count = strlen(out);
 
@@ -85,9 +82,11 @@ int callback_services(struct lws *wsi, enum lws_callback_reasons reason, void *u
 
                 int n = sprintf((char *)p, "%s", out);
 
-                lws_write(wsi, p,  n, LWS_WRITE_TEXT); 
-                free(root);free(root_object);
-                break;            
+                lws_write(wsi, p,  n, LWS_WRITE_TEXT);  
+                process(out);
+                free(out);  
+                    
+                break;              
 
             }
             

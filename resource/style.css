@@ -11,7 +11,7 @@ th {
 .fa {
     cursor: pointer;
 }
-.fa.fa-spinner.fa-spin {
+.panel .fa.fa-spinner.fa-spin {
     color: turquoise;
     display: none;
     left: -20px;
@@ -104,6 +104,7 @@ th {
     margin: 6px;
     padding: 4px;
     width: 100%;
+    position: relative;
 }
 .all-server span {
     font-size: 14px;
@@ -289,5 +290,11 @@ th {
     background: turquoise none repeat scroll 0 0;
 }
 .notifications{
+    display: none;
+}
+.all-server .fa {
+    left: -15px;
+    position: absolute;
+    top: 7px;
     display: none;
 }

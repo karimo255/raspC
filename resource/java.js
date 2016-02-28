@@ -19,329 +19,324 @@ $(window).ready(function() {
     var settings_fa = $('<i class="fa fa-wrench" />');
     $('.halter').append(settings_div).append(settings_fa);
 
-    //
+//
 
-    /* display/hide settings div */
-    $('.fa-wrench').click(function(){
-        $(this).parents('.halter').find('.settings').toggle();
-    });
-
-
+/* display/hide settings div */
+$('.fa-wrench').click(function(){
+    $(this).parents('.halter').find('.settings').toggle();
+});
 
 
-    var canvas_width = $(".halter").width()+1;
-    $(window).resize(function(){
-        canvas_width = $(".halter").width()+1;
-    });
 
 
-    $('.legend i').click(function(){
-        switch($.trim($(this).parents("p").text())){
-            /* cpu time*/
-            case "user":
-            cpu_user= cpu_user?0:1;
-            cpu_user?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            case "system":
-            cpu_system= cpu_system?0:1;
-            cpu_system?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            case "idle":
-            cpu_idle= cpu_idle?0:1;
-            cpu_idle?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;                                    
-            case "wait":
-            cpu_wait= cpu_wait?0:1;
-            cpu_wait?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            /* network*/            
-            case "rx":
-            rx= rx?0:1;
-            rx?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            case "tx":
-            tx= tx?0:1;
-            tx?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            case "total":
-            total= total?0:1;
-            total?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            /* cpu freq */                                    
-            case "cpu0":
-            cpu0= cpu0?0:1;
-            cpu0?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            case "cpu1":
-            cpu1= cpu1?0:1;
-            cpu1?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            case "cpu2":
-            cpu2= cpu2?0:1;
-            cpu2?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            case "cpu3":
-            cpu3= cpu3?0:1;
-            cpu3?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;
-            /* ram usage*/   
-            case "free":
-            ram_free= ram_free?0:1;
-            ram_free?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;   
-            case "used":
-            ram_used= ram_used?0:1;
-            ram_used?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;  
-            case "cached":
-            ram_cached= ram_cached?0:1;
-            ram_cached?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break; 
-            case "shared":
-            ram_shared= ram_shared?0:1;
-            ram_shared?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break; 
-            case "buffers":
-            ram_buffers= ram_buffers?0:1;
-            ram_buffers?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
-            break;                                                                                
-        }
-        $('.halter legend ul').hide();
-    });
-    
+var canvas_width = $(".halter").width()+1;
+$(window).resize(function(){
+    canvas_width = $(".halter").width()+1;
+});
 
-    //
 
-    /* color */
-
-    var farben=["red","green","tomato",
-    "blue","yellow","black","sienna",
-    "turquoise","teal","skyblue","palevioletred","orangered",
-    "orange","olive","tan","salmon","thistle","seagreen"];
-    var color_palette = $('<ul/>');
-    for (var i = farben.length - 1; i >= 0; i--) {
-        var li = $('<li/>');
-        li.css({"background-color":farben[i]});
-        color_palette.append(li);
+$('.legend i').click(function(){
+    switch($.trim($(this).parents("p").text())){
+        /* cpu time*/
+        case "user":
+        cpu_user= cpu_user?0:1;
+        cpu_user?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        case "system":
+        cpu_system= cpu_system?0:1;
+        cpu_system?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        case "idle":
+        cpu_idle= cpu_idle?0:1;
+        cpu_idle?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;                                    
+        case "wait":
+        cpu_wait= cpu_wait?0:1;
+        cpu_wait?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        /* network*/            
+        case "rx":
+        rx= rx?0:1;
+        rx?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        case "tx":
+        tx= tx?0:1;
+        tx?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        case "total":
+        total= total?0:1;
+        total?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        /* cpu freq */                                    
+        case "cpu0":
+        cpu0= cpu0?0:1;
+        cpu0?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        case "cpu1":
+        cpu1= cpu1?0:1;
+        cpu1?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        case "cpu2":
+        cpu2= cpu2?0:1;
+        cpu2?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        case "cpu3":
+        cpu3= cpu3?0:1;
+        cpu3?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;
+        /* ram usage*/   
+        case "free":
+        ram_free= ram_free?0:1;
+        ram_free?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;   
+        case "used":
+        ram_used= ram_used?0:1;
+        ram_used?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;  
+        case "cached":
+        ram_cached= ram_cached?0:1;
+        ram_cached?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break; 
+        case "shared":
+        ram_shared= ram_shared?0:1;
+        ram_shared?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break; 
+        case "buffers":
+        ram_buffers= ram_buffers?0:1;
+        ram_buffers?$(this).parents("p").css({"opacity":"1"}):$(this).parents("p").css({"opacity":"0.3"});
+        break;                                                                                
     }
+    $('.halter legend ul').hide();
+});
 
 
-    $('.legend p').append(color_palette);
-    
-    $('.legend p').click(function(e){
-        if($(e.target).is('i') || $(e.target).is('span') ){
-            return false;
-        }
-        $(this).find('ul').toggle();
+//
 
-    });
+/* color */
 
-    var set_color = function(name,color){
-        switch(name){
-            /* cpu time */
-            case "user":
-            cpu_user_color=color;
-            break;
-            case "system":
-            cpu_system_color=color;
-            break;
-            case "idle":
-            cpu_idle_color=color;
-            break;                                    
-            case "wait":
-            cpu_wait_color=color;
-            break;  
-            /* network */          
-            case "rx":
-            rx_color=color;
-            break;
-            case "tx":
-            tx_color=color;
-            break;
-            case "total":
-            total_color=color;
-            break;                                    
-            case "cpu0":
-            cpu0_color=color;
-            break;            
-            case "cpu1":
-            cpu1_color=color;
-            break;
-            case "cpu2":
-            cpu2_color=color;
-            break;
-            case "cpu3":
-            cpu3_color=color;
-            break; 
-            case "used":
-            ram_used_color=color;
-            break;
-            case "free":
-            ram_free_color=color;
-            break; 
-            case "cached":
-            ram_cached_color=color;
-            break;  
-            case "buffers":
-            ram_buffers_color=color;
-            break;  
-            case "shared":
-            ram_shared_color=color;
-            break;                                                                                                  
-        }
-    };
+var farben=["red","green","tomato",
+"blue","yellow","black","sienna",
+"turquoise","teal","skyblue","palevioletred","orangered",
+"orange","olive","tan","salmon","thistle","seagreen"];
+var color_palette = $('<ul/>');
+for (var i = farben.length - 1; i >= 0; i--) {
+    var li = $('<li/>');
+    li.css({"background-color":farben[i]});
+    color_palette.append(li);
+}
 
-    $('.legend li').click(function(){
-        $('.halter legend ul').hide();
 
-        var color = $(this).css("background-color");
+$('.legend p').append(color_palette);
 
-        $(this).parents('p').css({"color":color});
-        set_color($.trim($(this).parents('p').text()),color);
-
-    });
-
-    $('.legend p').each(function(index){
-        var color = farben[Math.round(Math.random()*1000)%farben.length];
-        $(this).css({"color":color});
-        var name = $.trim($(this).text());
-        set_color(name,color);
-    });
-
-    var  handleCpu=function(obj){
-        $('.cpu-details .btn').removeClass("btn-danger").addClass("btn-primary");
-        $.each( obj, function( key, value ) {
-
-            if(key=="temp"){
-                if(value>48){
-                    classe="btn-danger"; 
-                    $('.cpu-details .btn').removeClass("btn-primary").addClass("btn-danger");                                   
-                }
-                $('#cpuTemp').text(value);
-            }                   
-        });
+$('.legend p').click(function(e){
+    if($(e.target).is('i') || $(e.target).is('span') ){
+        return false;
     }
-    var  handleRam=function(obj){
+    $(this).find('ul').toggle();
 
-        $.each( obj, function( key, value ) {
-            $('.bar[label=' + key + ']').find(".value").animate({
-                height: (value*210)/925
-            },2);
-        });
+});
+
+var set_color = function(name,color){
+    switch(name){
+        /* cpu time */
+        case "user":
+        cpu_user_color=color;
+        break;
+        case "system":
+        cpu_system_color=color;
+        break;
+        case "idle":
+        cpu_idle_color=color;
+        break;                                    
+        case "wait":
+        cpu_wait_color=color;
+        break;  
+        /* network */          
+        case "rx":
+        rx_color=color;
+        break;
+        case "tx":
+        tx_color=color;
+        break;
+        case "total":
+        total_color=color;
+        break;                                    
+        case "cpu0":
+        cpu0_color=color;
+        break;            
+        case "cpu1":
+        cpu1_color=color;
+        break;
+        case "cpu2":
+        cpu2_color=color;
+        break;
+        case "cpu3":
+        cpu3_color=color;
+        break; 
+        case "used":
+        ram_used_color=color;
+        break;
+        case "free":
+        ram_free_color=color;
+        break; 
+        case "cached":
+        ram_cached_color=color;
+        break;  
+        case "buffers":
+        ram_buffers_color=color;
+        break;  
+        case "shared":
+        ram_shared_color=color;
+        break;                                                                                                  
     }
+};
 
-    var handleCpuInfo=function(obj){
-        $('.cpu-info tbody').html("");
-        $.each( obj, function( key, value ) {
-            var tr=$("<tr/>");
-            var th_k=$("<th/>");
-            var th_v=$("<th/>");             
-            th_k.text(key);
-            th_v.text(value);
-            tr.append(th_k);
-            tr.append(th_v); 
-            $('.cpu-info tbody').append(tr);           
-        });
-    }
+$('.legend li').click(function(){
+    $('.halter legend ul').hide();
 
+    var color = $(this).css("background-color");
 
-    var handleStorage=function(obj){
+    $(this).parents('p').css({"color":color});
+    set_color($.trim($(this).parents('p').text()),color);
 
-        var pieData = [
-        {
-            value: 300,
-            color:"#F7464A",
-            highlight: "#FF5A5E",
-            label: "Total"
-        },
-        {
-            value: 50,
-            color: "#46BFBD",
-            highlight: "#5AD3D1",
-            label: "Used"
-        },
-        {
-            value: 100,
-            color: "#FDB45C",
-            highlight: "#FFC870",
-            label: "Free"
-        }
-        ];
-        pieData[0].value=obj.total;
-        pieData[1].value=obj.used;
-        pieData[2].value=obj.free;
+});
 
-        var ctx = document.getElementById("chart-area").getContext("2d");
-        window.myPie = new Chart(ctx).Pie(pieData);
-    }
+$('.legend p').each(function(index){
+    var color = farben[Math.round(Math.random()*1000)%farben.length];
+    $(this).css({"color":color});
+    var name = $.trim($(this).text());
+    set_color(name,color);
+});
 
-    /*  end common */
+var  handleCpu=function(obj){
+    $('.cpu-details .btn').removeClass("btn-danger").addClass("btn-primary");
+    $.each( obj, function( key, value ) {
 
-    window.WebSocket = window.WebSocket || window.MozWebSocket;
-
-    var websocket = new WebSocket('ws://192.168.43.88:7681',
-      'details');                
-
-
-    var count_client =0;
-    var cpu_buffer=[];
-    var ram_buffer=[];
-    var cpu_freq_buffer=[];
-    var net_live_buffer=[];
-
-    websocket.onopen = function () {
-        console.log('verbindung hergestellt');
-    };
-
-    websocket.onerror = function (e) {
-        alert(e);
-    };
-
-    var sendObject = function(obj){
-        obj = JSON.stringify(obj,null,4);
-        websocket.send(obj);
-    }
-    var c_cpu=0;var c_ram=0;var c_cpu_freq=0;var c_net_live=0;
-
-    websocket.onmessage = function (message) {
-        var obj = JSON.parse(message.data);
-        //console.log('erhalten obj');
-        for (var i = obj.length - 1; i >= 0; i--) {
-            switch (obj[i].request) {
-                case "count_client": 
-                handleUser(obj[i]);
-                break;
-                case "cpu-live":
-                handleCpu(obj[i].data);
-                cpu_buffer[c_cpu]=obj[i].data;
-                c_cpu++;
-                break;
-                case "ram-live":
-                ram_buffer[c_ram]=obj[i].data;    
-                c_ram++;               
-                break;
-                case "cpu-freq":
-                cpu_freq_buffer[c_cpu_freq]=obj[i].data;    
-                c_cpu_freq++;               
-                break;            
-                case "storage-info":
-                handleStorage(obj[i].data);                    
-                break;                
-                case "cpu-info":
-                handleCpuInfo(obj[i].data);                    
-                break;    
-                case "net-live":
-                net_live_buffer[c_net_live]=obj[i].data;    
-                c_net_live++;                      
-                break;                           
+        if(key=="temp"){
+            if(value>48){
+                classe="btn-danger"; 
+                $('.cpu-details .btn').removeClass("btn-primary").addClass("btn-danger");                                   
             }
-        }
+            $('#cpuTemp').text(value);
+        }                   
+    });
+}
+var  handleRam=function(obj){
 
+    $.each( obj, function( key, value ) {
+        $('.bar[label=' + key + ']').find(".value").animate({
+            height: (value*210)/925
+        },2);
+    });
+}
+
+var handleCpuInfo=function(obj){
+    $('.cpu-info tbody').html("");
+    $.each( obj, function( key, value ) {
+        var tr=$("<tr/>");
+        var th_k=$("<th/>");
+        var th_v=$("<th/>");             
+        th_k.text(key);
+        th_v.text(value);
+        tr.append(th_k);
+        tr.append(th_v); 
+        $('.cpu-info tbody').append(tr);           
+    });
+}
+
+
+var handleStorage=function(obj){
+
+    var pieData = [
+    {
+        value: 0,
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "Used"
+    },
+    {
+        value: 0,
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: "Free"
+    }
+    ];
+    pieData[0].value=obj.used;
+    pieData[1].value=obj.free;
+
+    var ctx = document.getElementById("chart-area").getContext("2d");
+    window.myPie = new Chart(ctx).Pie(pieData);
+
+    $('.total').text(obj.total);
+}
+
+/*  end common */
+
+window.WebSocket = window.WebSocket || window.MozWebSocket;
+
+var websocket = new WebSocket('ws://192.168.43.88:7681',
+  'details');                
+
+
+var count_client =0;
+var cpu_buffer=[];
+var ram_buffer=[];
+var cpu_freq_buffer=[];
+var net_live_buffer=[];
+
+websocket.onopen = function () {
+    console.log('verbindung hergestellt');
+};
+
+websocket.onerror = function (e) {
+    alert(e);
+};
+
+var sendObject = function(obj){
+    obj = JSON.stringify(obj,null,4);
+    websocket.send(obj);
+}
+var c_cpu=0;var c_ram=0;var c_cpu_freq=0;var c_net_live=0;
+
+websocket.onmessage = function (message) {
+    var obj = JSON.parse(message.data);
+    //console.log('erhalten obj');
+    for (var i = obj.length - 1; i >= 0; i--) {
+        switch (obj[i].request) {
+            case "count_client": 
+            handleUser(obj[i]);
+            break;
+            case "cpu-live":
+            handleCpu(obj[i].data);
+            cpu_buffer[c_cpu]=obj[i].data;
+            c_cpu++;
+            break;
+            case "ram-live":
+            ram_buffer[c_ram]=obj[i].data;    
+            c_ram++;               
+            break;
+            case "cpu-freq":
+            cpu_freq_buffer[c_cpu_freq]=obj[i].data;    
+            c_cpu_freq++;               
+            break;            
+            case "storage-info":
+            handleStorage(obj[i].data);                    
+            break;                
+            case "cpu-info":
+            handleCpuInfo(obj[i].data);                    
+            break;    
+            case "net-live":
+            net_live_buffer[c_net_live]=obj[i].data;    
+            c_net_live++;                      
+            break;                           
+        }
     }
 
-    websocket.onclose = function (close) {
+}
 
-    };
+websocket.onclose = function (close) {
+
+};
 
 
 
@@ -456,7 +451,7 @@ var cpu_loop=function(){
                     if(i==cpu_buffer_tmp.length-2){
                         step=canvas_width;
                     }
-                    
+
                 }                
 
                 cpu_user_ctx.stroke();
@@ -667,7 +662,7 @@ var ram_loop=function(){
                     if(i==ram_buffer_tmp.length-2){
                         step=canvas_width;
                     }
-                    
+
                 }                
 
                 ram_used_ctx.stroke();
@@ -897,7 +892,7 @@ var cpu_freq_loop=function(){
                     if(i==cpu_freq_buffer_tmp.length-2){
                         step=canvas_width;
                     }
-                    
+
                 }                
 
                 cpu0_ctx.stroke();
@@ -1100,7 +1095,7 @@ var net_live_loop=function(){
                     if(i==net_live_buffer_tmp.length-2){
                         step=canvas_width;
                     }
-                    
+
                 }                
 
                 rx_ctx.stroke();
@@ -1128,7 +1123,7 @@ var net_live_loop=function(){
                     }else{
                         tx_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].tx-net_live_buffer_tmp[i-1].tx)*240)/5120)); 
                     }
-                    
+
                     step=step+spane;
                     if(i==net_live_buffer_tmp.length-2){
                         step=canvas_width;
@@ -1224,43 +1219,35 @@ var handleUser=function(obj){
 
     var user_info = $.grep(obj.users,function (element,index) {
        return $.trim($.cookie("session_id").substring(24))==$.trim(element.id);
-    });
-        console.log(user_info);
-     if($.trim($('.user-name').text())==""){
+   });
+    console.log(user_info);
+    if($.trim($('.user-name').text())==""){
         $('.user-name').text(user_info[0].user);
-     }    
+    }    
 
     var other_users = $.grep(obj.users,function (element,index) {
        return $.trim($.cookie("session_id").substring(24))!=$.trim(element.id);
-    });
+   });
 
     $('.other_users ul').empty();
     for (var i = other_users.length - 1; i >= 0; i--) {
-         var user=$.trim(other_users[i].user);
-         console.log(user);
-            $('.other_users ul').append("<li>"+ user +"</li>");
-         
-         
-     } 
-     
-     
+     var user=$.trim(other_users[i].user);
+     $('.other_users ul').append("<li>"+ user +"</li>");
+    } 
 
 
-        if(obj.data>tmp_count_client){
-            console.log(tmp_user+" has been connected");
-            $('.notifications p').text(tmp_user+" has been connected");
-            $('.notifications').show();
-        }else{
-            $('.notifications p').text(tmp_user+" has been disconnected");
-            $('.notifications').show();
-        }
-        setTimeout(function() {
-            $('.notifications').hide();
-        },1800);
-         tmp_count_client=obj.data;
-     
-
-   
+    if(obj.data>tmp_count_client){
+        $('.notifications p').text(tmp_user+" has been connected");
+        $('.notifications').show();
+    }else{
+        $('.notifications p').text(tmp_user+" has been disconnected");
+        $('.notifications').show();
+    }
+    setTimeout(function() {
+        $('.notifications').hide();
+    },1800);
+    
+    tmp_count_client=obj.data;
 }
 
 var deleteSession = function(){
