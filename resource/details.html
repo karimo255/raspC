@@ -42,19 +42,18 @@
                 </ul>
                 <!-- user info -->
                 <div  class="user-area pull-right">
-                    <p data-target="#user-info" data-toggle="collapse">Details</p>
+                    <p data-target="#user-info" data-toggle="collapse" class="user-name"></p>
                     <div id="user-info" class="collapse">
                         <ul class="user-action">
                             <li class="logout">
                                 Logout
                             </li>
                         </ul>
-                        <div class="log">
+                        <div class="other_users">
                             
                             <h5>Loged users</h5>
                             <ul>
-                                <li>admin</li>
-                                <li>demo</li>
+                                <!-- html code fron java.js -->
                             </ul>
                         </div>
                     </div>
@@ -67,6 +66,16 @@
         </div>
         <!-- /.container -->
     </nav> 
+    <!--notifications -->
+    <div class="container">
+        <div class="row">
+            <div class="notifications">
+                <div class="alert alert-info">
+                    <p></p>
+                </div>
+            </div>     
+        </div>       
+    </div>         
     <!-- breadcrumb-->
     <div class="container">
         <div class="row">
@@ -74,7 +83,8 @@
                 <li><a href="/home.html">Home</a></li>                
             </ol>     
         </div>       
-    </div>    
+    </div>   
+
     <div class="container">
 
         <div class="row">

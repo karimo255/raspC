@@ -309,7 +309,7 @@ $(window).ready(function() {
         for (var i = obj.length - 1; i >= 0; i--) {
             switch (obj[i].request) {
                 case "count_client": 
-                console.log(obj[i]);
+                handleUser(obj[i]);
                 break;
                 case "cpu-live":
                 handleCpu(obj[i].data);
@@ -1155,10 +1155,10 @@ var net_live_loop=function(){
                     if(i==0){
 
                     }else{
-                     total_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].total-net_live_buffer_tmp[i-1].total)*240)/5120)); 
-                 }
-                 step=step+spane;
-                 if(i==net_live_buffer_tmp.length-2){
+                       total_ctx.lineTo(step,240-(((net_live_buffer_tmp[i].total-net_live_buffer_tmp[i-1].total)*240)/5120)); 
+                   }
+                   step=step+spane;
+                   if(i==net_live_buffer_tmp.length-2){
                     step=canvas_width;
                 }
             }                
@@ -1214,12 +1214,54 @@ $('.halter-net-live button').click(function(){
 
 });
 
+var tmp_count_client=0;
+
+var handleUser=function(obj){
+    var tmp_user;
+    tmp_user=obj.user_changed;
+
+    var user_name = $.grep(obj.users,function (element,index) {
+       return $.cookie("session_id")==element.user;
+    });
+    var other_users = $.grep(obj.users,function (element,index) {
+       return $.cookie("session_id")!=element.user;
+    });
+
+    $('.other_users ul').empty();
+    for (var i = other_users.length - 1; i >= 0; i--) {
+         var user=other_users[i].user;
+         if(user!=tmp_user){
+            $('.other_users ul').append("<li>"+ user +"</li>");
+         }
+         
+     } 
+     
+     
+     if($.trim($('.user-name').text())==""){
+        $('.user-name').text($.trim(tmp_user));
+     }else{
+        if(obj.data>tmp_count_client){
+            console.log(tmp_user+" has been connected");
+            $('.notifications p').text(tmp_user+" has been connected");
+            $('.notifications').show();
+        }else{
+            $('.notifications p').text(tmp_user+" has been disconnected");
+            $('.notifications').show();
+        }
+        setTimeout(function() {
+            $('.notifications').hide();
+        },1800);
+         tmp_count_client=obj.data;
+     }
+
+   
+}
 
 var deleteSession = function(){
     $.removeCookie("session_id",{ expires:31,path:"/"}) || $.removeCookie("session_id");
-            location.reload();
+    location.reload();
 }
 
-        $('.logout').click(function(){
-            deleteSession();
-        });
+$('.logout').click(function(){
+    deleteSession();
+});

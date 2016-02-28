@@ -279,12 +279,15 @@ th {
     margin: 4px 10px;
     padding: 5px 0;
 }
-.log li {
+.other_users li {
     border-radius: 4px;
 }
-.log li:hover {
-    background: turquoise none repeat scroll 0 0;
+.other_users li:hover {
+    background: teal none repeat scroll 0 0;
 }
 .user-action li:hover {
     background: turquoise none repeat scroll 0 0;
+}
+.notifications{
+    display: none;
 }
