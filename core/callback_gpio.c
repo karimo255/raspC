@@ -37,8 +37,8 @@ int callback_gpio(struct lws *wsi, enum lws_callback_reasons reason, void *user,
         case LWS_CALLBACK_ESTABLISHED:
         {
 
-            process("*****user info down*****************");
-            process(pss->session_id);
+            dump_user_info(pss);
+            
             new_user=pss->user;
 
 
@@ -91,8 +91,6 @@ int callback_gpio(struct lws *wsi, enum lws_callback_reasons reason, void *user,
 
             if(strncmp(pss->checked,hash,32)!=0){
                 memcpy(pss->checked,hash,32);
-                process("erst check");
-                lst_print(clinets_lst);
                 
                 char *out = lst_json(&clinets_lst);
 
@@ -104,7 +102,6 @@ int callback_gpio(struct lws *wsi, enum lws_callback_reasons reason, void *user,
                 int n = sprintf((char *)p, "%s", out);
 
                 lws_write(wsi, p,  n, LWS_WRITE_TEXT);  
-                process(out);
                 free(out);  
                     
                 break;              

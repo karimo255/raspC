@@ -124,29 +124,48 @@ get_header_item(struct lws *wsi,char *item)
       c = lws_token_to_string(n);
 
       if (!c) {
-       n++;
-       continue;
-   }
+         n++;
+         continue;
+     }
 
 
 
-   if(strncmp((char *)c,item,strlen(item))==0){
-    memset(buf, 0, sizeof buf);
-    lws_hdr_copy(wsi, buf, sizeof buf, n);
-    if(strlen(buf)>5){
-        buf[sizeof(buf) - 1] = '\0';
+     if(strncmp((char *)c,item,strlen(item))==0){
+        memset(buf, 0, sizeof buf);
+        lws_hdr_copy(wsi, buf, sizeof buf, n);
+        if(strlen(buf)>5){
+            buf[sizeof(buf) - 1] = '\0';
 
-        char *buf_malloc = (char *)realloc(buf_malloc,256*sizeof(char));
+            char *buf_malloc = (char *)realloc(buf_malloc,256*sizeof(char));
 
-        memcpy(buf_malloc,buf,256);
-        return buf_malloc;
+            memcpy(buf_malloc,buf,256);
+            return buf_malloc;
+        }
     }
-}
 
-n++;
+    n++;
 } while (c);
 
 return NULL;
+}
+
+void dump_user_info(struct per_session_data__details *pss){
+    process("****user info****");
+    process("session_id :");
+    process(pss->session_id);
+    process("user name :");
+    process(pss->user);
+    process("uid :");
+    char uid[10];
+    sprintf(uid,"%d",pss->uid);
+    process(uid);
+    process("gid :");
+    char gid[10];
+    sprintf(gid,"%d",pss->gid);
+    process(gid);   
+    process("id :");
+    process(pss->session_id+24);
+    process("**************************************");
 }
 
 int 
@@ -159,8 +178,7 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
 
     if(cookie && !pss->session_id)
     {
-        process("by cookie");
-
+        
         //build session_file form coockie/session_id        
         char *session_id= strrchr(cookie, '=')+1;
 

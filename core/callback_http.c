@@ -95,6 +95,7 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
                 //check if sessionfile exit
                 FILE *session_filep= fopen(session_file,"r");
                 if(session_filep==NULL){
+                    process(session_file);
                     process("sessions dir not found");
                     free(cookie);
                     break;
@@ -131,12 +132,8 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
             }
 
             char *requested_uri = (char *) in;
-
-
             if (strcmp(requested_uri, "/") == 0) {
-
-                requested_uri = "/index.html";
-
+                requested_uri = "/home.html";
             }            
 
             char *requested_file_ext = strrchr(requested_uri,'.');

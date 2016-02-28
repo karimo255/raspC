@@ -286,3 +286,7 @@ extern int lst_remove(struct client **,int);
 extern int lst_count(struct client **lst);
 extern char *lst_json(struct client **lst);
 /* list end */
+
+/* dump user informtion */
+
+extern void dump_user_info(struct per_session_data__details *pss);

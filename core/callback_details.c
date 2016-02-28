@@ -52,8 +52,8 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 		case LWS_CALLBACK_ESTABLISHED:
 		{
 
-			process("*****user info down*****************");
-			process(pss->session_id);
+			dump_user_info(pss);
+
 			new_user=pss->user;
 
 
@@ -77,8 +77,6 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 		{         
 			if(strncmp(pss->checked,hash,32)!=0){
 				memcpy(pss->checked,hash,32);
-				process("erst check");
-				lst_print(clinets_lst);
 				
 				char *out = lst_json(&clinets_lst);
 
@@ -90,7 +88,6 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 				int n = sprintf((char *)p, "%s", out);
 
 				lws_write(wsi, p,  n, LWS_WRITE_TEXT); 	
-				process(out);
 				free(out);	
 					
 				break;				

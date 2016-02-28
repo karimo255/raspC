@@ -3,7 +3,7 @@
 
 static char *tx ="sudo cat /sys/class/net/wlan0/statistics/tx_bytes" ;
 static char *rx ="sudo cat /sys/class/net/wlan0/statistics/rx_bytes" ;
-
+static char *oneline="vnstat --oneline -i wlan0";
 
 static char tmp[15];
 

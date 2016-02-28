@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-<script src="jquery/jquery.js">
-</script>
-<script src="cookie/cookie.js">
-</script>
+    <script src="jquery/jquery.js">
+    </script>
+    <script src="cookie/cookie.js">
+    </script>
 
-<script src="bootstrap/bootstrap.min.js">
-</script> 
-<link rel="stylesheet" href="bootstrap/bootstrap.min.css">     
-<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="style.css" />     
+    <script src="bootstrap/bootstrap.min.js">
+    </script> 
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">     
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css" />     
 
 
     <script type="text/javascript">
@@ -40,49 +40,68 @@
             
             websocket.onmessage = function (message) {
                 var obj = JSON.parse(message.data);
-                console.log('erhalten obj');
-                console.log(obj); 
-                if(obj.hasOwnProperty('count_client') ){
-                    var new_count_client = obj.count_client; 
 
-                    if(new_count_client>count_client){
-                        count_client=new_count_client;  
-                        $('.count_client').text(count_client);
-                        $('#message1').show();
-                    }else if(new_count_client<count_client){
-                        count_client=new_count_client;   
-                        $('.count_client').text(count_client);
-                        $('#message2').show();
+                for (var i = obj.length - 1; i >= 0; i--) {
+                    switch (obj[i].request) {
+                        case "count_client": 
+                        handleUser(obj[i]);
+                        break;
+                        case "start":
+                        handlestart(obj[i].data);
+                        $('.working').text('Services Status');
+                        console.log(obj[i].dat);
+                        break;                                           
                     }
-                    setTimeout(function(){
-                        $('#message1,#message2').hide();
-                    },1400); 
-                }else{
-                    $('.pin[pinid=' + obj.pin + ']').prev('i').css('display','inline-block');
+                    console.log(obj);
                 }
-            };
+            }
 
 
-            $('.pin').click(function () {
-        //status : if off then enable (1) it else disable it (0)
-        var status = 0;
-        if ($(this).hasClass('fa fa-toggle-off')) {
-            //$(this).toogleClass('fa fa-toggle-off', 'fa fa-toggle-on');
-            status = 1;
+            var handlestart = function(obj){
+
+            }
+            var tmp_count_client=0;
+
+            var handleUser=function(obj){
+
+                var tmp_user;
+                tmp_user=$.trim(obj.user_changed);
+
+
+                var user_info = $.grep(obj.users,function (element,index) {
+                 return $.trim($.cookie("session_id").substring(24))==$.trim(element.id);
+             });
+
+                if($.trim($('.user-name').text())==""){
+                    $('.user-name').text(user_info[0].user);
+                }    
+
+                var other_users = $.grep(obj.users,function (element,index) {
+                 return $.trim($.cookie("session_id").substring(24))!=$.trim(element.id);
+             });
+
+                $('.other_users ul').empty();
+                for (var i = other_users.length - 1; i >= 0; i--) {
+                   var user=$.trim(other_users[i].user);
+                   $('.other_users ul').append("<li>"+ user +"</li>");
+               } 
+
+
+               if(obj.data>tmp_count_client){
+                $('.notifications p').text(tmp_user+" has been connected");
+                $('.notifications').show();
+            }else{
+                $('.notifications p').text(tmp_user+" has been disconnected");
+                $('.notifications').show();
+            }
+            setTimeout(function() {
+                $('.notifications').hide();
+            },1800);
+
+            tmp_count_client=obj.data;
         }
-        //pin number
-        var pin = $(this).attr('pinid');
-
-        var obj={};
-        obj.pin = pin;
-        obj.status=status;
-
-        sendObject(obj);
-        console.log('gesendet');
-        console.log(obj);
+        
     });
-
-        });
 </script>
 </head>
 <body>
@@ -158,7 +177,7 @@
     <div class="container">
 
         <div class="row">
-        <h3> Information</h3>
+            <h3> Information</h3>
             <div class="col-md-4">
                 <div class="box home">
                     <h4>Network</h4>
