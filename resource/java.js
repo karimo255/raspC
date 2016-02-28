@@ -1217,29 +1217,35 @@ $('.halter-net-live button').click(function(){
 var tmp_count_client=0;
 
 var handleUser=function(obj){
+    console.log("from cookie  :" + $.cookie("session_id").substring(24));
     var tmp_user;
-    tmp_user=obj.user_changed;
+    tmp_user=$.trim(obj.user_changed);
 
-    var user_name = $.grep(obj.users,function (element,index) {
-       return $.cookie("session_id")==element.user;
+
+    var user_info = $.grep(obj.users,function (element,index) {
+       return $.trim($.cookie("session_id").substring(24))==$.trim(element.id);
     });
+        console.log(user_info);
+     if($.trim($('.user-name').text())==""){
+        $('.user-name').text(user_info[0].user);
+     }    
+
     var other_users = $.grep(obj.users,function (element,index) {
-       return $.cookie("session_id")!=element.user;
+       return $.trim($.cookie("session_id").substring(24))!=$.trim(element.id);
     });
 
     $('.other_users ul').empty();
     for (var i = other_users.length - 1; i >= 0; i--) {
-         var user=other_users[i].user;
-         if(user!=tmp_user){
+         var user=$.trim(other_users[i].user);
+         console.log(user);
             $('.other_users ul').append("<li>"+ user +"</li>");
-         }
+         
          
      } 
      
      
-     if($.trim($('.user-name').text())==""){
-        $('.user-name').text($.trim(tmp_user));
-     }else{
+
+
         if(obj.data>tmp_count_client){
             console.log(tmp_user+" has been connected");
             $('.notifications p').text(tmp_user+" has been connected");
@@ -1252,7 +1258,7 @@ var handleUser=function(obj){
             $('.notifications').hide();
         },1800);
          tmp_count_client=obj.data;
-     }
+     
 
    
 }

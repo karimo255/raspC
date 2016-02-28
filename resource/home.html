@@ -102,7 +102,7 @@
             <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                    <a href="/details.html">Details</a>
+                        <a href="/details.html">Details</a>
                     </li>
                     <li>
                         <a href="/services.html">Services</a>
@@ -111,11 +111,42 @@
                         <a href="/gpio.html">GPIO</a>
                     </li>
                 </ul>
+                <!-- user info -->
+                <div  class="user-area pull-right">
+                    <p data-target="#user-info" data-toggle="collapse" class="user-name"></p>
+                    <div id="user-info" class="collapse">
+                        <ul class="user-action">
+                            <li class="logout">
+                                Logout
+                            </li>
+                        </ul>
+                        <div class="other_users">
+                            
+                            <h5>Loged users</h5>
+                            <ul>
+                                <!-- html code fron java.js -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.user-info -->                
             </div>
             <!-- /.navbar-collapse -->
+
+            
         </div>
         <!-- /.container -->
     </nav> 
+    <!--notifications -->
+    <div class="container">
+        <div class="row">
+            <div class="notifications">
+                <div class="alert alert-info">
+                    <p></p>
+                </div>
+            </div>     
+        </div>       
+    </div>  
     <!-- breadcrumb-->
     <div class="container">
         <div class="row">

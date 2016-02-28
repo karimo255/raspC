@@ -205,12 +205,7 @@ int main(int argc, char **argv)
 		 extern struct net_live net_live;
 
 
-		 ms = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-		 if ((ms - oldms) > 50 && get_client_count()>0 && (cpuLive(&cpu_l,5)==0 && ramLive(&ram_l,5)==0  && cpuLiveFreq(&cpu_freq)==0 && netLive(&net_live)==0)) {
-		 	lws_callback_on_writable_all_protocol(context,
-		 		&protocols[PROTOCOL_DETAILS]);
-		 	oldms = ms;
-		 }
+
 
 		if(old_client_count!=client_count){
 			if(hash){
@@ -219,15 +214,22 @@ int main(int argc, char **argv)
 
 			hash=rand_string();
 		 	lws_callback_on_writable_all_protocol(context,
-		 		&protocols[PROTOCOL_DETAILS]);
+		 		&protocols[PROTOCOL_GPIO]);
 		 	lws_callback_on_writable_all_protocol(context,
-		 		&protocols[PROTOCOL_GPIO]);		
+		 		&protocols[PROTOCOL_DETAILS]);		
 		 	lws_callback_on_writable_all_protocol(context,
 		 		&protocols[PROTOCOL_SERVICES]);	
 		 	lws_callback_on_writable_all_protocol(context,
 		 		&protocols[PROTOCOL_HOME]);			 				 			 					
 			old_client_count=client_count;
-		}		 
+		}
+
+		 ms = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+		 if ((ms - oldms) > 50 && get_client_count()>0 && (cpuLive(&cpu_l,5)==0 && ramLive(&ram_l,5)==0  && cpuLiveFreq(&cpu_freq)==0 && netLive(&net_live)==0)) {
+		 	lws_callback_on_writable_all_protocol(context,
+		 		&protocols[PROTOCOL_DETAILS]);
+		 	oldms = ms;
+		 }				 
 
 
 		 n = lws_service(context, 50);

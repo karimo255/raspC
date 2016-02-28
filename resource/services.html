@@ -46,7 +46,7 @@
                 for (var i = obj.length - 1; i >= 0; i--) {
                     switch (obj[i].request) {
                         case "count_client": 
-                        checkCount(obj[i].data);
+                        handleUser(obj[i]);
                         break;
                         case "services":
                         handleServices(obj[i].data);
@@ -60,21 +60,57 @@
                     console.log(obj);
                 }
             }
+var tmp_count_client=0;
 
-            var checkCount = function(count){
-               if(count>count_client){
-                count_client=count;  
-                $('.count_client').text(count_client);
-                $('#message1').show();
-            }else if(count<count_client){
-                count_client=count;   
-                $('.count_client').text(count_client);
-                $('#message2').show();
-            }
-            setTimeout(function(){
-                $('#message1,#message2').hide();
-            },1400);   
-        } 
+var handleUser=function(obj){
+    var tmp_user;
+    tmp_user=obj.user_changed;
+
+    var user_name = $.grep(obj.users,function (element,index) {
+       return $.cookie("session_id")==element.user;
+    });
+    var other_users = $.grep(obj.users,function (element,index) {
+       return $.cookie("session_id")!=element.user;
+    });
+
+    $('.other_users ul').empty();
+    for (var i = other_users.length - 1; i >= 0; i--) {
+         var user=other_users[i].user;
+         if(user!=tmp_user){
+            $('.other_users ul').append("<li>"+ user +"</li>");
+         }
+         
+     } 
+     
+     
+     if($.trim($('.user-name').text())==""){
+        $('.user-name').text($.trim(tmp_user));
+     }else{
+        if(obj.data>tmp_count_client){
+            console.log(tmp_user+" has been connected");
+            $('.notifications p').text(tmp_user+" has been connected");
+            $('.notifications').show();
+        }else{
+            $('.notifications p').text(tmp_user+" has been disconnected");
+            $('.notifications').show();
+        }
+        setTimeout(function() {
+            $('.notifications').hide();
+        },1800);
+         tmp_count_client=obj.data;
+     }
+
+   
+}
+
+var deleteSession = function(){
+    $.removeCookie("session_id",{ expires:31,path:"/"}) || $.removeCookie("session_id");
+    location.reload();
+}
+
+$('.logout').click(function(){
+    deleteSession();
+});
 
             var checkDaemon = function(obj){
                 $('.daemon').each(function(){
@@ -195,11 +231,42 @@
                         <a href="/gpio.html">GPIO</a>
                     </li>
                 </ul>
+                <!-- user info -->
+                <div  class="user-area pull-right">
+                    <p data-target="#user-info" data-toggle="collapse" class="user-name"></p>
+                    <div id="user-info" class="collapse">
+                        <ul class="user-action">
+                            <li class="logout">
+                                Logout
+                            </li>
+                        </ul>
+                        <div class="other_users">
+                            
+                            <h5>Loged users</h5>
+                            <ul>
+                                <!-- html code fron java.js -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.user-info -->                
             </div>
             <!-- /.navbar-collapse -->
+
+            
         </div>
         <!-- /.container -->
     </nav> 
+    <!--notifications -->
+    <div class="container">
+        <div class="row">
+            <div class="notifications">
+                <div class="alert alert-info">
+                    <p></p>
+                </div>
+            </div>     
+        </div>       
+    </div>  
     <!-- breadcrumb-->
     <div class="container">
         <div class="row">
