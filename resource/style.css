@@ -206,13 +206,13 @@ th {
     position: absolute;
     right: 0;
     top: 0;
-    width: 100px;
+    width: 150px;
     z-index: 99;
 }
-.settings_speed {
+.settings_speed,.settings_interface {
     width: 35px;
 }
-.settings_speed {
+.settings_speed,.settings_interface {
     border: medium none;
     box-shadow: 0 0 2px 1px black;
     color: black;

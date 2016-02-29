@@ -1,6 +1,6 @@
 #include "server.h"
 
-//static char *received_msg=NULL;
+static char *received_msg=NULL;
 
 extern int cookie_lifetime;
 
@@ -12,6 +12,7 @@ struct net_live net_live;
 
 struct cpu_info cpu_i;
 struct storage_info storage_l;
+struct net_info net_info;
 
 extern char *hash;
 extern char *new_user;
@@ -55,12 +56,15 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 			dump_user_info(pss);
 
 			new_user=pss->user;
+			
+			strcpy(pss->interface,"wlan0");
 
 
 			storageInfo(&storage_l);
 			cpuInfo(&cpu_i);
+			netInfo(&net_info,pss->interface);
 
-			char *out = hardwareStaticJSON(storage_l,cpu_i);
+			char *out = hardwareStaticJSON(storage_l,cpu_i,net_info);
 
 			int count = strlen(out);
 
@@ -94,6 +98,7 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 
 			}
 
+			netLive(&net_live,pss->interface);
 			char *out = hardwareDynamicJSON(cpu_l,ram_l,cpu_freq,net_live);
 
 			int count = strlen(out);
@@ -111,9 +116,22 @@ int callback_details(struct lws *wsi, enum lws_callback_reasons reason, void *us
 		}
 		case LWS_CALLBACK_RECEIVE:
 		{
-        //received_msg = (char *) in;
-        //chalter=1;
-        //lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
+	        received_msg = (char *) in;
+            cJSON *root = cJSON_Parse(received_msg);
+
+			char *request = cJSON_GetObjectItem(root,"request")->valuestring;
+                 process(received_msg);   
+	        if(strcmp(request,"interface")==0){
+					char *interface = cJSON_GetObjectItem(root,"interface")->valuestring;
+					process(interface);
+	        		strcpy(pss->interface,interface);
+	        }else{
+	        	process("fff");
+	        }
+
+	        free(root);
+	        //hash=rand_string();
+        	//lws_callback_on_writable_all_protocol(lws_get_context(wsi),lws_get_protocol(wsi));
 
 			break;
 		}  

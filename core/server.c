@@ -11,6 +11,8 @@ int old_client_count=-1;
 char *hash=NULL;
 char *new_user=NULL;
 
+char *net_interface="wlan0";
+
 volatile int force_exit = 0;
 
 struct client *clinets_lst;
@@ -202,7 +204,6 @@ int main(int argc, char **argv)
 		 extern struct ram_usage ram_l;
 		 extern struct cpu_live cpu_l;
 		 extern struct cpu_freq cpu_freq;
-		 extern struct net_live net_live;
 
 
 
@@ -225,7 +226,7 @@ int main(int argc, char **argv)
 		}
 
 		 ms = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-		 if ((ms - oldms) > 50 && get_client_count()>0 && (cpuLive(&cpu_l,5)==0 && ramLive(&ram_l,5)==0  && cpuLiveFreq(&cpu_freq)==0 && netLive(&net_live)==0)) {
+		 if ((ms - oldms) > 200 && get_client_count()>0 && (cpuLive(&cpu_l,5)==0 && ramLive(&ram_l,5)==0  && cpuLiveFreq(&cpu_freq)==0 )) {
 		 	lws_callback_on_writable_all_protocol(context,
 		 		&protocols[PROTOCOL_DETAILS]);
 		 	oldms = ms;

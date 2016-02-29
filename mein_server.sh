@@ -10,27 +10,29 @@ PIDFILE=/var/run/$NAME.pid
 DAEMON=/usr/sbin/mein_server
 
 export PATH="${PATH}:/usr/sbin:/sbin"
-
+. /lib/lsb/init-functions
 case "$1" in
   start)
-        echo -n "Starting daemon: "$NAME
+        log_daemon_msg "$NAME started"
 	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON 
         echo "."
 	;;
   stop)
-        echo -n "Stopping daemon: "$NAME
+        log_daemon_msg "$NAME stoped"
 	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE
-        echo "."
 	;;
   restart)
-        echo -n "Restarting daemon: "$NAME
+        log_daemon_msg "$NAME restarting"
 	start-stop-daemon --stop --quiet --oknodo --retry 30 --pidfile $PIDFILE
 	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_OPTS
-	echo "."
 	;;
+  status)
+	status_of_proc -p $PIDFILE $DAEMON $NAME && exit 0 || exit $?
+        exit $?
+        ;;
 
   *)
-	echo "Usage: "$1" {start|stop|restart}"
+	log_failure_msg "Usage: "$1" {start|stop|restart|status}"
 	exit 1
 esac
 

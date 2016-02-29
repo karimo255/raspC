@@ -56,6 +56,7 @@ struct per_session_data__details {
     int uid;
     int gid;
     char checked[32];
+    char interface[10];
 };
 
 struct per_session_data__auth {
@@ -160,8 +161,15 @@ struct net_live{
     int total;
 };
 
-extern int netLive(struct net_live *net_live);
+extern int netLive(struct net_live *net_live,char *interface);
 
+//network
+struct net_info{
+    char oneline[320];
+    char interfaces[320];
+};
+
+extern int netInfo(struct net_info *net_info,char *interface);
 
 
 //
@@ -216,7 +224,7 @@ extern void storageInfo(struct storage_info *storage_i);
 
 //hardware-info
 
-extern char *hardwareStaticJSON(struct storage_info storage_l,struct cpu_info cpu_i);
+extern char *hardwareStaticJSON(struct storage_info storage_l,struct cpu_info cpu_i,struct net_info net_info);
 char *hardwareDynamicJSON(struct cpu_live cpu_l,struct ram_usage ram_l,struct cpu_freq cpu_freq,struct net_live net_live);
 
 //services

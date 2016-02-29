@@ -1,8 +1,8 @@
 #include "server.h"
 
 
-char *hardwareStaticJSON(struct storage_info storage_l,struct cpu_info cpu_i){
-    cJSON *root,*root_object,*root_object2,*root_object_object,*root_object_object2;
+char *hardwareStaticJSON(struct storage_info storage_l,struct cpu_info cpu_i,struct net_info net_info){
+    cJSON *root,*root_object,*root_object2,*root_object_object,*root_object_object2,*root_object3,*root_object_object3;
 
     root = cJSON_CreateArray();
 
@@ -24,20 +24,34 @@ char *hardwareStaticJSON(struct storage_info storage_l,struct cpu_info cpu_i){
     root_object_object2=cJSON_CreateObject();
 
     cJSON_AddStringToObject(root_object2, "request", "cpu-info");            
-    cJSON_AddItemToObject(root_object2, "data", root_object_object2); 
+    cJSON_AddItemToObject(root_object2, "data", root_object_object2);  
 
     cJSON_AddNumberToObject(root_object_object2, "cpu_cur_freq", cpu_i.cpu_cur_freq);            
     cJSON_AddNumberToObject(root_object_object2, "cpu_min_freq", cpu_i.cpu_min_freq);            
     cJSON_AddNumberToObject(root_object_object2, "cpu_max_freq", cpu_i.cpu_max_freq);                
-    cJSON_AddStringToObject(root_object_object2, "cpu_governor", cpu_i.cpu_governor);                
+    cJSON_AddStringToObject(root_object_object2, "cpu_governor", cpu_i.cpu_governor);
+
+    root_object3=cJSON_CreateObject();
+    cJSON_AddItemToArray(root,root_object3);
+
+    root_object_object3=cJSON_CreateObject();
+
+    cJSON_AddStringToObject(root_object3, "request", "network-info");            
+    cJSON_AddItemToObject(root_object3, "data", root_object_object3); 
+    
+    cJSON_AddStringToObject(root_object_object3, "oneline", net_info.oneline);    
+    cJSON_AddStringToObject(root_object_object3, "interfaces", net_info.interfaces);    
+            
 
     
     char *storagejs=NULL;
-    storagejs = (char *) realloc (storagejs,strlen(cJSON_Print(root))*sizeof(char));      
+    storagejs = (char *) realloc (storagejs,sizeof(cJSON_Print(root)));      
     storagejs=cJSON_Print(root);
+
+    process(storagejs);
     
     
-    free(root);free(root_object);free(root_object2);free(root_object_object),free(root_object_object2);    
+    free(root);free(root_object);free(root_object2);free(root_object3);free(root_object_object3);free(root_object_object),free(root_object_object2);    
     return storagejs;
 }
 

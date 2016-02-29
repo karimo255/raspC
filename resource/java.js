@@ -1,7 +1,7 @@
 $(window).ready(function() {
 
 
-    var cpu_speed=3600;
+    var cpu_speed=7600;
 
     /* common */
 
@@ -10,15 +10,19 @@ $(window).ready(function() {
     var settings_speed_label = $('<label/>');    
     settings_speed_label.text('Speed');
 
-    var settings_speed = $('<input class="settings_speed" type="text" name="settings_speed" value="'+cpu_speed+'"/>');    
+    var settings_speed = $('<input class="settings_speed" type="text" name="settings_speed" value="'+cpu_speed+'"/>'); 
 
+    var settings_interface_label = $('<label> Interface </label>');    
+
+    var settings_interface = $('<select class="settings_interface" type="text" name="settings_interface" />');        
+    
     var button=$('<button class="btn btn-primary" />');
     button.text('Apply');
-    settings_div.append(settings_speed_label).append(settings_speed).append(button);
-
+    settings_div.append(settings_speed_label).append(settings_speed).append($('<br>'));
     var settings_fa = $('<i class="fa fa-wrench" />');
     $('.halter').append(settings_div).append(settings_fa);
-
+    $('.halter-net-live').find('.settings').append(settings_interface_label).append(settings_interface);
+    $('.settings').append(button);
 //
 
 /* display/hide settings div */
@@ -32,6 +36,13 @@ $('.fa-wrench').click(function(){
 var canvas_width = $(".halter").width()+1;
 $(window).resize(function(){
     canvas_width = $(".halter").width()+1;
+});
+
+$('select').change(function(){
+    var obj={};
+    obj.request ="interface";
+    obj.interface=$(this).val();
+    sendObject(obj);
 });
 
 
@@ -187,7 +198,7 @@ var set_color = function(name,color){
         break;  
         case "shared":
         ram_shared_color=color;
-        break;                                                                                                  
+        break;                                                                                                 
     }
 };
 
@@ -296,11 +307,56 @@ var sendObject = function(obj){
     obj = JSON.stringify(obj,null,4);
     websocket.send(obj);
 }
+var handleInterfaces=function(obj){
+    var interfaces=$.trim(obj.interfaces);
+    var arr =interfaces.split(" ");
+    for (var i = arr.length - 1; i >= 0; i--) {
+        var option = "<option>"+arr[i]+"</option>";
+        $('select').append(option);
+    }
+    /*
+            The 1st field contains the version information
+            of the output that will be changed in future versions of  vnStat
+            if the field structure changes. The following fields in order
+
+            2)interface name,
+
+            3) timestamp for today,
+            4) rx for today,
+            5)  tx  for  today,
+            6)  total  for  today, 
+
+            7) average traffic rate for today, 
+            12) aver‐age traffic rate for today,
+
+            8) timestamp for current month, 
+            9) rx for current  month,
+            10) tx for current month, 
+            11) total for current month, 
+            
+
+            13) all time total rx, 
+            14) all  time total tx, 
+            15) all time total traffic.*/    
+
+
+    var oneline = obj.oneline.split(";");
+    var today=$.map(oneline,function(e,i){
+        return (i>=2 && i<=5)||(i==6 || i==11)?e:null;
+    });
+    var month=$.map(oneline,function(e,i){
+        return (i>=7 && i<=10)?e:null;
+    });
+    var alltime=$.map(oneline,function(e,i){
+        return i>=12?e:null;
+    });    
+
+}
 var c_cpu=0;var c_ram=0;var c_cpu_freq=0;var c_net_live=0;
 
 websocket.onmessage = function (message) {
     var obj = JSON.parse(message.data);
-    //console.log('erhalten obj');
+
     for (var i = obj.length - 1; i >= 0; i--) {
         switch (obj[i].request) {
             case "count_client": 
@@ -328,6 +384,9 @@ websocket.onmessage = function (message) {
             case "net-live":
             net_live_buffer[c_net_live]=obj[i].data;    
             c_net_live++;                      
+            break; 
+            case "network-info":
+                handleInterfaces(obj[i].data);
             break;                           
         }
     }
@@ -350,7 +409,7 @@ var last_value_ram_shared=0;
 var last_value_ram_cached=0;
 
 //+++++++++++++++++++++++++++++++++++++++++cpu+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-var cpu_speed=3600;
+var cpu_speed=7600;
 
 var cpu_user_color;
 var cpu_system_color;
@@ -558,7 +617,7 @@ var cpu_loop=function(){
 cpu_loop();
 
 //+++++++++++++++++++++++++++++++++++++++++ram+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-var ram_speed=3600;
+var ram_speed=7600;
 
 var ram_used_color;
 var ram_free_color;
@@ -793,7 +852,7 @@ var ram_loop=function(){
 ram_loop();
 
 //++++++++++++++++++++++++++++++++++++++++++++++++cpu freq--------------------------------------------------------------
-var cpu_freq_speed=3600;
+var cpu_freq_speed=7600;
 
 var cpu0_color;
 var cpu1_color;
@@ -999,7 +1058,7 @@ cpu_freq_loop();
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++net live--------------------------------------------------------------
-var net_live_speed=3600;
+var net_live_speed=7600;
 
 var rx_color;
 var tx_color;
@@ -1212,7 +1271,6 @@ $('.halter-net-live button').click(function(){
 var tmp_count_client=0;
 
 var handleUser=function(obj){
-    console.log("from cookie  :" + $.cookie("session_id").substring(24));
     var tmp_user;
     tmp_user=$.trim(obj.user_changed);
 
@@ -1220,7 +1278,6 @@ var handleUser=function(obj){
     var user_info = $.grep(obj.users,function (element,index) {
        return $.trim($.cookie("session_id").substring(24))==$.trim(element.id);
    });
-    console.log(user_info);
     if($.trim($('.user-name').text())==""){
         $('.user-name').text(user_info[0].user);
     }    
