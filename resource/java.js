@@ -307,49 +307,78 @@ var sendObject = function(obj){
     obj = JSON.stringify(obj,null,4);
     websocket.send(obj);
 }
-var handleInterfaces=function(obj){
+var handleNetworkInfo=function(obj){
     var interfaces=$.trim(obj.interfaces);
+    console.log(obj);
     var arr =interfaces.split(" ");
     for (var i = arr.length - 1; i >= 0; i--) {
         var option = "<option>"+arr[i]+"</option>";
         $('select').append(option);
     }
     /*
-            The 1st field contains the version information
+            The (0)st field contains the version information
             of the output that will be changed in future versions of  vnStat
             if the field structure changes. The following fields in order
 
-            2)interface name,
+            1)interface name,
 
-            3) timestamp for today,
-            4) rx for today,
-            5)  tx  for  today,
-            6)  total  for  today, 
+            2) timestamp for today,
+            3) rx for today,
+            4)  tx  for  today,
+            5)  total  for  today, 
 
-            7) average traffic rate for today, 
-            12) aver‐age traffic rate for today,
+            6) average traffic rate for today, 
+            11) aver‐age traffic rate for today,
 
-            8) timestamp for current month, 
-            9) rx for current  month,
-            10) tx for current month, 
-            11) total for current month, 
+            7) timestamp for current month, 
+            8) rx for current  month,
+            9) tx for current month, 
+            10) total for current month, 
             
 
-            13) all time total rx, 
-            14) all  time total tx, 
-            15) all time total traffic.*/    
+            12) all time total rx, 
+            13) all  time total tx, 
+            14) all time total traffic.*/    
 
 
     var oneline = obj.oneline.split(";");
-    var today=$.map(oneline,function(e,i){
-        return (i>=2 && i<=5)||(i==6 || i==11)?e:null;
+    var keys=[
+                "version","interface name",
+                "timestamp for today","rx for today",
+                "tx for today","total for today","average traffic rate fo today",
+                "timestamp for current month","rx for current month",
+                "tx for current month","total for current month",
+                "aver‐age traffic rate for today","all time total rx",
+                "all time total rx","all time traffic tx","all time total traffic"
+            ];
+
+    var today=$.map(oneline,function(e,i){        
+        return (i>=2 && i<=5)||(i==6 || i==11)?{"key":keys[i],"value":e}:null;
     });
+    var today_ul = $("<ul/>");
+    for (var i =  0; i < today.length; i++) {
+        today_ul.append('<li>'+ today[i].key+ "  :  <b>"+ today[i].value +'</b></li>');
+    }
+
     var month=$.map(oneline,function(e,i){
-        return (i>=7 && i<=10)?e:null;
+        return (i>=7 && i<=10)?{"key":keys[i],"value":e}:null;
     });
+    var month_ul = $("<ul/>");
+    for (var i =  0; i < month.length; i++) {
+        month_ul.append('<li>'+ month[i].key+ "  :  <b>"+ month[i].value +'</b></li>');
+    } 
+       
     var alltime=$.map(oneline,function(e,i){
-        return i>=12?e:null;
-    });    
+        return i>=12?{"key":keys[i],"value":e}:null;
+    });
+    var alltime_ul = $("<ul/>");
+    for (var i =  0; i < alltime.length; i++) {
+        alltime_ul.append('<li>'+ alltime[i].key+ "  :  <b>"+ alltime[i].value +'</b></li>');
+    }       
+
+
+    $('.net-tarffic').append(today_ul,month_ul,alltime_ul);
+
 
 }
 var c_cpu=0;var c_ram=0;var c_cpu_freq=0;var c_net_live=0;
@@ -386,7 +415,7 @@ websocket.onmessage = function (message) {
             c_net_live++;                      
             break; 
             case "network-info":
-                handleInterfaces(obj[i].data);
+                handleNetworkInfo(obj[i].data);
             break;                           
         }
     }

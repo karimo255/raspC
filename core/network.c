@@ -41,6 +41,7 @@ static char *oneline="vnstat --oneline -i %s";
 static char *interfaces="vnstat --iflist";
 
 static char tmp2[320];
+static char tmp3[320];
 
 int netInfo(struct net_info *net_info,char *interface){
 
@@ -56,9 +57,10 @@ int netInfo(struct net_info *net_info,char *interface){
 
 
 	fp = popen(interfaces, "r");
-	fgets(tmp2, 320, fp);
+	fgets(tmp3, 320, fp);
 
-	strcpy(net_info->interfaces,tmp2+22);	// after 22 char , ignore text "Available iterfaces :"
+	strcpy(net_info->interfaces,tmp3+22);
+	process(net_info->interfaces);	// after 22 char , ignore text "Available iterfaces :"
 	pclose(fp);//end
 
 	return 0;

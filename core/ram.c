@@ -21,6 +21,7 @@ void ramInfo(struct ram_info *ram_i) {
 
 
 static char *ram_used ="free -mo | awk ' NR==2  {print $3 }'" ;
+static char *ram_free ="free -mo | awk ' NR==2  {print $4 }'" ;
 static char *ram_shared ="free -mo | awk ' NR==2  {print $5 }'" ;
 static char *ram_buffers ="free -mo | awk ' NR==2  {print $6 }'" ;
 static char *ram_cached ="free -mo | awk ' NR==2  {print $7 }'" ;
@@ -39,9 +40,16 @@ int ramLive(struct ram_usage *ram_u,int interval){
 	fgets(tmp, 15, fp);
 
 	ram_u->used = atoi(tmp);
-	ram_u->frei=925-ram_u->used; 	
 	
 	pclose(fp);
+
+	fp = popen(ram_free, "r");
+	fgets(tmp, 15, fp);
+
+	ram_u->frei = atoi(tmp);
+
+	
+	pclose(fp);	
 
 	fp = popen(ram_shared, "r");
 	fgets(tmp, 15, fp);
