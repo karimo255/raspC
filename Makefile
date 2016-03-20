@@ -17,6 +17,7 @@ CONFIG_DIR = /etc/mein_server
 SESSIONS = $(CONFIG_DIR)/sessions
 CONFIG_FILE = $(CONFIG_DIR)/config.json
 PASSWD_FILE = $(CONFIG_DIR)/passwd
+RESOURCE_PATH = /share/$(NAME)
 
 
 mein_server: $(OBJECTS)
@@ -29,9 +30,11 @@ install:
 	install --mode=755 $(NAME) $(BINDIR)/
 	mkdir -p  $(CONFIG_DIR)
 	mkdir -p  $(SESSIONS)
+	mkdir -p  $(RESOURCE_PATH)
 	cp etc/config.json $(CONFIG_FILE)
 	cp etc/passwd $(PASSWD_FILE)
 	cp mein_server.sh /etc/init.d/mein_server
+	cp -R resource/ $(RESOURCE_PATH) 
 	chmod +x /etc/init.d/mein_server
 	update-rc.d mein_server remove
 	update-rc.d mein_server defaults

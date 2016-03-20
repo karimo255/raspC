@@ -20,9 +20,7 @@ struct client *clinets_lst;
 struct lws_context *context;
 
 
-/* http server gets files from this path */
-#define LOCAL_RESOURCE_PATH "assets"
-char *resource_path = LOCAL_RESOURCE_PATH;
+
 
 
 enum demo_protocols {
