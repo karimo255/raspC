@@ -17,7 +17,7 @@ git clone https://github.com/karimo255/raspC
 	sudo make install
 	sudo make clean
 
-	after installation type on a browser [your-ip]:7681
+	after installation type on a browser [your-ip or hostname]:7681
 
 #uninstall
 
