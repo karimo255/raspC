@@ -5,29 +5,37 @@ Ras9C is a monitoring tool for the Raspberry Pi
 #features
 	
 	
+#download
 
+git clone https://github.com/karimo255/raspC
 
 #insatll 
 
+	cd raspC
 	sudo ./configure
 	sudo make
 	sudo make install
+	sudo make clean
+
 
 #uninstall
 
 	sudo make uninstall
 
 
-#start server
-
+#start/stop server
+	-start
 	sudo service mein_server start
 	or
 	sudo /etc/init.d/mein_server start
 
-#stop server
+	-stop
+        sudo service mein_server stop
+        or
+        sudo /etc/init.d/mein_server stop
 
-	sudo service mein_server stop
-	or
-	sudo /etc/init.d/mein_server stop
-
+	-status
+        sudo service mein_server status
+        or
+        sudo /etc/init.d/mein_server status
 
