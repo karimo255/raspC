@@ -20,7 +20,7 @@ cd ../../lib/cJSON
 sudo make
 echo "done."
 
-for package in openssl; do
+for package in libssl; do
 	echo "find $package..."
     dpkg -s "$package" >/dev/null 2>&1 && {
         echo "$package is installed."
