@@ -17,6 +17,7 @@ git clone https://github.com/karimo255/raspC
 	sudo make install
 	sudo make clean
 
+	after installation type on a browser [your-ip]:7681
 
 #uninstall
 
@@ -24,10 +25,11 @@ git clone https://github.com/karimo255/raspC
 
 
 #start/stop server
+
 	-start
-	sudo service mein_server start
+		sudo service mein_server start
 	or
-	sudo /etc/init.d/mein_server start
+		sudo /etc/init.d/mein_server start
 
 	-stop
         sudo service mein_server stop
