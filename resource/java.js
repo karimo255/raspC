@@ -285,7 +285,7 @@ var handleStorage=function(obj){
 
 window.WebSocket = window.WebSocket || window.MozWebSocket;
 
-var websocket = new WebSocket('ws://192.168.43.88:7681',
+var websocket = new WebSocket('ws://192.168.1.6:7681',
   'details');                
 
 
@@ -383,6 +383,7 @@ var handleNetworkInfo=function(obj){
 }
 var c_cpu=0;var c_ram=0;var c_cpu_freq=0;var c_net_live=0;
 
+var prev=0;
 websocket.onmessage = function (message) {
     var obj = JSON.parse(message.data);
 
@@ -411,7 +412,9 @@ websocket.onmessage = function (message) {
             handleCpuInfo(obj[i].data);                    
             break;    
             case "net-live":
-            net_live_buffer[c_net_live]=obj[i].data;    
+            net_live_buffer[c_net_live]=obj[i].data;  
+            $('.status-num p').text(obj[i].data.total-prev+" b/s");
+            prev = obj[i].data.total; 
             c_net_live++;                      
             break; 
             case "network-info":
@@ -422,9 +425,7 @@ websocket.onmessage = function (message) {
 
 }
 
-websocket.onclose = function (close) {
 
-};
 
 
 
@@ -1322,6 +1323,11 @@ var handleUser=function(obj){
     } 
 
 
+    if(obj.users[0].gid==100 && $('.manage-user').length==0){
+        $('.other_users').append("<h5 class='manage-user'><a href='/admin.html'> manage user </a></h5>"); 
+    }
+
+
     if(obj.data>tmp_count_client){
         $('.notifications p').text(tmp_user+" has been connected");
         $('.notifications').show();
@@ -1335,6 +1341,8 @@ var handleUser=function(obj){
     
     tmp_count_client=obj.data;
 }
+
+
 
 var deleteSession = function(){
     $.removeCookie("session_id",{ expires:31,path:"/"}) || $.removeCookie("session_id");

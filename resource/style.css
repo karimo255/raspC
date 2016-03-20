@@ -103,8 +103,8 @@ th {
     height: 25px;
     margin: 6px;
     padding: 4px;
-    width: 100%;
     position: relative;
+    width: 100%;
 }
 .all-server span {
     font-size: 14px;
@@ -209,10 +209,10 @@ th {
     width: 150px;
     z-index: 99;
 }
-.settings_speed,.settings_interface {
+.settings_speed, .settings_interface {
     width: 35px;
 }
-.settings_speed,.settings_interface {
+.settings_speed, .settings_interface {
     border: medium none;
     box-shadow: 0 0 2px 1px black;
     color: black;
@@ -289,16 +289,25 @@ th {
 .user-action li:hover {
     background: turquoise none repeat scroll 0 0;
 }
-.notifications{
+.notifications {
     display: none;
 }
 .all-server .fa {
+    display: none;
     left: -15px;
     position: absolute;
     top: 7px;
-    display: none;
 }
 .net-tarffic > ul {
     float: left;
     width: 50%;
+}
+.manage-user > a {
+    color: white;
+}
+.status-num {
+    position: absolute;
+    right: 50px;
+    text-align: center;
+    top: 0;
 }

@@ -41,6 +41,7 @@ char *lst_json(struct client **lst){
 		cJSON *root_object_array_object = cJSON_CreateObject();
 		cJSON_AddStringToObject(root_object_array_object, "user", (*lst)->name);
 		cJSON_AddStringToObject(root_object_array_object, "id", (*lst)->session_id);
+		cJSON_AddNumberToObject(root_object_array_object, "gid", (*lst)->gid);		
 		if (!prev) root_object_array->child = root_object_array_object;
 		else prev->next = root_object_array_object, root_object_array_object->prev = prev;
 		prev = root_object_array_object;

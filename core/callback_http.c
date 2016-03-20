@@ -162,8 +162,10 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
 
                 //free(resource_path);
                 // join current working direcotry to the resource path
-                sprintf(resource_path, "%s%s", cwd, requested_uri); 
+                sprintf(resource_path, "%s%s", "/var/www/upload/release/resource", requested_uri); 
             }
+
+            process(resource_path);
             
 
             char *extension = strrchr(resource_path, '.');
