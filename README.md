@@ -7,7 +7,7 @@ Ras9C is a monitoring tool for the Raspberry Pi
 	
 #download
 
-git clone https://github.com/karimo255/raspC
+	git clone https://github.com/karimo255/raspC
 
 #insatll 
 
