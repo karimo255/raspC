@@ -23,6 +23,17 @@ Ras9C is a monitoring tool for the Raspberry Pi
 		user : admin
 		pass : admin
 
+#paths description
+
+| Path | Description |
+|------|-------------|
+| /| Display global Information about system |
+| /home.html  | like / |
+| /details.html | Display information about hardware,storage,network... |
+| /gpio.html | Display the status and modifing the gpio-pins  |
+| /services.html  | Display and start/stop all installed daemons |		
+| /auth.html  | It be will automaticly called if no session running (not logged in) |	
+
 #uninstall
 
 	sudo make uninstall
