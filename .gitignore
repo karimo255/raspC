@@ -2,3 +2,5 @@ mein_server
 *.o
 package_checker.h
 lib/libwebsockets/build/CMakeFiles/Progress/
+go
+mach
