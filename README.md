@@ -1,8 +1,11 @@
-"# Ras9C"
+"#Ras9C"
 
-Ras9C is a monitoring tool for the Raspberry Pi
+Ras9C is a monitoring tool for the Raspberry Pi based on websockets
 
 #features
+	-realtime
+	-lightweight
+	-cross-over client support (web brwoser)
 	
 	
 #download
