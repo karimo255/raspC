@@ -1,18 +1,18 @@
-"#Ras9C"
+# Ras9C
 
 Ras9C is a monitoring tool for the Raspberry Pi based on websockets
 
-#features
+# features
 	-realtime
 	-lightweight
 	-cross-over client support (web brwoser)
 	
 	
-#download
+# download
 
 	git clone https://github.com/karimo255/raspC
 
-#insatll 
+# insatll 
 
 	cd raspC
 	sudo ./configure
@@ -26,7 +26,7 @@ Ras9C is a monitoring tool for the Raspberry Pi based on websockets
 		user : admin
 		pass : admin
 
-#paths description
+# paths description
 
 | Path | Description |
 |------|-------------|
@@ -37,12 +37,12 @@ Ras9C is a monitoring tool for the Raspberry Pi based on websockets
 | /services.html  | Display and start/stop all installed daemons |		
 | /auth.html  | It be will automaticly called if no session running (not logged in) |	
 
-#uninstall
+# uninstall
 
 	sudo make uninstall
 
 
-#start/stop server
+# start/stop server
 
 	-start
 		sudo service mein_server start
