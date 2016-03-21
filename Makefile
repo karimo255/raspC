@@ -19,7 +19,6 @@ CONFIG_FILE = $(CONFIG_DIR)/config.json
 PASSWD_FILE = $(CONFIG_DIR)/passwd
 RESOURCE_PATH = /share/$(NAME)
 
-
 mein_server: $(OBJECTS)
 	$(CC) -o $(NAME) $(OBJECTS) $(LIBS)
 
@@ -34,7 +33,8 @@ install:
 	cp etc/config.json $(CONFIG_FILE)
 	cp etc/passwd $(PASSWD_FILE)
 	cp mein_server.sh /etc/init.d/mein_server
-	cp -R resource/ $(RESOURCE_PATH) 
+	cp -R resource/ $(RESOURCE_PATH)		
+	
 	chmod +x /etc/init.d/mein_server
 	update-rc.d mein_server remove
 	update-rc.d mein_server defaults

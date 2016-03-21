@@ -19,6 +19,10 @@ git clone https://github.com/karimo255/raspC
 
 	after installation type on a browser [your-ip or hostname]:7681 
 
+	user/pass
+		user : admin
+		pass : admin
+
 #uninstall
 
 	sudo make uninstall
