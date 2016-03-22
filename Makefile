@@ -11,15 +11,15 @@ OBJECTS = server.o callback_http.o callback_home.o callback_details.o callback_s
 
 BINDIR = /usr/sbin
 
-NAME = mein_server
+NAME = raspC
 
-CONFIG_DIR = /etc/mein_server
+CONFIG_DIR = /etc/raspC
 SESSIONS = $(CONFIG_DIR)/sessions
 CONFIG_FILE = $(CONFIG_DIR)/config.json
 PASSWD_FILE = $(CONFIG_DIR)/passwd
 RESOURCE_PATH = /share/$(NAME)
 
-mein_server: $(OBJECTS)
+raspC: $(OBJECTS)
 	$(CC) -o $(NAME) $(OBJECTS) $(LIBS)
 
 %.o: core/%.c
@@ -32,20 +32,20 @@ install:
 	mkdir -p  $(RESOURCE_PATH)
 	cp etc/config.json $(CONFIG_FILE)
 	cp etc/passwd $(PASSWD_FILE)
-	cp mein_server.sh /etc/init.d/mein_server
+	cp raspC.sh /etc/init.d/raspC
 	cp -R resource/ $(RESOURCE_PATH)		
 	
-	chmod +x /etc/init.d/mein_server
-	update-rc.d mein_server remove
-	update-rc.d mein_server defaults
+	chmod +x /etc/init.d/raspC
+	update-rc.d raspC remove
+	update-rc.d raspC defaults
 
 clean:
 	rm *.o $(BINDIR)/$(NAME)
 
 uninstall:
-	rm $(CONFIG_FILE)/config.json $(PASSWD_FILE)/passwd  /etc/init.d/mein_server 
+	rm $(CONFIG_FILE)/config.json $(PASSWD_FILE)/passwd  /etc/init.d/raspC 
 	rmdir $(CONFIG_DIR)  $(SESSIONS)
-	update-rc.d mein_server remove
+	update-rc.d raspC remove
 
 stop:
 	kill `pidof server`

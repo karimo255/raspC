@@ -45,17 +45,17 @@ Ras9C is a monitoring tool for the Raspberry Pi based on websockets
 # start/stop server
 
 	-start
-		sudo service mein_server start
+		sudo service raspC start
 	or
-		sudo /etc/init.d/mein_server start
+		sudo /etc/init.d/raspC start
 
 	-stop
-        sudo service mein_server stop
+        sudo service raspC stop
         or
-        sudo /etc/init.d/mein_server stop
+        sudo /etc/init.d/raspC stop
 
 	-status
-        sudo service mein_server status
+        sudo service raspC status
         or
-        sudo /etc/init.d/mein_server status
+        sudo /etc/init.d/raspC status
 

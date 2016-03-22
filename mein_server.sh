@@ -4,10 +4,10 @@
 set -e
 
 # Must be a valid filename
-NAME=mein_server
+NAME=raspC
 PIDFILE=/var/run/$NAME.pid
 #This is the command to be run, give the full pathname
-DAEMON=/usr/sbin/mein_server
+DAEMON=/usr/sbin/raspC
 
 export PATH="${PATH}:/usr/sbin:/sbin"
 . /lib/lsb/init-functions

@@ -1,4 +1,4 @@
-mein_server
+raspC
 *.o
 package_checker.h
 lib/libwebsockets/build/CMakeFiles/Progress/
