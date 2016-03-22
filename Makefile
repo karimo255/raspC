@@ -46,14 +46,3 @@ uninstall:
 	rm $(CONFIG_FILE)/config.json $(PASSWD_FILE)/passwd  /etc/init.d/raspC 
 	rmdir $(CONFIG_DIR)  $(SESSIONS)
 	update-rc.d raspC remove
-
-stop:
-	kill `pidof server`
-
-start:
-	cd bin && sudo ./server
-
-
-
-
-
