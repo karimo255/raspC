@@ -43,6 +43,6 @@ clean:
 	rm *.o $(BINDIR)/$(NAME)
 
 uninstall:
-	rm $(CONFIG_FILE)/config.json $(PASSWD_FILE)/passwd  /etc/init.d/raspC 
+	rm $(CONFIG_FILE) $(PASSWD_FILE)  /etc/init.d/raspC 
 	rmdir $(CONFIG_DIR)  $(SESSIONS)
 	update-rc.d raspC remove
