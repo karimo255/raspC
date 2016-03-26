@@ -1,6 +1,8 @@
 #!/bin/sh
 echo "Install dependies librarie  :"
 
+WD=$(pwd)
+echo $WD
 
 echo "Installing Libwebsockets library"
 cd lib/libwebsockets
@@ -45,13 +47,19 @@ do
 done	
 
 
+rm /tmp/*.html && rm /tmp/*.js
 
-for file_ in `find ../../resource/ -name *.html`;do
-	sed -i -e 's/SERVER_IP/'$IP'/g' $file_  
-done
+cd $WD
 
-for file_ in `find ../../resource/ -name *.js`;do
-	sed -i -e 's/SERVER_IP/'$IP'/g' $file_  
+
+for file_ in `find resource/ -name *.html`;do
+         cp $file_ /tmp/`basename $file_` 
+	 sed -i -e 's/SERVER_IP/'$IP'/g' /tmp/`basename $file_`
+ done
+
+for file_ in `find resource/ -name *.js`;do
+         cp $file_ /tmp/`basename $file_` 
+	 sed -i -e 's/SERVER_IP/'$IP'/g' /tmp/`basename $file_`
 done
 
 echo "finish"

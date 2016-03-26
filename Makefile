@@ -18,7 +18,7 @@ SESSIONS = $(CONFIG_DIR)/sessions
 CONFIG_FILE = $(CONFIG_DIR)/config.json
 PASSWD_FILE = $(CONFIG_DIR)/passwd
 RESOURCE_PATH = /share/$(NAME)
-
+RESOURCE = $(RESOURCE_PATH)/resource/
 raspC: $(OBJECTS)
 	$(CC) -o $(NAME) $(OBJECTS) $(LIBS)
 
@@ -34,6 +34,8 @@ install:
 	cp etc/passwd $(PASSWD_FILE)
 	cp raspC.sh /etc/init.d/raspC
 	cp -R resource/ $(RESOURCE_PATH)		
+	cp /tmp/*.html $(RESOURCE)
+	cp /tmp/*.js $(RESOURCE)
 	
 	chmod +x /etc/init.d/raspC
 	update-rc.d raspC remove
