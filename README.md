@@ -21,7 +21,7 @@ RaspC is a monitoring tool for the Raspberry Pi based on websockets
 ![Alt text](img/auth.png?raw=true "Optional Title")
 
 # todo
-	doc
+	-doc
 
 # download
 	git clone https://github.com/karimo255/raspC
