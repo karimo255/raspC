@@ -1,7 +1,4 @@
 raspC
 *.o
-package_checker.h
 lib/libwebsockets/build/CMakeFiles/Progress/
-go
-mach
-lib/
+lib/*
