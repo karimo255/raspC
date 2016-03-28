@@ -88,7 +88,7 @@ int callback_auth(struct lws *wsi, enum lws_callback_reasons reason, void *user,
 
             if(clientAuth(user,pass)==0){
                 
-                char *path="/etc/mein_server/sessions/";
+                char *path="/etc/raspC/sessions/";
                 char session_file[strlen(path)+strlen(key)+2];
                 sprintf(session_file,"%s%s",path,key);
 

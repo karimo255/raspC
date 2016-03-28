@@ -1,6 +1,6 @@
 #include "server.h"
 
-char *lock_path="/var/run/mein_server.pid";
+char *lock_path="/var/run/raspC.pid";
 void process(char arr[]){
 
     syslog(LOG_NOTICE, arr);
@@ -17,7 +17,7 @@ void daemonize(){
 
   /* init logging */
     setlogmask (LOG_UPTO (LOG_NOTICE));
-    openlog ("mein_server", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+    openlog ("raspC", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
 
         /* Our process ID and Session ID */
     pid_t pid, sid;

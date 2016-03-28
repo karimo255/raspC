@@ -1,6 +1,6 @@
 #include "server.h"
 /* http server gets files from this path */
-#define RESOURCE_PATH  "/share/mein_server/resource"
+#define RESOURCE_PATH  "/share/raspC/resource"
 
 extern int debug_level;
 extern int cookie_lifetime;
@@ -89,7 +89,7 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
             if(cookie){
                 //build session_file form coockie/session_id
                 session_id= strrchr(cookie, '=')+1;
-                char *session_file_path="/etc/mein_server/sessions";
+                char *session_file_path="/etc/raspC/sessions";
                 char session_file[sizeof(session_file_path)+sizeof(session_id)+1]={0};
                 sprintf(session_file,"%s/%s",session_file_path,session_id);
 

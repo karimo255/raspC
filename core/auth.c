@@ -6,7 +6,7 @@ static char *salt="Y/.U34DoL195";
 
 extern int clientAuth(char *user,char *password){
 
-	char *passwd="/etc/mein_server/passwd";
+	char *passwd="/etc/raspC/passwd";
 
 	char tmp_user[20]={0};
 	char tmp_password[20]={0};
@@ -49,7 +49,7 @@ extern int clientAuth(char *user,char *password){
 
 
 extern void saveData(char *user,int uid,int gid,char *password){
-	char *passwd="/etc/mein_server/passwd";
+	char *passwd="/etc/raspC/passwd";
 
 	FILE *passwdFile = fopen(passwd, "a");
 

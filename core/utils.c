@@ -22,7 +22,7 @@ int get_client_count(){
 
 struct cJSON *parseConfigFile(){
 
-    char *jsfile="/etc/mein_server/config.json";
+    char *jsfile="/etc/raspC/config.json";
     FILE *file = fopen(jsfile, "r"); 
 
     cJSON *config_object=NULL;
@@ -172,7 +172,7 @@ int
 check_session(struct lws *wsi,struct per_session_data__details *pss)   
 {
 
-    char *session_file_path="/etc/mein_server/sessions";
+    char *session_file_path="/etc/raspC/sessions";
 
     char *cookie=get_header_item(wsi,"cookie:");
 
@@ -246,7 +246,7 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
 
 void parse_passwd(char *user,char uid[],char gid[])
 {
-    FILE *passwdFile = fopen("/etc/mein_server/passwd", "r"); 
+    FILE *passwdFile = fopen("/etc/raspC/passwd", "r"); 
     char line[75]={0};
     char deli[2];
     char tmp_user[25];
