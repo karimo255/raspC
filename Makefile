@@ -1,4 +1,4 @@
-CC = gcc
+CC = gcc 
 LIBS = -rdynamic lib/libwebsockets/build/lib/libwebsockets.a  -rdynamic lib/cJSON/libcjson.a -lm -lwiringPi  -lssl -lcrypto -lcrypt
 #LIBS = -rdynamic lib/libwebsockets/build/lib/libwebsockets.a  -lwiringPi -lz -lssl -lcrypto -lcrypt  -I lib/libwebsockets/lib -I lib/cJSON  -rdynamic lib/cJSON/libcjson.a -lm -g
 HEADERS =   -I lib/libwebsockets/lib -I lib/cJSON
