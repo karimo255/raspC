@@ -3,7 +3,7 @@
 RaspC is a monitoring tool for the Raspberry Pi based on websockets
 
 # features
-	-realtime ( websockets )
+	-realtime ( websockets ) 
 	-lightweight
 	-cross-over client support (web brwoser)
 	-no webserver needed	
@@ -58,4 +58,3 @@ RaspC is a monitoring tool for the Raspberry Pi based on websockets
         sudo service raspC status
         or
         sudo /etc/init.d/raspC status
-
