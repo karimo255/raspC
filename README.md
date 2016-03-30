@@ -1,6 +1,6 @@
-# Ras9C
+# Description
 
-Ras9C is a monitoring tool for the Raspberry Pi based on websockets
+RaspC is a monitoring tool for the Raspberry Pi based on websockets
 
 # features
 	-realtime ( websockets )
