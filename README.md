@@ -18,7 +18,7 @@ RaspC is a monitoring tool for the Raspberry Pi based on websockets
 	sudo ./configure
 	sudo make
 	sudo make install
-	sudo make clean
+	sudo make clean 
 
 	after installation type on a browser [your-ip or hostname]:7681 
 
@@ -26,6 +26,14 @@ RaspC is a monitoring tool for the Raspberry Pi based on websockets
 		user : admin
 		pass : admin
 
+	# configuration 
+	
+	 Configuration file is /etc/raspC/config.json
+	 
+	 You can edit :
+	   - the GPIO-pins Directions ( input or output) 
+	   - Ip-whiteist ( accepted IPs)
+	   
 # paths description
 
 | Path | Description |
