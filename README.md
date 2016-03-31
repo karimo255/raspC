@@ -26,7 +26,7 @@ RaspC is a monitoring tool for the Raspberry Pi based on websockets
 		user : admin
 		pass : admin
 
-	# configuration 
+# configuration 
 	
 	 Configuration file is /etc/raspC/config.json
 	 
