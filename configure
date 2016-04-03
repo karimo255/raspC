@@ -1,34 +1,34 @@
 #!/bin/sh
-echo "Install dependies librarie  :"
+echo "Install dependies  :"
 
 WD=$(pwd)
-echo $WD
 
 echo "Installing Libwebsockets library"
 cd lib/libwebsockets
 mkdir -p build && cd build
 cmake ..
 sudo make install
-echo "done."
+
 
 
 echo "Installing wiringPi library"
-cd ../../../lib/wiringPi
+cd $WD
+cd lib/wiringPi
 sudo bash build
-echo "done."
+
 
 echo "Installing cJSON library"
-cd ../../lib/cJSON
+cd $WD
+cd lib/cJSON
 sudo make
-echo "done."
+
 
 for package in libssl-dev vnstat; do
 	echo "find $package..."
     dpkg -s "$package" >/dev/null 2>&1 && {
         echo "$package is installed."
     } || {
-        echo "$package is not installed."
-        echo "$package will be installed"
+        echo "$package is not installed and will be installed."
         apt-get install $package
     }
 done
@@ -63,3 +63,4 @@ for file_ in `find resource/ -name *.js`;do
 done
 
 echo "finish"
+
