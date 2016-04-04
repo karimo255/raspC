@@ -1,5 +1,4 @@
 #include "server.h"
-#include "liste.h"
 
 extern char *new_user;
 
@@ -11,8 +10,8 @@ void lst_print(const struct client *e)
 
 	{
 		printf("************ \n");
-		process(e->name );
-		process(e->session_id );
+		process((char *)e->name );
+		process((char *)e->session_id );
 
 	}
 

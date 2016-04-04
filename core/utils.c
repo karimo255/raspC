@@ -137,6 +137,7 @@ get_header_item(struct lws *wsi,char *item)
      }
 
 
+    char *buf_malloc = (char *)(256*sizeof(char));
 
      if(strncmp((char *)c,item,strlen(item))==0){
         memset(buf, 0, sizeof buf);
@@ -144,7 +145,7 @@ get_header_item(struct lws *wsi,char *item)
         if(strlen(buf)>5){
             buf[sizeof(buf) - 1] = '\0';
 
-            char *buf_malloc = (char *)realloc(buf_malloc,256*sizeof(char));
+            buf_malloc = (char *)realloc(buf_malloc,256*sizeof(char));
 
             memcpy(buf_malloc,buf,256);
             return buf_malloc;

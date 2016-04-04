@@ -1,7 +1,7 @@
 #include "server.h"
 
 char *lock_path="/var/run/raspC.pid";
-void process(char arr[]){
+void process(char *arr){
 
     syslog(LOG_NOTICE, arr);
 } 
