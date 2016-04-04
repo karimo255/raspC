@@ -1,3 +1,16 @@
+/** @file liste.c
+ *  @brief Function prototypes for client list.
+ *
+ *  This contains the prototypes for the liste.c
+ *  and eventually any macros, constants,
+ *  or global variables needed.
+ *
+ *  @author Karim Echchennouf
+ *  @author Ziad Benhachem
+ *  @bug No known bugs.
+ */
+
+ 
 /** client list information */
 
 struct client

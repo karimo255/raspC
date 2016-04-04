@@ -27,6 +27,7 @@
 #include <cJSON.h>
 #include "liste.h"
 #include "utils.h"
+ #include "daemonize.h"
 
 extern int close_testing;
 
@@ -215,9 +216,7 @@ extern char *rand_string();
 
 
 
-/* daemonize */
-extern void process(char *arr);
-extern void daemonize();
+
 
 
 
