@@ -1,7 +1,7 @@
 raspC
 *.o
 lib/*
-doxygen_raspC
+demo
 doxygen_sqlite3.db
 html/
 latex/
