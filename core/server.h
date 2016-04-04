@@ -25,9 +25,11 @@
 #include <wiringPi.h>
 #include <libwebsockets.h>
 #include <cJSON.h>
+
 #include "liste.h"
 #include "utils.h"
- #include "daemonize.h"
+#include "auth.h"
+#include "daemonize.h"
 
 extern int close_testing;
 
@@ -205,14 +207,6 @@ extern int stop_daemon(char *daemon,char *action);
 
 
 
-
-extern int clientAuth(char *user,char *password);
-
-
-char *do_hashing(char *buffer);
-int clientAuth(char *user,char *password);
-void saveData(char *user,int uid,int gid,char *password);
-extern char *rand_string();
 
 
 

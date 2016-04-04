@@ -3,18 +3,7 @@
 /* salt*/
 static char *salt="Y/.U34DoL195";
 
-/*
- * Function:  clientAuth 
- * --------------------
- * computes an approximation of pi using:
- *    pi/6 = 1/2 + (1/2 x 3/4) 1/5 (1/2)^3  + (1/2 x 3/4 x 5/6) 1/7 (1/2)^5 +
- *
- *  user: number of terms in the series to sum
- *
- *  returns: the approximate value of pi obtained by suming the first n terms
- *           in the above series
- *           returns zero on error (if n is non-positive)
- */
+
 extern int clientAuth(char *user,char *password){
 
 	char *passwd="/etc/raspC/passwd";
@@ -27,7 +16,6 @@ extern int clientAuth(char *user,char *password){
 	char deli[2];
 
 	FILE *passwdFile = fopen(passwd, "r"); 
-
 	
 	if (passwdFile==NULL)
 	{
@@ -36,8 +24,6 @@ extern int clientAuth(char *user,char *password){
 	}
 
 	int i = 0;
-
-	
 
 	while(i < 100 && fgets(line, sizeof(line), passwdFile) != NULL){
 		sscanf(line, "%[^:]%[:^:]%[^:]%[:^:]%[^:]%[:^:]%[^\n]", tmp_user,deli,uid,deli,gid,deli,tmp_password);
@@ -50,13 +36,10 @@ extern int clientAuth(char *user,char *password){
 		}
 	}
 
-	fclose(passwdFile);
-	
+	fclose(passwdFile);	
 
 	return 1;
 }
-
-
 
 
 extern void saveData(char *user,int uid,int gid,char *password){
@@ -72,17 +55,9 @@ extern void saveData(char *user,int uid,int gid,char *password){
 
 	char *hash = strdup(crypt(password, salt));
 
-
-
-
 	char record[150];
 
-
 	sprintf(record,"%s:%d:%d:%s\n",user,uid,gid,hash);
-
-
-
-	//printf("record45 :  %s\n",record );
 
 	fwrite (record , sizeof(char), strlen(record), passwdFile);	
 
@@ -92,6 +67,24 @@ extern void saveData(char *user,int uid,int gid,char *password){
 
 }
 
+
+extern char *rand_string()
+{
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK";
+    char str[33];
+    memset(str,0,33);
+    int n=0;
+    for ( n = 0; n < 32; n++) {
+        int key = rand() % (int) (sizeof charset - 1);
+        str[n] = charset[key];
+    }
+   
+    
+    char *ret_str=malloc(sizeof(char)*32);
+    strcpy(ret_str,str);
+    
+    return ret_str;
+}
 
 
 

@@ -5,23 +5,7 @@ static char *received_msg=NULL;
 
 cJSON *root_copy;
 
-char *rand_string()
-{
-    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK";
-    char str[33];
-    memset(str,0,33);
-    int n=0;
-    for ( n = 0; n < 32; n++) {
-        int key = rand() % (int) (sizeof charset - 1);
-        str[n] = charset[key];
-    }
-   
-    
-    char *ret_str=malloc(sizeof(char)*32);
-    strcpy(ret_str,str);
-    
-    return ret_str;
-}
+
 
 int callback_auth(struct lws *wsi, enum lws_callback_reasons reason, void *user,
   void *in, size_t len)  {
