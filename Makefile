@@ -1,13 +1,11 @@
 CC = gcc 
 LIBS = -rdynamic lib/libwebsockets/build/lib/libwebsockets.a  -rdynamic lib/cJSON/libcjson.a -lm -lwiringPi  -lssl -lcrypto -lcrypt
-#LIBS = -rdynamic lib/libwebsockets/build/lib/libwebsockets.a  -lwiringPi -lz -lssl -lcrypto -lcrypt  -I lib/libwebsockets/lib -I lib/cJSON  -rdynamic lib/cJSON/libcjson.a -lm -g
 HEADERS =   -I lib/libwebsockets/lib -I lib/cJSON
 
 CFLAGS = -Wall -O2
 
 
-
-OBJECTS = server.o callback_http.o callback_home.o callback_details.o callback_services.o callback_gpio.o callback_auth.o   ram.o cpu.o storage.o hardware_info.o services.o utils.o auth.o cpu_freq.o daemonize.o network.o liste.o
+OBJECTS = server.o utils.o callback_http.o callback_home.o callback_details.o callback_services.o callback_gpio.o callback_auth.o   ram.o cpu.o storage.o hardware_info.o services.o auth.o cpu_freq.o daemonize.o network.o liste.o
 
 BINDIR = /usr/sbin
 

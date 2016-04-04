@@ -1,92 +1,43 @@
-#include "lws_config.h"
-
+/** @file server.h
+ *  @brief Function prototypes for the server.c.
+ *
+ *  This contains the prototypes for the server.c
+ *  and eventually any macros, constants,
+ *  or global variables you will need.
+ *
+ *  @author Karim Echchennouf
+ *  @author Ziad Benhachem
+ *  @bug No known bugs.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <errno.h>
+#include <syslog.h>
+#include <getopt.h>
+#include <signal.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <assert.h>
+#include <unistd.h>
+#include <crypt.h>
 #include <wiringPi.h>
 #include <libwebsockets.h>
 #include <cJSON.h>
 
-#include <getopt.h>
-#include <signal.h>
-
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <assert.h>
-
-#include <unistd.h>
-#include <crypt.h>
-
-#include <sys/types.h>
-
-#include <errno.h>
-#include <syslog.h>
-
 
 extern int close_testing;
-extern int max_poll_elements;
 
-#ifdef EXTERNAL_POLL
-extern struct lws_pollfd *pollfds;
-extern int *fd_lookup;
-extern int count_pollfds;
-#endif
 extern volatile int force_exit;
-extern struct lws_context *context;
+
+/** resource path for http requests
+ */
 extern char *resource_path;
 
-extern void test_server_lock(int care);
-extern void test_server_unlock(int care);
-
-#ifndef __func__
-#define __func__ __FUNCTION__
-#endif
-
-
-
-
-struct per_session_data__http {
-	char  *session_id;
-};
-
-struct per_session_data__details {
-    char  *session_id;
-    char *user;
-    int uid;
-    int gid;
-    char checked[32];
-    char interface[10];
-};
-
-struct per_session_data__auth {
-    char  *session_id;
-};
-
-struct per_session_data__gpio {
-	int number;
-};
-struct per_session_data__services {
-    int number;
-};
-
-struct per_session_data__lws_mirror {
-	struct lws *wsi;
-	int ringbuffer_tail;
-};
-
-struct per_session_data__echogen {
-	size_t total;
-	size_t total_rx;
-	int fd;
-	int fragsize;
-	int wr;
-};
-
-
-
-
-
+/** 
+* callable callbacks ,they are called by the loop in the main program in server.c
+*/
 extern int
 callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
    void *in, size_t len);
@@ -108,24 +59,18 @@ extern int
 callback_auth(struct lws *wsi, enum lws_callback_reasons reason,
    void *user, void *in, size_t len);
 
+/** @brief Prints infos about handshake with client.
+*
+*   The Output contains a lot of information about the client.
+*   One way to build filter.
+*
+*  @param struct lws *wsi The websocket instanze.
+*  @return Void.
+*/
 extern void
 dump_handshake_info(struct lws *wsi);
 
 
-extern void
-increment_client_count();
-
-extern void
-decrement_client_count();
-
-extern int get_client_count();
-
-
-
-extern struct cJSON *parseConfigFile();
-
-
-extern void handlePinsDirection(cJSON *js);
 
 //cpu
 
@@ -255,7 +200,6 @@ extern int stop_daemon(char *daemon,char *action);
 //check client ip
 
 
-extern int checkIP (cJSON *whitelist, struct lws *wsi);
 
 
 
@@ -268,7 +212,6 @@ int clientAuth(char *user,char *password);
 void saveData(char *user,int uid,int gid,char *password);
 extern char *rand_string();
 
-time_t get_mtime(const char *path);
 
 
 /* daemonize */
@@ -276,38 +219,244 @@ extern void process(char arr[]);
 extern void daemonize();
 
 
-extern char * 
-get_header_item(struct lws *wsi,char *item);
-extern int 
-check_session(struct lws *wsi,struct per_session_data__details *pss);
 
-extern void 
-parse_passwd(char *user,char *uid,char *gid);
-
-/* liste */
+/** client list information */
 
 struct client
 
-{   int uid ;
-    char name[20];            /* der Wert des clients          */
-    int gid;
-    char session_id[10];
-    struct client *next; /* Zeiger auf das nächste client */
+{   
+    int uid ;                 /** user id   */
+    char name[20];            /** client name  */
+    int gid;                  /** client name  */  
+    char session_id[10];      /** session id */  
+    struct client *next;      /* pointer to next client */
 
 };
 
+/** @brief prints information about all clients in client list.
+*
+*   prints information about all clients in client list.
+*
+*   @param struct client.
+*
+*   @return Void.
+*/
+extern void 
+lst_print(const struct client* );
 
-extern void lst_print(const struct client* );
+/** @brief append new client to client list.
+*
+*   append new client to client list.
+*
+*   @param struct *client. 
+*
+*   @return index of the new client beginning by 0.
+*/
+extern int 
+lst_append(struct client **, char *,int,int,char *);
 
-extern int lst_append(struct client **, char *,int,int,char *);
+/** @brief replace client by new client.
+*
+*   append new client to list of connected clients.
+*
+*   @param struct *client.
+*   @param char *user. 
+*   @param int uid. 
+*   @param int gid.  
+*   @param char *session_id.  
+*
+*   @return index of the new client by success otherwise -1.
+*/
+extern int 
+lst_replace(struct client **, char *,int,int,char *);
 
-extern int lst_replace(struct client **, char *,int,int,char *);
-extern int lst_find(struct client **,int);
-extern int lst_remove(struct client **,int);
-extern int lst_count(struct client **lst);
-extern char *lst_json(struct client **lst);
+/** @brief check if client exists.
+*
+*   check if client with uid exists.
+*
+*   @param struct *client.
+*   @param int uid. 
+*
+*   @return index of the client if exists otherwise -1.
+*/
+extern int 
+lst_find(struct client **,int uid);
+
+/** @brief remove client.
+*
+*   remove client from client list.
+*
+*   @param struct *client.
+*   @param int uid. 
+*
+*   @return index of the client removed  otherwise -1.
+*/
+extern int 
+lst_remove(struct client **,int uid);
+
+/** @brief get client count.
+*
+*   get client count in client list.
+*
+*   @param struct *client.
+*
+*   @return client count.
+*/
+extern int 
+lst_count(struct client **lst);
+
+/** @brief get client list as json string.
+*
+*   get client list as json string.
+*
+*   @param struct *client.
+*
+*   @return json string.
+*/
+extern char 
+*lst_json(struct client **lst);
 /* list end */
 
-/* dump user informtion */
 
-extern void dump_user_info(struct per_session_data__details *pss);
+
+/** one of these is auto-created for each connection and a pointer to the
+ *  appropriate instance is passed to the callback in the user parameter
+ */
+struct per_session_data__http {
+    char  *session_id;
+};
+
+struct per_session_data__details {
+    char  *session_id;
+    char *user;
+    int uid;
+    int gid;
+    char checked[32];
+    char interface[10];
+};
+
+struct per_session_data__auth {
+    char  *session_id;
+};
+
+struct per_session_data__gpio {
+    int number;
+};
+struct per_session_data__services {
+    int number;
+};
+
+/** @brief Increment the count of clients.
+*
+*   Increment the count of clients connected by one.
+*
+*   @return Void.
+*/
+extern void
+increment_client_count();
+
+/** @brief Decrement the count of clients.
+*
+*   Decrement the count of clients connected by one.
+*
+*   @return Void.
+*/
+extern void
+decrement_client_count();
+
+/** @brief get the count of clients.
+*
+*   get the count of clients connected.
+*
+*   @return count of clients connected.
+*/
+extern int
+get_client_count();
+
+/** @brief Parse Configuration File.
+*
+*   Parse Configuration File "/etc/raspC/config.json" to a cJSON Object.
+*
+*   @return config_object as cJSON Object.
+*/
+extern struct
+cJSON *parseConfigFile();
+
+/** @brief Set GPIO Pins Direction.
+*
+*   Set GPIO Pins Directions ("Input/Output") based on the infomation
+*   provided by "/etc/raspC/config.json" section 'pinDirections'.
+*
+*   @return void
+*/
+extern void 
+handlePinsDirection(cJSON *js);
+
+/** @brief Check IP-adresse.
+*
+*   Check if IP-adresse is in the whitelist structur generad from the config_obejct.
+*   
+*   @param cJSON *whitelist.
+*   @param lws *wsi websocket instance.
+*
+*   @return 0 if ip listed otherwise -1.
+*/
+extern int
+checkIP (cJSON *whitelist, struct lws *wsi);
+
+/** @brief get the modification time of file.
+*
+*   get the modification time of file located at path.
+*
+*   @param path of file 
+*
+*   @return time_t modification time
+*/  
+time_t get_mtime(const char *path);
+
+/** @brief get header informations.
+*
+*   get header infomation for a item such a cookie etc.
+*
+*   @param lws *wsi websocket instance.
+*   @param *item.
+*
+*   @return header information
+*/
+extern char * 
+get_header_item(struct lws *wsi,char *item);
+
+/** @brief Prints user info.
+*
+*   Prints user info
+*
+*   @param per_session_data__details *pss.
+*
+*   @return Void.
+*/
+extern void 
+dump_user_info(struct per_session_data__details *pss);
+
+/** @brief check if session running.
+*
+*   check if session file existed, if not redirect client to auth
+*
+*   @param lws *wsi websocket instance.
+*   @param per_session_data__details *pss.
+*
+*   @return 0 if session runnig otherwise -1.
+*/
+extern int 
+check_session(struct lws *wsi,struct per_session_data__details *pss);
+
+/** @brief parse passwd file.
+*
+*   parse passwd file, grep and get uid "uid" and gid "gid" for user "user"
+*
+*   @param lws *wsi websocket instance.
+*   @param per_session_data__details *pss.
+*
+*   @return 0 if session runnig otherwise -1.
+*/
+extern void 
+parse_passwd(char *user,char *uid,char *gid);

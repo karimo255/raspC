@@ -1,3 +1,13 @@
+/** @file utils.c
+ *  @brief help functions.
+ *
+ *  help functions.
+ *
+ *  @author Karim Echchennouf
+ *  @author Ziad Benhachem
+ *  @bug No known bugs.
+ */
+
 #include "server.h"
 
 extern int client_count;  
@@ -10,9 +20,7 @@ void increment_client_count()  {
 
 
 void decrement_client_count()  {
-
 	client_count--;
-    process("nach");
 }
 
 int get_client_count(){
@@ -182,13 +190,10 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
         //build session_file form coockie/session_id        
         char *session_id= strrchr(cookie, '=')+1;
 
-
         char session_file[75]={0};
         sprintf(session_file,"%s/%s",session_file_path,session_id);
 
-        
-
-                //check if sessionfile exit
+        //check if sessionfile exit
         FILE *session_filep= fopen(session_file,"r");
         if(session_filep==NULL){
             process("sessions file not found2");
@@ -212,12 +217,8 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
         pss->session_id=session_id;
         pss->user=(char*)malloc(32);
 
-        
-
         char line[100]={0};
         
-
-
         if(fgets(line, sizeof(line), session_filep) != NULL)
         {
             char *u=strrchr(line, '=')+1;
@@ -233,10 +234,7 @@ check_session(struct lws *wsi,struct per_session_data__details *pss)
             pss->uid =atoi(uid);
             pss->gid =atoi(gid);
             memcpy(pss->checked,"init",32);             
-        }else{
-            process("doch");
-        }         
-
+        }        
 
         fclose(session_filep);
         return 0;

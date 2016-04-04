@@ -1,4 +1,5 @@
 #include "server.h"
+#include "utils.h"
 
 int close_testing;
 int max_poll_elements;

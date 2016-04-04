@@ -1,12 +1,9 @@
 #!/bin/sh
 
-# Quick start-stop-daemon example, derived from Debian /etc/init.d/ssh
 set -e
 
-# Must be a valid filename
 NAME=raspC
 PIDFILE=/var/run/$NAME.pid
-#This is the command to be run, give the full pathname
 DAEMON=/usr/sbin/raspC
 
 export PATH="${PATH}:/usr/sbin:/sbin"
