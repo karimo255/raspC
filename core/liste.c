@@ -1,4 +1,5 @@
 #include "server.h"
+#include "liste.h"
 
 extern char *new_user;
 
