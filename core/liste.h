@@ -1,5 +1,5 @@
-/** @file liste.c
- *  @brief Function prototypes for client list.
+/** @file liste.h
+ *  @brief Function prototypes for client list liste.c.
  *
  *  This contains the prototypes for the liste.c
  *  and eventually any macros, constants,
@@ -11,13 +11,25 @@
  */
 
  
-/** client list information */
+/** @struct client cpu.h "cpu.h" 
+ *  @brief This structure is used to build clinet list.
+ *  @var client::name 
+ *  Member 'name' contains user name
+ *  @var client::uid 
+ *  Member 'uid' contains user id
+ *  @var client::gid 
+ *  Member 'gid' contains group id
+ *  @var client::session_id 
+ *  Member 'session_id' contains session id user also in  frontend
+ *  @var client::client *next 
+ *  Member 'client *next' pointer to next client
+ */
 
 struct client
 
 {   
+    char name[20];            /** client name  */	
     int uid ;                 /** user id   */
-    char name[20];            /** client name  */
     int gid;                  /** client name  */  
     char session_id[10];      /** session id */  
     struct client *next;      /* pointer to next client */
@@ -106,4 +118,4 @@ lst_count(struct client **lst);
 */
 extern char 
 *lst_json(struct client **lst);
-/* list end */
+

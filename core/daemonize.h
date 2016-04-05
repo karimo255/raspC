@@ -11,20 +11,20 @@
  */
 
 
- /** @brief write to syslog.
-*
-*   one way to write in syslog.
-*
-*   @param char *msg.
-*
-*   @return Void.
-*/
+/** @brief write to syslog.
+ *
+ *   one way to write in syslog.
+ *
+ *   @param char *msg.
+ *
+ *   @return Void.
+ */
 extern void process(char *msg);
 
  /** @brief making a daemon.
-*
-*   let the server runnig a background service.
-*
-*   @return Void.
-*/
+ *
+ *   let the server runnig a background service.
+ *
+ *   @return Void.
+ */
 extern void daemonize();

@@ -31,6 +31,8 @@
 #include "auth.h"
 #include "daemonize.h"
 
+#include "cpu.h" 
+
 extern int close_testing;
 
 extern volatile int force_exit;
@@ -63,35 +65,9 @@ extern int
 callback_auth(struct lws *wsi, enum lws_callback_reasons reason,
    void *user, void *in, size_t len);
 
-/** @brief Prints infos about handshake with client.
-*
-*   The Output contains a lot of information about the client.
-*   One way to build filter.
-*
-*  @param struct lws *wsi The websocket instanze.
-*  @return Void.
-*/
-extern void
-dump_handshake_info(struct lws *wsi);
 
 
 
-//cpu
-
-struct cpu_info {
-    int cpu_cur_freq;
-    int cpu_min_freq;
-    int cpu_max_freq;
-    char cpu_governor[20];
-};
-
-
-struct cpu_usage {
-    int user;
-    int system;
-    int idle;
-    int wait;
-};
 
 //cpu freq
 struct cpu_freq{
@@ -123,10 +99,7 @@ extern int netInfo(struct net_info *net_info,char *interface);
 
 //
 
-struct cpu_live {
-    int cpu_temp;
-    struct cpu_usage cpu_usage;
-};
+
 
 /* home_info */
 struct home_info
@@ -159,15 +132,9 @@ struct ram_usage {
 struct ram_usage ram_l;
 
 
-struct cpu_live cpu_l;
-struct cpu_info cpu_i;
 
 struct storage_info storage_l;
 
-extern void cpuInfo(struct cpu_info *cpu_i);
-
-
-extern int cpuLive(struct cpu_live *cpu_l,int interval);
 
 //storage
 

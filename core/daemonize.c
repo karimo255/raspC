@@ -1,3 +1,13 @@
+/** @file daemonize.c
+ *  @brief Function to daemonize the service.
+ *
+ *  Function to daemonize the service
+ *
+ *  @author Karim Echchennouf
+ *  @author Ziad Benhachem
+ *  @bug No known bugs.
+ */
+
 #include "server.h"
 
 char *lock_path="/var/run/raspC.pid";
