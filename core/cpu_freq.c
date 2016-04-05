@@ -1,53 +1,114 @@
 #include "server.h"
 
+#define CORES 4
 
 
-
-static char *cpu0 ="cat /proc/stat | awk ' $1==\"cpu0\"  {print $2 }'" ;
-static char *cpu1 ="cat /proc/stat | awk ' $1==\"cpu1\"  {print $2 }'" ;
-static char *cpu2 ="cat /proc/stat | awk ' $1==\"cpu2\"  {print $2 }'" ;
-static char *cpu3 ="cat /proc/stat | awk ' $1==\"cpu3\"  {print $2 }'" ;
+int total_last[CORES]={0};
+int busy_last[CORES]={0};
 
 
-static char tmp[15];
+static char *cpu0_busy_ticks ="echo `grep ^\"cpu0\" /proc/stat` | awk -F' ' '{printf \"%.0f\",$2+$3+$4+$7+$8-$BL}'" ;
+static char *cpu0_total_ticks ="echo `grep ^\"cpu0\" /proc/stat` | awk -F' ' '{printf \"%.0f\",$2+$3+$4+$5+$6+$7+$8}'" ;
+
+static char *cpu1_busy_ticks ="echo `grep ^\"cpu1\" /proc/stat` | awk -F' ' '{printf \"%.0f\",$2+$3+$4+$7+$8-$BL}'" ;
+static char *cpu1_total_ticks ="echo `grep ^\"cpu1\" /proc/stat` | awk -F' ' '{printf \"%.0f\",$2+$3+$4+$5+$6+$7+$8}'" ;
+
+static char *cpu2_busy_ticks ="echo `grep ^\"cpu2\" /proc/stat` | awk -F' ' '{printf \"%.0f\",$2+$3+$4+$7+$8-$BL}'" ;
+static char *cpu2_total_ticks ="echo `grep ^\"cpu2\" /proc/stat` | awk -F' ' '{printf \"%.0f\",$2+$3+$4+$5+$6+$7+$8}'" ;
+
+static char *cpu3_busy_ticks ="echo `grep ^\"cpu3\" /proc/stat` | awk -F' ' '{printf \"%.0f\",$2+$3+$4+$7+$8-$BL}'" ;
+static char *cpu3_total_ticks ="echo `grep ^\"cpu3\" /proc/stat` | awk -F' ' '{printf \"%.0f\",$2+$3+$4+$5+$6+$7+$8}'" ;
+
+static char busy_ticks[50];
+static char total_ticks[50];
 
 int cpuLiveFreq(struct cpu_freq *cpu_freq){
 
 	static FILE *fp;
 
+	/**
+	 *	cpu0
+	 */
 
-	fp = popen(cpu0, "r");
-	fgets(tmp, 15, fp);
+	fp = popen(cpu0_busy_ticks, "r");
+	fgets(busy_ticks, 50, fp);
+	double int_busy_ticks=atoi(busy_ticks);
+	pclose(fp);
 
-	cpu_freq->cpu0 = rand()%240;
+	fp = popen(cpu0_total_ticks, "r");
+	fgets(total_ticks, 50, fp);	
+	double int_total_ticks=atoi(total_ticks);
+	pclose(fp);
+
+	cpu_freq->cpu0 = 100*((int_busy_ticks-busy_last[0])/(int_total_ticks-total_last[0]));
+
+
+	busy_last[0]=int_busy_ticks;
+	total_last[0]=int_total_ticks;
+
+
+	/**
+	 *	cpu1
+	 */
+
+	fp = popen(cpu1_busy_ticks, "r");
+	fgets(busy_ticks, 50, fp);
+	int_busy_ticks=atoi(busy_ticks);
+	pclose(fp);
+
+	fp = popen(cpu1_total_ticks, "r");
+	fgets(total_ticks, 50, fp);	
+	int_total_ticks=atoi(total_ticks);
+	pclose(fp);
+
+	cpu_freq->cpu1 = 100*((int_busy_ticks-busy_last[1])/(int_total_ticks-total_last[1]));
+
+
+	busy_last[1]=int_busy_ticks;
+	total_last[1]=int_total_ticks;
+
 	
-	pclose(fp);//end
+	/**
+	 *	cpu2
+	 */
+
+	fp = popen(cpu2_busy_ticks, "r");
+	fgets(busy_ticks, 50, fp);
+	int_busy_ticks=atoi(busy_ticks);
+	pclose(fp);
+
+	fp = popen(cpu2_total_ticks, "r");
+	fgets(total_ticks, 50, fp);	
+	int_total_ticks=atoi(total_ticks);
+	pclose(fp);
+
+	cpu_freq->cpu2 = 100*((int_busy_ticks-busy_last[2])/(int_total_ticks-total_last[2]));
 
 
-	fp = popen(cpu1, "r");
-	fgets(tmp, 15, fp);
-
-	cpu_freq->cpu1 = rand()%240;
-	
-	pclose(fp);//end
+	busy_last[2]=int_busy_ticks;
+	total_last[2]=int_total_ticks;
 
 
-	fp = popen(cpu2, "r");
-	fgets(tmp, 15, fp);
+	/**
+	 *	cpu3
+	 */
 
-	cpu_freq->cpu2 = rand()%240;
-	
-	pclose(fp);//end
+	fp = popen(cpu3_busy_ticks, "r");
+	fgets(busy_ticks, 50, fp);
+	int_busy_ticks=atoi(busy_ticks);
+	pclose(fp);
+
+	fp = popen(cpu3_total_ticks, "r");
+	fgets(total_ticks, 50, fp);	
+	int_total_ticks=atoi(total_ticks);
+	pclose(fp);
+
+	cpu_freq->cpu3 = 100*((int_busy_ticks-busy_last[3])/(int_total_ticks-total_last[3]));
 
 
-	fp = popen(cpu3, "r");
-	fgets(tmp, 15, fp);
-
-	cpu_freq->cpu3 = rand()%240;
-	
-	pclose(fp);//end
-
-
+	busy_last[3]=int_busy_ticks;
+	total_last[3]=int_total_ticks;
+			
 	return 0;
 
 }

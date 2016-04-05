@@ -975,7 +975,7 @@ var cpu_freq_loop=function(){
                     if(i==0){
 
                     }else{
-                        cpu0_ctx.lineTo(step,240-cpu_freq_buffer_tmp[i].cpu0); 
+                        cpu0_ctx.lineTo(step,240-((240*cpu_freq_buffer_tmp[i].cpu0)/100)); 
                     }
                     step=step+spane;
                     if(i==cpu_freq_buffer_tmp.length-2){
@@ -986,7 +986,7 @@ var cpu_freq_loop=function(){
 
                 cpu0_ctx.stroke();
 
-                cpu0_last_value=240-cpu_freq_buffer_tmp[cpu_freq_buffer_tmp.length-1].cpu0;
+                cpu0_last_value=240-((240*cpu_freq_buffer_tmp[cpu_freq_buffer_tmp.length-1].cpu0)/100);
             }
             /* end cpu0*/
 

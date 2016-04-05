@@ -33,17 +33,14 @@
 
 #include "cpu.h" 
 
-extern int close_testing;
-
-extern volatile int force_exit;
 
 /** resource path for http requests
  */
 extern char *resource_path;
 
 /** 
-* callable callbacks ,they are called by the loop in the main program in server.c
-*/
+ * callable callbacks ,they are called by the loop in the main program in server.c
+ */
 extern int
 callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
    void *in, size_t len);
@@ -71,10 +68,10 @@ callback_auth(struct lws *wsi, enum lws_callback_reasons reason,
 
 //cpu freq
 struct cpu_freq{
-    int cpu0;
-    int cpu1;
-    int cpu2;
-    int cpu3;
+    double cpu0;
+    double cpu1;
+    double cpu2;
+    double cpu3;
 };
 
 extern int cpuLiveFreq(struct cpu_freq *cpu_freq);
