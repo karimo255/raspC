@@ -1,9 +1,16 @@
+/** @file server.c
+ *  @brief main program.
+ *
+ *  main programm.
+ *
+ *  @author Karim Echchennouf
+ *  @author Ziad Benhachem
+ *  @bug No known bugs.
+ */
+
 #include "server.h"
 
 
-int close_testing;
-int max_poll_elements;
-int debug_level = 9;
 
 int cookie_lifetime=31*24*3600;//one week
 int client_count=0; 
@@ -24,7 +31,7 @@ struct lws_context *context;
 
 
 
-enum demo_protocols {
+enum protocols {
 	/* always first */
 	PROTOCOL_HTTP = 0,
 
@@ -32,10 +39,7 @@ enum demo_protocols {
 	PROTOCOL_DETAILS,
 	PROTOCOL_SERVICES,
 	PROTOCOL_GPIO,
-	PROTOCOL_AUTH,
-
-	/* always last */
-	DEMO_PROTOCOL_COUNT
+	PROTOCOL_AUTH
 };
 
 /* list of supported protocols and callbacks */
@@ -82,54 +86,60 @@ static struct lws_protocols protocols[] = {
 	{ NULL, NULL, 0, 0 } /* terminator */
 };
 
-
-
-void sighandler(int sig)
-{
-	force_exit = 1;
-	lws_cancel_service(context);
-}
-
-static const struct lws_extension exts[] = {
-	{
-		"permessage-deflate",
-		lws_extension_callback_pm_deflate,
-		"permessage-deflate"
-	},
-	{
-		"deflate-frame",
-		lws_extension_callback_pm_deflate,
-		"deflate_frame"
-	},
-	{ NULL, NULL, NULL /* terminator */ }
-};
-
 //pares conf file  .json
 cJSON *config_obj;
 cJSON *ipWhitelist;
 cJSON *pinDirections;
 
+void load_parse_config(){
+	config_obj=parseConfigFile();
+	ipWhitelist = cJSON_GetObjectItem(config_obj,"ipWhitelist");
+
+	
+	pinDirections = cJSON_GetObjectItem(config_obj,"pinDirections");
+	handlePinsDirection(pinDirections);
+}
+
+void sighandler(int sig)
+{
+	switch(sig){
+		case SIGINT:{
+			force_exit = 1;
+			lws_cancel_service(context);
+			break;			
+		}
+		case SIGTERM:{
+				break;		
+		}	
+		case SIGHUP:{
+				load_parse_config();
+				break;
+		}			
+	}
+}
+
+
+
+
+
 char *forbidden_message= "<body><h3>Blocked IP-ADRESSE </h3></body>";
+
+
 
 int main(int argc, char **argv)
 {
 	daemonize();
-	
-
-
-
+	wiringPiSetup();
 
 	//saveData("admin",100,100,"admin");
 
-	config_obj=parseConfigFile();
-	ipWhitelist = cJSON_GetObjectItem(config_obj,"ipWhitelist");
 
-	wiringPiSetup();
-	pinDirections = cJSON_GetObjectItem(config_obj,"pinDirections");
-	handlePinsDirection(pinDirections);
 
-	signal(SIGINT, sighandler);
+	//signal(SIGINT, sighandler);
+	//signal(SIGTERM, sighandler);
+	signal(SIGHUP, sighandler);
 	
+	load_parse_config();
 
 
 	struct lws_context_creation_info info;
@@ -149,7 +159,6 @@ int main(int argc, char **argv)
 	 info.port = 7681;
 
 
-	 signal(SIGINT, sighandler);
 
 
 

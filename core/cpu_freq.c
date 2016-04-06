@@ -1,3 +1,15 @@
+/** @file cpu_freq.c
+ *  @brief Function prototypes.
+ *
+ *  This contains the prototypes
+ *  and eventually any macros, constants,
+ *  or global variables you will need.
+ *
+ *  @author Karim Echchennouf
+ *  @author Ziad Benhachem
+ *  @bug No known bugs.
+ */
+
 #include "server.h"
 
 #define CORES 4

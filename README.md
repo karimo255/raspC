@@ -76,6 +76,9 @@ RaspC is a monitoring tool for the Raspberry Pi based on websockets
         or
         sudo /etc/init.d/raspC stop
 
+	-reload
+        sudo kill -HUP `pgrep raspC`
+
 	-status
         sudo service raspC status
         or

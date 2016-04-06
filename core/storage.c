@@ -1,3 +1,12 @@
+/** @file storage.c
+ *  @brief various functions.
+ *
+ *  various functions.
+ *
+ *  @author Karim Echchennouf
+ *  @author Ziad Benhachem
+ *  @bug No known bugs.
+ */
 #include "server.h"
 
 void storageInfo(struct storage_info *storage_i) {

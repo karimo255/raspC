@@ -1,10 +1,6 @@
 #include "server.h"
 
-time_t retTime;
-void waitFor (unsigned int secs) {
-    retTime = time(0) + secs;     // Get finishing time.
-    while (time(0) < retTime);    // Loop until it arrives.
-}
+
 void ramInfo(struct ram_info *ram_i) {
 
 	char *ram_total ="free -mo | awk ' NR==2  {print $2 }'" ;

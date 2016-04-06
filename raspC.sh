@@ -23,6 +23,10 @@ case "$1" in
 	start-stop-daemon --stop --quiet --oknodo --retry 30 --pidfile $PIDFILE
 	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_OPTS
 	;;
+  reload)
+	pid=$(pgrep $name)
+	/bin/kill -s HUP $pid 
+	;;
   status)
 	status_of_proc -p $PIDFILE $DAEMON $NAME && exit 0 || exit $?
         exit $?

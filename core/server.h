@@ -31,8 +31,14 @@
 #include "auth.h"
 #include "daemonize.h"
 
+#include "home_info.h"
+#include "storage.h" 
 #include "cpu.h" 
-
+#include "ram.h"  
+#include "cpu_freq.h" 
+#include "network.h" 
+#include "services.h" 
+#include "hardware_info.h" 
 
 /** resource path for http requests
  */
@@ -66,106 +72,6 @@ callback_auth(struct lws *wsi, enum lws_callback_reasons reason,
 
 
 
-//cpu freq
-struct cpu_freq{
-    double cpu0;
-    double cpu1;
-    double cpu2;
-    double cpu3;
-};
-
-extern int cpuLiveFreq(struct cpu_freq *cpu_freq);
-
-//network
-struct net_live{
-    int tx;
-    int rx;
-    int total;
-};
-
-extern int netLive(struct net_live *net_live,char *interface);
-
-//network
-struct net_info{
-    char oneline[320];
-    char interfaces[320];
-};
-
-extern int netInfo(struct net_info *net_info,char *interface);
-
-
-//
-
-
-
-/* home_info */
-struct home_info
-{
-    char ip_addr_local[32];
-    char ip_addr_ext[32];
-    char hostname[32];
-    char os[32];
-    char users[128];
-
-};
-extern int homeInfo(struct home_info *home_i);
-/* end home_info */
-
-struct ram_info {
-    int total;
-};
-
-
-struct ram_usage {
-    int used;
-    int frei;
-    int shared;
-    int buffers;
-    int cached;
-};
-
-//hardware
-
-struct ram_usage ram_l;
-
-
-
-struct storage_info storage_l;
-
-
-//storage
-
-struct storage_info {
-    int total;
-    int used;
-    int free;
-};
-
-extern void ramInfo(struct ram_info *ram_i);
-extern int ramLive(struct ram_usage *ram_u,int interval);
-
-extern void storageInfo(struct storage_info *storage_i);
-
-
-
-//hardware-info
-
-extern char *hardwareStaticJSON(struct storage_info storage_l,struct cpu_info cpu_i,struct net_info net_info);
-char *hardwareDynamicJSON(struct cpu_live cpu_l,struct ram_usage ram_l,struct cpu_freq cpu_freq,struct net_live net_live);
-
-//services
-struct services {
-    char *actived[60];
-    char *disactived[60];
-    int count_actived;
-    int count_disactived;
-};
-
-extern void servicesInfo(struct services * );
-extern char *servicesJSON(struct services services_i);
-
-extern int stop_daemon(char *daemon,char *action);
-//check client ip
 
 
 

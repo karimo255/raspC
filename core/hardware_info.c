@@ -1,3 +1,14 @@
+/** @file hardware_info.c
+ *  @brief various functions to create json strings.
+ *
+ *  various functions to create json strings
+ *  from cjson objects contains informations about hardware stats.
+ *
+ *  @author Karim Echchennouf
+ *  @author Ziad Benhachem
+ *  @bug No known bugs.
+ */
+
 #include "server.h"
 
 

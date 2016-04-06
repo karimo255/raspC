@@ -1,3 +1,15 @@
+/** @file network.c
+ *  @brief Function prototypes
+ *
+ *  This contains the prototypes
+ *  and eventually any macros, constants,
+ *  or global variables needed.
+ *
+ *  @author Karim Echchennouf
+ *  @author Ziad Benhachem
+ *  @bug No known bugs.
+ */
+
 #include "server.h"
 
 
