@@ -1,5 +1,18 @@
 #!/bin/sh
 
+
+### BEGIN INIT INFO
+# Provides:          raspC
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Monitoring tool
+# Description:       Monitoring tool for Raspberry Pi
+### END INIT INFO
+
+# Author: Karim Echchennouf <karimo255@gmail.com>
+
 set -e
 
 NAME=raspC
@@ -22,10 +35,6 @@ case "$1" in
         log_daemon_msg "$NAME restarting"
 	start-stop-daemon --stop --quiet --oknodo --retry 30 --pidfile $PIDFILE
 	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_OPTS
-	;;
-  reload)
-	pid=$(pgrep $name)
-	/bin/kill -s HUP $pid 
 	;;
   status)
 	status_of_proc -p $PIDFILE $DAEMON $NAME && exit 0 || exit $?
