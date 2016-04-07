@@ -10,15 +10,15 @@ RaspC is a monitoring tool for the Raspberry Pi based on websockets
 	
 # Screenshots
 ####Home
-![Alt text](img/home.png?raw=true "Optional Title")
+![Home](img/home.png?raw=true "Optional Title")
 ####Details
-![Alt text](img/details.png?raw=true "Optional Title")
+![Details](img/details.png?raw=true "Optional Title")
 ####Services
-![Alt text](img/daemons.png?raw=true "Optional Title")
+![Services](img/daemons.png?raw=true "Optional Title")
 ####GPIO
-![Alt text](img/gpio.png?raw=true "Optional Title")
+![GPIO](img/gpio.png?raw=true "Optional Title")
 ####Auth
-![Alt text](img/auth.png?raw=true "Optional Title")
+![Auth](img/auth.png?raw=true "Optional Title")
 
 # todo
 	-doc
@@ -68,7 +68,7 @@ RaspC is a monitoring tool for the Raspberry Pi based on websockets
 
 	-start
 		sudo service raspC start
-	or
+		or
 		sudo /etc/init.d/raspC start
 
 	-stop
@@ -76,8 +76,17 @@ RaspC is a monitoring tool for the Raspberry Pi based on websockets
         or
         sudo /etc/init.d/raspC stop
 
-	-reload
+	-force-reload
+        sudo service raspC force-reload
+        or
+        sudo /etc/init.d/raspC force-reload
+        or
         sudo kill -HUP `pgrep raspC`
+
+	-restart
+        sudo service raspC restart
+        or
+        sudo /etc/init.d/raspC restart
 
 	-status
         sudo service raspC status

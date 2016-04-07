@@ -95,7 +95,7 @@ void load_parse_config(){
 	config_obj=parseConfigFile();
 	ipWhitelist = cJSON_GetObjectItem(config_obj,"ipWhitelist");
 
-	
+	wiringPiSetup();
 	pinDirections = cJSON_GetObjectItem(config_obj,"pinDirections");
 	handlePinsDirection(pinDirections);
 }
@@ -129,7 +129,7 @@ char *forbidden_message= "<body><h3>Blocked IP-ADRESSE </h3></body>";
 int main(int argc, char **argv)
 {
 	daemonize();
-	wiringPiSetup();
+	
 
 	//saveData("admin",100,100,"admin");
 
