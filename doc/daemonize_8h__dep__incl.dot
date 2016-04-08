@@ -1,0 +1,24 @@
+digraph "core/daemonize.h"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="core/daemonize.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="core/server.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$server_8h.html",tooltip="Function prototypes for the server.c. "];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="core/cpu_freq.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cpu__freq_8c.html",tooltip="Function prototypes. "];
+  Node2 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="core/daemonize.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$daemonize_8c.html",tooltip="Function to daemonize the service. "];
+  Node2 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="core/hardware_info.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$hardware__info_8c.html",tooltip="various functions to create json strings. "];
+  Node2 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="core/liste.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$liste_8c.html",tooltip="Function prototypes for client list. "];
+  Node2 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="core/network.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$network_8c.html",tooltip="Function prototypes. "];
+  Node2 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="core/server.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$server_8c.html",tooltip="main program. "];
+  Node2 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="core/storage.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$storage_8c.html",tooltip="various functions. "];
+  Node2 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="core/utils.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$utils_8c.html",tooltip="help functions. "];
+}

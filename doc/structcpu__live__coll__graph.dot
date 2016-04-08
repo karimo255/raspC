@@ -1,0 +1,8 @@
+digraph "cpu_live"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="cpu_live",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" cpu_usage" ,fontname="Helvetica"];
+  Node2 [label="cpu_usage",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcpu__usage.html",tooltip="This structure contains information about cpu time. "];
+}
